@@ -23,11 +23,11 @@ import org.apache.log4j.Logger;
 
 import it.alessandromodica.product.app.HelloWorldApp;
 import it.alessandromodica.product.common.AdapterGson;
+import it.alessandromodica.product.common.InputRequest;
 import it.alessandromodica.product.common.MagicString;
 import it.alessandromodica.product.common.enumerative.AppContext;
 import it.alessandromodica.product.common.enumerative.RequestVariable;
 import it.alessandromodica.product.common.exceptions.BusinessException;
-import it.alessandromodica.product.model.bo.BORequestData;
 
 public class AppViewServlet extends HttpServlet {
 
@@ -75,7 +75,7 @@ public class AppViewServlet extends HttpServlet {
 					throw new BusinessException(msg, ex);
 				}
 
-				BORequestData inputData = new BORequestData();
+				InputRequest inputData = new InputRequest();
 				switch (context) {
 				case outhsignin:
 				case outhsignout:

@@ -7,12 +7,12 @@ import org.springframework.stereotype.Component;
 
 import it.alessandromodica.product.callback.SettingCookie;
 import it.alessandromodica.product.common.AdapterGson;
+import it.alessandromodica.product.common.InputRequest;
 import it.alessandromodica.product.common.enumerative.AppContext;
 import it.alessandromodica.product.common.enumerative.RequestVariable;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.context.interfaces.ISecurity;
-import it.alessandromodica.product.model.bo.BORequestData;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.persistence.uow.UnitOfWork;
 
@@ -85,7 +85,7 @@ public class MainApplication extends MainContext {
 		log.info("Ambiente " + appcontext + " caricato con successo!");
 	}
 
-	public Object processAction(BORequestData inputData, String remoteAddrs, String referer, String useragent,
+	public Object processAction(InputRequest inputData, String remoteAddrs, String referer, String useragent,
 			String rawUtente, AppContext appcontext) throws BusinessException {
 		try {
 
@@ -105,7 +105,7 @@ public class MainApplication extends MainContext {
 		}
 	}
 
-	public Object processSignInOutGoogle(BORequestData inputData, String payloadOauth, AppContext appcontext)
+	public Object processSignInOutGoogle(InputRequest inputData, String payloadOauth, AppContext appcontext)
 			throws BusinessException {
 		cassaforte.setControllerSecurity(controllerSecurity);
 		log.info(">>> Si sta richiedendo la fase " + appcontext + " per accedere ai servizi " + TITOLO_APP
@@ -136,7 +136,7 @@ public class MainApplication extends MainContext {
 		return dataToSendClient;
 	}
 
-	private Object accessCapabilities(BORequestData inputData, BOUtente currentUtente, AppContext appcontext)
+	private Object accessCapabilities(InputRequest inputData, BOUtente currentUtente, AppContext appcontext)
 			throws BusinessException {
 		Object dataToSendClient;
 		// XXX: istanza del blocco di sicurezza. Serve a verificare la

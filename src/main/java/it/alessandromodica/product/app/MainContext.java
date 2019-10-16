@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import it.alessandromodica.product.common.InputRequest;
 import it.alessandromodica.product.common.enumerative.AppContext;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
@@ -29,7 +30,6 @@ import it.alessandromodica.product.context.security.Cassaforte;
 import it.alessandromodica.product.model.bo.BOAppPayload;
 import it.alessandromodica.product.model.bo.BOCoordinate;
 import it.alessandromodica.product.model.bo.BODecoderAddress;
-import it.alessandromodica.product.model.bo.BORequestData;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.po.PluginGestioneUtenti;
 import it.alessandromodica.product.services.interfaces.IMainService;
@@ -88,7 +88,7 @@ public abstract class MainContext extends GoToBusiness {
 	 * Questo field è valorizzato dal componente incaricato ad evadere la
 	 * richiesta, di solito viene valorizzato anche l'utente corrente
 	 */
-	protected BORequestData inputData;
+	protected InputRequest inputData;
 
 	/**
 	 * Questo setter viene sempre inizializzato da tutti i componenti con il
@@ -134,7 +134,7 @@ public abstract class MainContext extends GoToBusiness {
 	 * @return
 	 * @throws BusinessException
 	 */
-	public BOAppPayload getResult(AppContext appcontext, BORequestData inputData, BOUtente utenteCorrente)
+	public BOAppPayload getResult(AppContext appcontext, InputRequest inputData, BOUtente utenteCorrente)
 			throws BusinessException {
 		BOAppPayload dataToSendClient = new BOAppPayload();
 

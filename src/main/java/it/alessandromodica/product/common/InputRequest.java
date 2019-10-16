@@ -1,10 +1,10 @@
-package it.alessandromodica.product.model.bo;
+package it.alessandromodica.product.common;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("rawtypes")
-public class BORequestData {
+public class InputRequest {
 
 	private Map<Enum,Object> mapRequestData = new HashMap<Enum,Object>();
 
