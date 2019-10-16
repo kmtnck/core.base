@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0"
+	xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+
+	<persistence-unit name="appjpa" transaction-type="RESOURCE_LOCAL">
+		<!-- Persistence provider -->
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+		<class>it.alessandromodica.product.model.po.PluginCommonBlacklist</class>
+		<class>it.alessandromodica.product.model.po.PluginCommonLogaccesso</class>
+		<class>it.alessandromodica.product.model.po.PluginCommonWarningAccesso</class>
+		<class>it.alessandromodica.product.model.po.PluginGestioneApps</class>
+		<class>it.alessandromodica.product.model.po.PluginGestioneUtenti</class>
+		<class>it.alessandromodica.product.model.po.PluginGestioneUtentiInfoautenticazione</class>
+		<class>it.alessandromodica.product.model.po.PluginGestioneUtentiOauth</class>
+		<class>it.alessandromodica.product.model.po.PluginGestioneUtentiOauthSessioni</class>
+		<class>it.alessandromodica.product.model.po.PluginLogger</class>
+
+		<class>it.alessandromodica.product.model.po.VGestioneUtenti</class>
+		<class>it.alessandromodica.product.model.po.VGestioneUtentiOuth</class>
+		<class>it.alessandromodica.product.model.po.VUtentiLoggatiDettaglio</class>
+		<properties>
+			<property name="hibernate.search.autoregister_listeners"
+				value="false" />
+
+			<!-- <property name="hibernate.archive.autodetection" value="class" /> -->
+			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
+			<property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver" />
+			<property name="hibernate.connection.url" value="jdbc:hsqldb:file:STORAGETEST/main;shutdown=true" />
+			<property name="hibernate.connection.user" value="sa" />
+			<!-- <property name="hibernate.show_sql" value="true"/> <property name="hibernate.flushMode" 
+				value="FLUSH_AUTO" /> -->
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+
+
+
+		</properties>
+	</persistence-unit>
+
+	<persistence-unit name="appjpa-mysql"
+		transaction-type="RESOURCE_LOCAL">
+		<!-- Persistence provider -->
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<!-- Entity classes -->
+		<class>it.alessandromodica.product.model.po.PluginCommonBlacklist</class>
+		<class>it.alessandromodica.product.model.po.PluginCommonLogaccesso</class>
+		<class>it.alessandromodica.product.model.po.PluginCommonWarningAccesso</class>
+		<class>it.alessandromodica.product.model.po.PluginGestioneApps</class>
+		<class>it.alessandromodica.product.model.po.PluginGestioneUtenti</class>
+		<class>it.alessandromodica.product.model.po.PluginGestioneUtentiInfoautenticazione</class>
+		<class>it.alessandromodica.product.model.po.PluginGestioneUtentiOauth</class>
+		<class>it.alessandromodica.product.model.po.PluginGestioneUtentiOauthSessioni</class>
+		<class>it.alessandromodica.product.model.po.PluginLogger</class>
+
+		<class>it.alessandromodica.product.model.po.VGestioneUtenti</class>
+		<class>it.alessandromodica.product.model.po.VGestioneUtentiOuth</class>
+		<class>it.alessandromodica.product.model.po.VUtentiLoggatiDettaglio</class>
+		<properties>
+
+			<property name="hibernate.search.autoregister_listeners"
+				value="false" />
+			<property name="hibernate.show_sql" value="false" />
+			<!-- The JDBC driver of your database -->
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<!-- The JDBC URL to the database instance -->
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://%URI_DB%?useSSL=true" 
+				/>
+			<!-- The database username -->
+			<property name="javax.persistence.jdbc.user" value="%USERNAME%" 
+				/> 
+			<!-- The database password -->
+			<property name="javax.persistence.jdbc.password" value="%PASSWORD%" />
+
+			<property name="hibernate.dialect"
+				value="org.hibernate.spatial.dialect.mysql.MySQL56SpatialDialect" />
+
+			<property name="hibernate.c3p0.min_size" value="3" />
+			<property name="hibernate.c3p0.max_size" value="20" />
+			<property name="hibernate.c3p0.timeout" value="200" />
+			<property name="hibernate.c3p0.max_statements" value="50" />
+			<property name="hibernate.c3p0.idle_test_period" value="300" />
+			
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+		</properties>
+	</persistence-unit>
+
+</persistence>
+

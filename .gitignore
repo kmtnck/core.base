@@ -1,0 +1,12 @@
+/target/
+/.settings/
+/volume/
+/build/
+/gradle/
+/gradlew
+/gradlew.bat
+/.gradle
+/bin/
+/autogenerate/
+/hsqldb-1.8.0.10.jar
+/STORAGETEST/
