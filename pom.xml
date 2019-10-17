@@ -8,7 +8,7 @@
 	<name>Modulo goToBusiness</name>
 	<description>Un contenitore per realizzare il software dei tuoi sogni. E' provvisto di tutto il minimo necessario per iniziare lo sviluppo di una generica applicazione arbitrariamente complessa. Un set di junit esemplificano il funzionamento delle varie componenti. A scopo dimostrativo l'applicazione e' esposta al web da una semplice servlet deployabile su un application server Tomcat.</description>
 	<packaging>war</packaging>
-	<url>http://alessandromodica.com:8080/appdeployata/handler</url>
+	<url>https://github.com/kmtnck/core.base</url>
 
 	<properties>
 		<!-- <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> -->
