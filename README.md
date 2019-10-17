@@ -1,5 +1,6 @@
 # goToBusiness nome in codice: core.base
- Un modulo che prende cose e ne fa altre per soddisfare la felicita'
+ Un modulo che prende cose e ne fa altre per soddisfare la felicita' .
+ 
  Una ampia documentazione in stile javadoc e rigorosamente autogenerata la trovate qui https://alessandromodica.com/javadoc/gotobusiness/
 
  
