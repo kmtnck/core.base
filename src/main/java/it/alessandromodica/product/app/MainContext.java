@@ -19,7 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import it.alessandromodica.product.common.InputRequest;
+import it.alessandromodica.product.common.OutputData;
+import it.alessandromodica.product.common.InputData;
 import it.alessandromodica.product.common.enumerative.AppContext;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
@@ -27,7 +28,6 @@ import it.alessandromodica.product.context.consultazione.MainConsultazione;
 import it.alessandromodica.product.context.interfaces.IConsultazione;
 import it.alessandromodica.product.context.interfaces.IGis;
 import it.alessandromodica.product.context.security.Cassaforte;
-import it.alessandromodica.product.model.bo.BOAppPayload;
 import it.alessandromodica.product.model.bo.BOCoordinate;
 import it.alessandromodica.product.model.bo.BODecoderAddress;
 import it.alessandromodica.product.model.bo.BOUtente;
@@ -88,7 +88,7 @@ public abstract class MainContext extends GoToBusiness {
 	 * Questo field è valorizzato dal componente incaricato ad evadere la
 	 * richiesta, di solito viene valorizzato anche l'utente corrente
 	 */
-	protected InputRequest inputData;
+	protected InputData inputData;
 
 	/**
 	 * Questo setter viene sempre inizializzato da tutti i componenti con il
@@ -134,9 +134,9 @@ public abstract class MainContext extends GoToBusiness {
 	 * @return
 	 * @throws BusinessException
 	 */
-	public BOAppPayload getResult(AppContext appcontext, InputRequest inputData, BOUtente utenteCorrente)
+	public OutputData getResult(AppContext appcontext, InputData inputData, BOUtente utenteCorrente)
 			throws BusinessException {
-		BOAppPayload dataToSendClient = new BOAppPayload();
+		OutputData dataToSendClient = new OutputData();
 
 		try {
 

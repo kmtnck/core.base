@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import it.alessandromodica.product.callback.SettingCookie;
 import it.alessandromodica.product.common.AdapterGson;
-import it.alessandromodica.product.common.InputRequest;
+import it.alessandromodica.product.common.InputData;
 import it.alessandromodica.product.common.enumerative.AppContext;
 import it.alessandromodica.product.common.enumerative.RequestVariable;
 import it.alessandromodica.product.common.exceptions.BusinessException;
@@ -85,7 +85,7 @@ public class MainApplication extends MainContext {
 		log.info("Ambiente " + appcontext + " caricato con successo!");
 	}
 
-	public Object processAction(InputRequest inputData, String remoteAddrs, String referer, String useragent,
+	public Object processAction(InputData inputData, String remoteAddrs, String referer, String useragent,
 			String rawUtente, AppContext appcontext) throws BusinessException {
 		try {
 
@@ -105,7 +105,7 @@ public class MainApplication extends MainContext {
 		}
 	}
 
-	public Object processSignInOutGoogle(InputRequest inputData, String payloadOauth, AppContext appcontext)
+	public Object processSignInOutGoogle(InputData inputData, String payloadOauth, AppContext appcontext)
 			throws BusinessException {
 		cassaforte.setControllerSecurity(controllerSecurity);
 		log.info(">>> Si sta richiedendo la fase " + appcontext + " per accedere ai servizi " + TITOLO_APP
@@ -136,7 +136,7 @@ public class MainApplication extends MainContext {
 		return dataToSendClient;
 	}
 
-	private Object accessCapabilities(InputRequest inputData, BOUtente currentUtente, AppContext appcontext)
+	private Object accessCapabilities(InputData inputData, BOUtente currentUtente, AppContext appcontext)
 			throws BusinessException {
 		Object dataToSendClient;
 		// XXX: istanza del blocco di sicurezza. Serve a verificare la

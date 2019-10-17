@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 
 import it.alessandromodica.product.app.HelloWorldApp;
 import it.alessandromodica.product.common.AdapterGson;
-import it.alessandromodica.product.common.InputRequest;
+import it.alessandromodica.product.common.InputData;
 import it.alessandromodica.product.common.MagicString;
 import it.alessandromodica.product.common.enumerative.AppContext;
 import it.alessandromodica.product.common.enumerative.RequestVariable;
@@ -75,7 +75,7 @@ public class AppViewServlet extends HttpServlet {
 					throw new BusinessException(msg, ex);
 				}
 
-				InputRequest inputData = new InputRequest();
+				InputData inputData = new InputData();
 				switch (context) {
 				case outhsignin:
 				case outhsignout:

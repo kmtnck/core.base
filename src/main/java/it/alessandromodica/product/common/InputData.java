@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("rawtypes")
-public class InputRequest {
+public class InputData {
 
 	private Map<Enum,Object> mapRequestData = new HashMap<Enum,Object>();
 

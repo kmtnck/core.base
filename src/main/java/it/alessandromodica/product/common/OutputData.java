@@ -1,6 +1,6 @@
-package it.alessandromodica.product.model.bo;
+package it.alessandromodica.product.common;
 
-public class BOAppPayload {
+public class OutputData {
 
 	private String context;
 	private Object payload;
