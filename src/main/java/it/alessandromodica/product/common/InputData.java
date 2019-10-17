@@ -3,6 +3,12 @@ package it.alessandromodica.product.common;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Classe che rappresenta la mappa dei valori forniti in input all'applicazione
+ * 
+ * @author Alessandro
+ *
+ */
 @SuppressWarnings("rawtypes")
 public class InputData {
 

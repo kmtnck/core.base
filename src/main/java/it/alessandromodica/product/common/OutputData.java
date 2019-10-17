@@ -1,5 +1,12 @@
 package it.alessandromodica.product.common;
 
+/**
+ * Classe che rappresenta il risultato da fornire in output al client. <br>
+ * Viene fornito il contesto del risultato fornito, il valore in formato generico Object pronto per essere serializzato.<br>
+ * Uno stato e un messaggio che hanno la funzione di metadati aggiuntivi. Il valore in output vero e proprio e' il valore Payload
+ * @author Alessandro
+ *
+ */
 public class OutputData {
 
 	private String context;
