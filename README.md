@@ -21,8 +21,8 @@ d) Stringhe magiche e parametri definiti a codice.
  Ci sono alcuni parametri strutturali che definiscono l'uri dell'application server (es Tomcat) per il deploy e il nome dell'artefatto finale.
  
 Tra le properties presenti sul pom.xml ce ne sono due che definiscono:
-a) il nome dell'artefatto .war 
-b) l'uri dell'indirizzo manager di tomcat
+ a) il nome dell'artefatto .war 
+ b) l'uri dell'indirizzo manager di tomcat
  	
  	<webappname>appdeployata</webappname>
  		
@@ -55,15 +55,15 @@ Per deployare il comando è il seguente
  
 ## b) Parametri di logging con Log4j
 La configurazione log4j è la piu semplice e versatile possibile: è definito allo stesso package common nello scope resource.
-Si ha una predisposizione per essere inizializzato da un yaml
-Può essere automaticamente riconosciuto in qualsiasi classpath del package common, in modo da rendere granulare il suo uso in fase di testing o altri casi specifici. Qui di seguito la locazione presente in questo progetto.
+ Si ha una predisposizione per essere inizializzato da un yaml
+ Può essere automaticamente riconosciuto in qualsiasi classpath del package common, in modo da rendere granulare il suo uso in fase di testing o altri casi specifici. Qui di seguito la locazione presente in questo progetto.
 
 	./src/main/resources/it/alessandromodica/product/common/config/log4j.xml
 
 
 ## c) Configurazione della persistence unit tramite persistence.xml
-In java ci sono molteplici approcci per configurare un datastorage, e ancor di piu con l'introduzione delle configurazioni dinamiche yaml kubernets oriented.
-Questa applicazione si basa sulle annotation JPA e Hibernate. La modalità delle transazione è il classico RESOURCE_LOCAL.
+ In java ci sono molteplici approcci per configurare un datastorage, e ancor di piu con l'introduzione delle configurazioni dinamiche yaml kubernets oriented.
+ Questa applicazione si basa sulle annotation JPA e Hibernate. La modalità delle transazione è il classico RESOURCE_LOCAL.
 La modalità JTA richiede un minimo di adattamento dei repository, ma necessita di un application server JTA compliance. Attualmente l'application server supportato è tomcat ma potrebbe essere incapsulato in un container cordova in un contesto nodejs.
  
 I parametri fondamentali da immettere rimangono comunque i seguenti:
