@@ -18,17 +18,18 @@ import it.alessandromodica.product.persistence.uow.UnitOfWork;
 
 /**
  * E' il componente principale dell'applicazione. E' contenuto l'intero set di
- * funzionalità previsto dalle specifiche applicative. E' istanziabile da un
- * contesto spring e da esso è possibile estrarre tutti i bean iniettati dove
- * poter fare testing e a sua volte farli interagire in altri componenti.
+ * funzionalita' dell'applicazione. E' istanziabile da un contesto spring e da
+ * esso e' possibile estrarre tutti i bean per poter fare testing e a sua volta
+ * farli interagire in altri componenti.
  * 
  * Può essere fatto partire in qualsiasi contesto runtime java platform.
  * 
  * Eredita il MainContext il quale rappresenta lo scope comune di tutti i
  * controller che manipolano dati a seconda le esigenze.
  * 
- * La superclasse ConvertToBusiness è condivisa sia dal maincontext che dal
- * mainservice in cui sono raccolti i componenti repository.
+ * La superclasse GoToBusiness è condivisa sia dal maincontext che dal
+ * mainservice in cui sono raccolti i componenti repository utilizzati per
+ * accedere alle risorse su un datastorage.
  * 
  * Questa gerarchia ad albero permette di avere un controllo efficente di tutte
  * le componenti distribuendo gli scope di funzionalità in base alle mutevoli
