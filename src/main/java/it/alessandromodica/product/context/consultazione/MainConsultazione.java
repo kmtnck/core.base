@@ -5,11 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import it.alessandromodica.product.app.MainContext;
-import it.alessandromodica.product.common.InputRequest;
+import it.alessandromodica.product.common.OutputData;
+import it.alessandromodica.product.common.InputData;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.context.interfaces.IConsultazione;
-import it.alessandromodica.product.model.bo.BOAppPayload;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.services.interfaces.IAppService;
 
@@ -21,17 +21,17 @@ public class MainConsultazione extends MainContext implements IConsultazione {
 	@Autowired
 	private IAppService appService;
 
-	public void setInfo(BOUtente utente, InputRequest inputData) {
+	public void setInfo(BOUtente utente, InputData inputData) {
 		setUtenteCorrente(utente);
 		this.inputData = inputData;
 	}
 
 	@Override
-	public BOAppPayload getUtentiConnessi() throws BusinessException {
+	public OutputData getUtentiConnessi() throws BusinessException {
 
 		try {
 
-			BOAppPayload dataResult = new BOAppPayload();
+			OutputData dataResult = new OutputData();
 			dataResult.setPayload(appService
 					.getUtentiConnessi());
 

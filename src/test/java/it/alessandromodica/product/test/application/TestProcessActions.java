@@ -9,12 +9,12 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import it.alessandromodica.product.app.HelloWorldApp;
 import it.alessandromodica.product.app.MainApplication;
+import it.alessandromodica.product.common.OutputData;
 import it.alessandromodica.product.common.config.ConfigApp;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.context.interfaces.ISecurity;
-import it.alessandromodica.product.model.bo.BOAppPayload;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.po.PluginCommonBlacklist;
 import it.alessandromodica.product.model.po.PluginCommonLogaccesso;
@@ -217,7 +217,7 @@ public class TestProcessActions extends TestCase {
 		criteria.get_listLikeClause().add(likeClause);
 		criteria.get_listOrderBy().add("nickname");
 		try {
-			BOAppPayload dataResult = new BOAppPayload();
+			OutputData dataResult = new OutputData();
 
 			List<PluginGestioneUtenti> result = repoquery.setEntity(PluginGestioneUtenti.class)
 					.search(criteria.getSerialized());
