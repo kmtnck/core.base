@@ -1,5 +1,13 @@
 package it.alessandromodica.product.persistence.searcher;
 
+/**
+ * Classe che rappresenta il criterio di ricerca di tipo like in un canonico
+ * database Permette di definire se il like è di tipo unsensitive, se supportato
+ * dal database
+ * 
+ * @author Alessandro
+ *
+ */
 public class BOLikeClause extends BOBase {
 
 	/**

@@ -17,10 +17,10 @@ import it.alessandromodica.product.persistence.uow.UnitOfWork;
  * In questa classe repository è possibile definire tutti i metodi legacy
  * necessari ad accedere a sql puro
  * 
- * @param periodo
- * @param nickname
- * @return
- * @throws RepositoryException
+ * E' la classe repository dedicata al software che si vuole realizzare e estende la classe astratta BaseRepository
+ * @author Alessandro
+ *
+ * @param <T>
  */
 @Component
 public class AppRepository<T> extends BaseRepository<T> implements IRepositoryQueries<T>, IRepositoryCommands<T> {

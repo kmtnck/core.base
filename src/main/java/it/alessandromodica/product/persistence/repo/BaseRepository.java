@@ -28,15 +28,26 @@ import it.alessandromodica.product.persistence.searcher.BOSearch;
 import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
 import it.alessandromodica.product.persistence.uow.UnitOfWork;
 
+/**
+ * Classe astratta in cui sono raccolte le implementazioni standard per
+ * l'accesso al database. Viene ereditata da tutte le classi repository
+ * implementate per l'applicazione corrente. Di solito e' sufficiente un solo
+ * repository, ma potrebbero esserne implementati piu di uno a seconda le
+ * esigenze
+ * 
+ * @author Alessandro
+ *
+ * @param <T>
+ */
 @SuppressWarnings("unchecked")
-public abstract class BaseRepository<T>  {
+public abstract class BaseRepository<T> {
 
 	private static final Logger log = Logger.getLogger(BaseRepository.class);
 
 	protected Class<T> classEntity;
 
 	protected void setClass(Class<T> classEntity) {
-		
+
 		if (classEntity != null) {
 			this.nameClass = classEntity.getName();
 			this.classEntity = classEntity;
@@ -47,7 +58,7 @@ public abstract class BaseRepository<T>  {
 
 	@Autowired
 	protected IUnitOfWork uow;
-	
+
 	public void executeTransaction(IBulkTransaction bulkoperation) throws RepositoryException {
 		uow.submit(bulkoperation);
 	}
@@ -89,20 +100,18 @@ public abstract class BaseRepository<T>  {
 		query.orderBy(listsOrder);
 
 		Query resultQuery;
-		
-		if(serializeCriteria.getMaxResult() > 0)
-		{
-			Query limitedCriteriaQuery = em.createQuery(query)
-				     .setMaxResults(serializeCriteria.getMaxResult()).setFirstResult(serializeCriteria.getFirstResult()); 
+
+		if (serializeCriteria.getMaxResult() > 0) {
+			Query limitedCriteriaQuery = em.createQuery(query).setMaxResults(serializeCriteria.getMaxResult())
+					.setFirstResult(serializeCriteria.getFirstResult());
 			resultQuery = limitedCriteriaQuery;
-		}
-		else
+		} else
 			resultQuery = em.createQuery(query);
-		
+
 		/*
 		 * if (serializeCriteria.getMaxResult() > 0)
-		 * searchCriteria.setMaxResults(serializeCriteria.getMaxResult()); for
-		 * (String cOrderBy : serializeCriteria.getListOrderBy()) { if
+		 * searchCriteria.setMaxResults(serializeCriteria.getMaxResult()); for (String
+		 * cOrderBy : serializeCriteria.getListOrderBy()) { if
 		 * (serializeCriteria.is_isDescendent()) {
 		 * searchCriteria.addOrder(Order.desc(cOrderBy)); } else {
 		 * searchCriteria.addOrder(Order.asc(cOrderBy)); } }
@@ -167,34 +176,29 @@ public abstract class BaseRepository<T>  {
 
 			Class<?> typeData = (Class) cBT.get(BOSearch.TYPE_DATA);
 			String field = cBT.get(BOSearch.NAME_FIELD).toString();
-			if (typeData != null && typeData.getName().contains("Date"))
-			{
+			if (typeData != null && typeData.getName().contains("Date")) {
 				Expression<Date> rootField = root.get(field);
 				Date dateTo = null;
 				Date dateFrom = null;
-				dateTo = (Date)cBT.get(BOSearch.VALUE_TO);
-				dateFrom = (Date)cBT.get(BOSearch.VALUE_FROM);
+				dateTo = (Date) cBT.get(BOSearch.VALUE_TO);
+				dateFrom = (Date) cBT.get(BOSearch.VALUE_FROM);
 				predicates.add(builder.between(rootField, dateFrom, dateTo));
-			}
-			else if (typeData != null && typeData.getName().contains("Integer"))
-			{
+			} else if (typeData != null && typeData.getName().contains("Integer")) {
 				Expression<Integer> rootField = root.get(field);
 				Integer valueTo = null;
 				Integer valueFrom = null;
-				valueTo = (Integer)cBT.get(BOSearch.VALUE_TO);
-				valueFrom = (Integer)cBT.get(BOSearch.VALUE_FROM);
+				valueTo = (Integer) cBT.get(BOSearch.VALUE_TO);
+				valueFrom = (Integer) cBT.get(BOSearch.VALUE_FROM);
 				predicates.add(builder.between(rootField, valueFrom, valueTo));
-				
-			}
-			else if (typeData != null && typeData.getName().contains("Double"))
-			{
+
+			} else if (typeData != null && typeData.getName().contains("Double")) {
 				Expression<Double> rootField = root.get(field);
 				Double valueTo = null;
 				Double valueFrom = null;
-				valueTo = (Double)cBT.get(BOSearch.VALUE_TO);
-				valueFrom = (Double)cBT.get(BOSearch.VALUE_FROM);
+				valueTo = (Double) cBT.get(BOSearch.VALUE_TO);
+				valueFrom = (Double) cBT.get(BOSearch.VALUE_FROM);
 				predicates.add(builder.between(rootField, valueFrom, valueTo));
-				
+
 			}
 		}
 
@@ -203,11 +207,10 @@ public abstract class BaseRepository<T>  {
 			Class<?> typeData = (Class) cOper.get(BOSearch.TYPE_DATA);
 			String operatore = cOper.get("_operatore").toString();
 			Predicate predicato = null;
-			
-			if (typeData != null && typeData.getName().contains("Date"))
-			{
+
+			if (typeData != null && typeData.getName().contains("Date")) {
 				Expression<Date> rootField = root.get(field);
-				Date value = (Date)cOper.get(BOSearch.VALUE_FIELD);
+				Date value = (Date) cOper.get(BOSearch.VALUE_FIELD);
 				if (operatore.equals(BOOperatorClause.MINUSEQUALS)) {
 					predicato = builder.lessThanOrEqualTo(rootField, value);
 				} else if (operatore.equals(BOOperatorClause.MINUS)) {
@@ -218,12 +221,10 @@ public abstract class BaseRepository<T>  {
 					predicato = builder.greaterThan(rootField, value);
 				} else if (operatore.equals(BOOperatorClause.DISEQUALS)) {
 					predicato = builder.notEqual(rootField, value);
-				}				
-			}
-			else if (typeData != null && typeData.getName().contains("Integer"))
-			{
+				}
+			} else if (typeData != null && typeData.getName().contains("Integer")) {
 				Expression<Integer> rootField = root.get(field);
-				Integer value = (Integer)cOper.get(BOSearch.VALUE_FIELD);
+				Integer value = (Integer) cOper.get(BOSearch.VALUE_FIELD);
 				if (operatore.equals(BOOperatorClause.MINUSEQUALS)) {
 					predicato = builder.lessThanOrEqualTo(rootField, value);
 				} else if (operatore.equals(BOOperatorClause.MINUS)) {
@@ -234,12 +235,10 @@ public abstract class BaseRepository<T>  {
 					predicato = builder.greaterThan(rootField, value);
 				} else if (operatore.equals(BOOperatorClause.DISEQUALS)) {
 					predicato = builder.notEqual(rootField, value);
-				}				
-			}
-			else if (typeData != null && typeData.getName().contains("Double"))
-			{
+				}
+			} else if (typeData != null && typeData.getName().contains("Double")) {
 				Expression<Double> rootField = root.get(field);
-				Double value = (Double)cOper.get(BOSearch.VALUE_FIELD);
+				Double value = (Double) cOper.get(BOSearch.VALUE_FIELD);
 				if (operatore.equals(BOOperatorClause.MINUSEQUALS)) {
 					predicato = builder.lessThanOrEqualTo(rootField, value);
 				} else if (operatore.equals(BOOperatorClause.MINUS)) {
@@ -250,9 +249,9 @@ public abstract class BaseRepository<T>  {
 					predicato = builder.greaterThan(rootField, value);
 				} else if (operatore.equals(BOOperatorClause.DISEQUALS)) {
 					predicato = builder.notEqual(rootField, value);
-				}				
+				}
 			}
-			
+
 			predicates.add(predicato);
 		}
 
@@ -303,37 +302,32 @@ public abstract class BaseRepository<T>  {
 	@Autowired
 	private Search<T> searchctx;
 
-	/*public class Create implements ICommand<T> {
-		@Override
-		public void execute(T entity, EntityManager manager) throws RepositoryException {
-			manager.persist(entity);
-		}
-	}
-
-	public class Update implements ICommand<T> {
-		@Override
-		public void execute(T entity, EntityManager manager) throws RepositoryException {
-			manager.merge(entity);
-
-		}
-	}
-
-	public class Remove implements ICommand<T> {
-		@Override
-		public void execute(T entity, EntityManager manager) throws RepositoryException {
-			manager.remove(manager.contains(entity) ? entity : manager.merge(entity));
-		}
-
-	}
-
-	public class Search implements ISearcher<T> {
-
-		@Override
-		public List<T> search(Query query) throws RepositoryException {
-			// TODO Auto-generated method stub
-			return query.getResultList();
-		}
-	}*/
+	/*
+	 * public class Create implements ICommand<T> {
+	 * 
+	 * @Override public void execute(T entity, EntityManager manager) throws
+	 * RepositoryException { manager.persist(entity); } }
+	 * 
+	 * public class Update implements ICommand<T> {
+	 * 
+	 * @Override public void execute(T entity, EntityManager manager) throws
+	 * RepositoryException { manager.merge(entity);
+	 * 
+	 * } }
+	 * 
+	 * public class Remove implements ICommand<T> {
+	 * 
+	 * @Override public void execute(T entity, EntityManager manager) throws
+	 * RepositoryException { manager.remove(manager.contains(entity) ? entity :
+	 * manager.merge(entity)); }
+	 * 
+	 * }
+	 * 
+	 * public class Search implements ISearcher<T> {
+	 * 
+	 * @Override public List<T> search(Query query) throws RepositoryException { //
+	 * TODO Auto-generated method stub return query.getResultList(); } }
+	 */
 
 	public List<T> getAll() throws RepositoryException {
 		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
@@ -352,8 +346,8 @@ public abstract class BaseRepository<T>  {
 	/**
 	 * Il criterio order è una specializzazione del tipo Criterion, il quale ha
 	 * però lo scopo di istruire hibernate a costruire la query definendo un
-	 * criterio di ordinamento su un campo (nome field, no nome campo su db) asc
-	 * o desc
+	 * criterio di ordinamento su un campo (nome field, no nome campo su db) asc o
+	 * desc
 	 */
 	public List<T> getAll(Order orderby) throws RepositoryException {
 
@@ -600,7 +594,7 @@ public abstract class BaseRepository<T>  {
 			em.close();
 		}
 	}
-	
+
 	public T getSingle(CriteriaQuery<T> criteria) throws RepositoryException {
 		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
 		return getRetrieve(em.createQuery(criteria), UniqueStrategy.single, em);
@@ -676,8 +670,7 @@ public abstract class BaseRepository<T>  {
 		}
 	}
 
-	private T getRetrieve(Query query, UniqueStrategy uniquestrategy, EntityManager em)
-			throws RepositoryException {
+	private T getRetrieve(Query query, UniqueStrategy uniquestrategy, EntityManager em) throws RepositoryException {
 		T obj = null;
 		try {
 			obj = getUnique(query, uniquestrategy, em);
@@ -691,8 +684,7 @@ public abstract class BaseRepository<T>  {
 		}
 	}
 
-	private T getUnique(Query query, UniqueStrategy uniquestrategy, EntityManager em)
-			throws RepositoryException {
+	private T getUnique(Query query, UniqueStrategy uniquestrategy, EntityManager em) throws RepositoryException {
 
 		T obj = null;
 

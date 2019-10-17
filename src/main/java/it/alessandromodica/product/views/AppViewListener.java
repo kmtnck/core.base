@@ -9,6 +9,14 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import it.alessandromodica.product.app.HelloWorldApp;
 import it.alessandromodica.product.common.config.ConfigApp;
 
+/**
+ * Classe listener che estende il classico ServletContextListener, che viene
+ * chiamato dall'application server (Tomcat) al momento dell'avvio
+ * dell'applicazione.
+ * 
+ * @author Alessandro
+ *
+ */
 public class AppViewListener implements ServletContextListener {
 
 	private static final Logger log = Logger.getLogger(AppViewListener.class);

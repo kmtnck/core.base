@@ -10,6 +10,14 @@ import org.apache.commons.lang.StringUtils;
 
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 
+/**
+ * Classe base del searcher usato per eseguire ricerche tramite lo strumento
+ * BOSearcher. I criteri di ricerca sono opportunamente serializzati affinchè
+ * siano convertiti in automatico in query HQL riconosciute da hibernate
+ * 
+ * @author Alessandro
+ *
+ */
 public class BOBase implements Serializable {
 
 	/**
@@ -17,6 +25,18 @@ public class BOBase implements Serializable {
 	 */
 	private static final long serialVersionUID = 9150468309827097773L;
 
+	/**
+	 * Metodo che serializza tramite reflection i fields definiti dalla classe che
+	 * la estende
+	 * 
+	 * Il metodo potrebbe subire modifiche in base al tipo di dati presenti sul
+	 * datastorage. Sono definiti per alcuni tipi standard le canoniche operazioni
+	 * di trasformazione
+	 * 
+	 * @param src
+	 * @return
+	 * @throws RepositoryException
+	 */
 	@SuppressWarnings("rawtypes")
 	protected static Map<String, Object> toDictionary(Object src) throws RepositoryException {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -40,9 +60,13 @@ public class BOBase implements Serializable {
 
 				if (value != null) {
 
+					// XXX: sono accettati valori di tipo stringa, int, char, double, date e un
+					// generico tipo Class
 					if (value instanceof String || value instanceof Integer || value instanceof Character
 							|| value instanceof Double || value instanceof Date || (value instanceof Class<?>)) {
 
+						// XXX: il dato viene castato in modo opportuno per essere inserito nella mappa
+						// result finale
 						if ((value instanceof String && !StringUtils.isBlank(value.toString()))
 								|| (value instanceof Character && !StringUtils.isBlank(value.toString()))
 								|| (value instanceof Integer && Integer.parseInt(value.toString()) != 0)

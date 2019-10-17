@@ -12,12 +12,20 @@ import it.alessandromodica.product.model.po.VUtentiLoggatiDettaglio;
 import it.alessandromodica.product.persistence.searcher.BOSearchApp;
 import it.alessandromodica.product.services.interfaces.IAppService;
 
+/**
+ * Classe che rappresenta il modulo service in cui sono implementati tutti i
+ * metodi di tipo Consultazione, lettura, ricerca e tutto cio che e' attinente
+ * alla ricerca di dati a seconda le esigenze del software.
+ * 
+ * Ogni metodo ha la sua firma nella interfaccia IAppService e di fatto potrebbe
+ * essere il modulo service piu usato dall'applicazione.
+ * 
+ * @author Alessandro
+ *
+ */
 @Service
 @SuppressWarnings("unchecked")
 public class ConsultazioneService extends GoToBusiness implements IAppService {
-
-	// @Autowired
-	// MainApplication mainApplication;
 
 	private static final Logger log = Logger.getLogger(ConsultazioneService.class);
 

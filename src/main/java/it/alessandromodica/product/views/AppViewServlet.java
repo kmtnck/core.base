@@ -29,12 +29,23 @@ import it.alessandromodica.product.common.enumerative.AppContext;
 import it.alessandromodica.product.common.enumerative.RequestVariable;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 
+/**
+ * Classe che implementa una semplice servlet a scopo dimostrativo per esporre
+ * le chiamate dell'applicazione in un ambiente remoto.
+ * 
+ * Potrebbero essere implementati altri tipi di approcci che espongano nel modo
+ * piu opporturno le funzionalità dell'applicazione, come ad esempio sotto forma
+ * di risorse REST
+ * 
+ * @author Alessandro
+ *
+ */
 public class AppViewServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger log = Logger.getLogger(AppViewServlet.class);
-	
+
 	HelloWorldApp mainApp = AppViewListener.context.getBean(HelloWorldApp.class);
 
 	/**
@@ -42,16 +53,16 @@ public class AppViewServlet extends HttpServlet {
 	 */
 
 	/**
-	 * La servlet ha lo scopo di intercettare la coppia di valori contesto e
-	 * azione. Tali valori vengono impostati dal chiamante e inseriti nella
-	 * richiesta che viene passata alla servlet.
+	 * La servlet ha lo scopo di intercettare la coppia di valori contesto e azione.
+	 * Tali valori vengono impostati dal chiamante e inseriti nella richiesta che
+	 * viene passata alla servlet.
 	 * 
 	 * In base a tale coppia di valori viene intrapresa un'azione specifica
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		try {
-			
+
 			Object dataToSendClient = null;
 			// <<<--------------------------------------------------
 			try {
@@ -86,8 +97,7 @@ public class AppViewServlet extends HttpServlet {
 					inputData.getMapRequestData().put(RequestVariable.nickname,
 							request.getParameter(RequestVariable.nickname.name()));
 
-					dataToSendClient = mainApp.processSignInOutGoogle(inputData, payloadOauth,
-							context);
+					dataToSendClient = mainApp.processSignInOutGoogle(inputData, payloadOauth, context);
 
 					break;
 				default:
@@ -101,8 +111,8 @@ public class AppViewServlet extends HttpServlet {
 					EnumSet.allOf(RequestVariable.class).forEach(currentEnum -> inputData.getMapRequestData()
 							.put(currentEnum, request.getParameter(currentEnum.name())));
 
-					dataToSendClient = mainApp.processAction(inputData, remoteAddrs, referer,
-							useragent, rawUtente, context);
+					dataToSendClient = mainApp.processAction(inputData, remoteAddrs, referer, useragent, rawUtente,
+							context);
 					break;
 				}
 

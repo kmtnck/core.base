@@ -2,9 +2,6 @@ package it.alessandromodica.product.common.exceptions;
 
 public class BusinessException extends Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1161385393431385864L;
 
 	public BusinessException(String message) {

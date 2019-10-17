@@ -2,9 +2,6 @@ package it.alessandromodica.product.common.exceptions;
 
 public class RepositoryException extends Exception {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3861246110796551546L;
 
 	public RepositoryException(String message) {

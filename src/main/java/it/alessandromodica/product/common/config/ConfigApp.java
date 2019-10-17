@@ -19,9 +19,8 @@ public class ConfigApp {
 	 * Inizializza il logger Definisce i parametri di configurazione usati
 	 * dall'applicazione
 	 * 
-	 * @param classLoader
-	 * @throws IOException
-	 */public ConfigApp()
+	 */
+	public ConfigApp()
 	{
 		DOMConfigurator.configure(ConfigApp.class.getResource("log4j.xml"));
 		log.info("Istanziato il logger");

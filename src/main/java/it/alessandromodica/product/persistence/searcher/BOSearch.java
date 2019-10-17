@@ -10,6 +10,15 @@ import java.util.Map.Entry;
 
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 
+/**
+ * Classe astratta che rappresenta il criterio di ricerca definito in input in una generica richiesta di ricerca sul datastorage.
+ * Estende la classe BOBase per poter serializzare in una mappatura i valori.
+ * Sono presenti valori statici di tipo stringa utilizzati dal metodo _buildItemClause e dal chiamante BaseRepository.
+ * Il metodo _buildItemClause ritorna l'oggetto BOSerializeCritera il quale e' l'unico oggetto riconosciuto dal BaseRepository
+ * 
+ * @author Alessandro
+ *
+ */
 public abstract class BOSearch extends BOBase implements Serializable {
 
 	/**

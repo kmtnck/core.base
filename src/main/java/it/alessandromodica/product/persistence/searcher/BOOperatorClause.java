@@ -1,5 +1,12 @@
 package it.alessandromodica.product.persistence.searcher;
 
+/**
+ * Classe che rappresenta il criterio di ricerca di tipo operatore minus, maior
+ * e varianti equals.
+ * 
+ * @author Alessandro
+ *
+ */
 public class BOOperatorClause extends BOBase {
 
 	/**
@@ -51,4 +58,3 @@ public class BOOperatorClause extends BOBase {
 	}
 
 }
-

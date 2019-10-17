@@ -1,5 +1,12 @@
 package it.alessandromodica.product.persistence.searcher;
 
+/**
+ * Classe che rappresenta il criterio di ricerca between, supportato dalla
+ * maggioranza dei database esistenti
+ * 
+ * @author Alessandro
+ *
+ */
 public class BOBetweenClause extends BOBase {
 
 	/**
@@ -11,7 +18,7 @@ public class BOBetweenClause extends BOBase {
 	private String _nameField;
 	private Object _valueFrom;
 	private Object _valueTo;
-	
+
 	public String get_nameField() {
 		return _nameField;
 	}
@@ -43,6 +50,5 @@ public class BOBetweenClause extends BOBase {
 	public void set_valueTo(Object _valueTo) {
 		this._valueTo = _valueTo;
 	}
-
 
 }

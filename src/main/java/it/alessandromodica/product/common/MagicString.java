@@ -61,7 +61,7 @@ public class MagicString {
 	 * identificati anche dal server. Tutti i tag html utilizzati unicamente
 	 * nello scope js/jsp non sono mappati in questa classe
 	 * 
-	 * @author Administrator
+	 * @author Alessandro
 	 * 
 	 */
 	public class TagToRender {
@@ -82,7 +82,7 @@ public class MagicString {
 	 * una richiesta. I parametri applicativi, insieme a quelli del protocollo
 	 * permettono la personalizzazione dei vari contesti a seconda le esigenze
 	 * 
-	 * @author Administrator
+	 * @author Alessandro
 	 * 
 	 */
 	public class ParameterName {
@@ -117,7 +117,7 @@ public class MagicString {
 	 * Classe che raccoglie la definizione di class css riservati, utilizzati
 	 * cioè per scopi non di layout grafico
 	 * 
-	 * @author Administrator
+	 * @author Alessandro
 	 * 
 	 */
 	public static class CssClassReserved {

@@ -15,6 +15,11 @@ import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.bo.BOVerifica;
 import it.alessandromodica.product.services.interfaces.ISecurityService;
 
+/**
+ * Modulo dedicato al controllo di sicurezza dell'utente corrente, anche se l'utente e' nuovo.
+ * @author Alessandro
+ *
+ */
 @Controller
 public class MainSecurity extends MainContext implements ISecurity {
 

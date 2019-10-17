@@ -16,6 +16,18 @@ import it.alessandromodica.product.model.po.PluginGestioneUtenti;
 import it.alessandromodica.product.persistence.searcher.BOSearchApp;
 import it.alessandromodica.product.services.interfaces.IMainService;
 
+/**
+ * Classe che rappresenta il modulo service principale. Viene esteso da tutti
+ * gli altri service e implementa metodi comuni a tutti i servizi, come ad
+ * esempio il recupero dell'utente corrente o il logging di accesso su una
+ * tabella dedicata. Il metodo logAccesso non ha alcuna correlazione con gli
+ * strumenti log4j, si limita a scrivere in modo personalizzato una tracciatura
+ * di accesso utente, permettendo una estrema personalizzazione di tracciamento
+ * attivita degli utenti.
+ * 
+ * @author Alessandro
+ *
+ */
 @Service
 @SuppressWarnings("unchecked")
 public class MainService extends GoToBusiness implements IMainService {
@@ -30,6 +42,9 @@ public class MainService extends GoToBusiness implements IMainService {
 	// altri servizi esterni) oppure agire su dati stessi
 	// i servizi sono trasversali e iniettati dove serve.
 
+	/**
+	 * Recupera le informazioni dell'utente corrente
+	 */
 	public PluginGestioneUtenti getUtente(String nickname) throws ServiceException {
 		BOSearchApp search = new BOSearchApp();
 		search.setNickname(nickname);
@@ -53,6 +68,10 @@ public class MainService extends GoToBusiness implements IMainService {
 		}
 	}
 
+	/**
+	 * Logga su una tabella l'attivita dell'utente corrente rappresentata da un
+	 * messaggio
+	 */
 	public void logAccesso(String messaggio, BOUtente utentecorrente) throws ServiceException {
 
 		try {

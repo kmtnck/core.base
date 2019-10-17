@@ -2,9 +2,6 @@ package it.alessandromodica.product.common.exceptions;
 
 public class ServiceException extends Exception {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -8612899408934890958L;
 
 	public ServiceException(String message) {

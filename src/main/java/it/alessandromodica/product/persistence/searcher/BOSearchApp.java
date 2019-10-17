@@ -2,13 +2,21 @@ package it.alessandromodica.product.persistence.searcher;
 
 import java.util.Date;
 
-public class BOSearchApp extends BOSearch{
+/**
+ * Classe specifica per l'applicazione che si vuole sviluppare. Ogni field qui
+ * definito e' automaticamente riconosciuto dal serializzatore del BOSearcher
+ * come clausola di uguaglianza. E' sufficiente aggiungere un nuovo field per
+ * fornire all'applicazione la gestione di un nuovo campo.
+ * 
+ * @author Alessandro
+ *
+ */
+public class BOSearchApp extends BOSearch {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 3465637985118214119L;
-
 
 	private String nickname;
 	private Date data;
@@ -18,7 +26,7 @@ public class BOSearchApp extends BOSearch{
 	private String idtoken;
 	private String guid;
 	private String descrizione;
-	
+
 	public String getDescrizione() {
 		return descrizione;
 	}
@@ -39,7 +47,7 @@ public class BOSearchApp extends BOSearch{
 	private String tokenapp;
 	private int idutente;
 	private String nomeparametro;
-	
+
 	public String getNomeparametro() {
 		return nomeparametro;
 	}

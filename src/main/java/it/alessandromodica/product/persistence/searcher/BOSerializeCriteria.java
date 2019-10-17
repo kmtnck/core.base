@@ -5,6 +5,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * La classe rappresenta l'oggetto dato in pasto al repository per poter generare la query HQL hibernate in modo automatico.
+ * Il repository di fatto riconosce unicamente questa classe, disaccoppiando la logica definita nel BOSearcher.
+ * L'oggetto è ritornato dal metodo privato _buildItemsClause presente nel BOSearcher.
+ * 
+ * @author Alessandro
+ *
+ */
 public class BOSerializeCriteria {
 
 	@SuppressWarnings("rawtypes")

@@ -8,6 +8,15 @@ import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.context.interfaces.ISecurity;
 import it.alessandromodica.product.model.bo.BOPayloadAuth;
 
+/**
+ * Componente in cui viene verificata l'autenticita' dell'utenza richiedente.
+ * Sono definite le informazioni base per il controllo di sicurezza:
+ * la versione del software e se e' la versione beta
+ * Le informazioni dell'utente richiedente, l'email, e il suo username qualora risulta gia registrato.
+ * 
+ * @author Alessandro
+ *
+ */
 @Component
 public class Cassaforte {
 

@@ -44,6 +44,26 @@ import it.alessandromodica.product.persistence.searcher.BOSearchApp;
 import it.alessandromodica.product.services.interfaces.IMainService;
 import it.alessandromodica.product.services.interfaces.ISecurityService;
 
+/**
+ * Classe che rappresenta il modulo service security. Sono implementati i metodi
+ * per il riconoscimento dell'utente, in base ai criteri e permessi definiti
+ * dall'applicazione. Questo modulo potrebbe subire modifiche e customizzazioni
+ * spinte a seconda il tipo di sicurezza scelta nello sviluppo dell'applicativo.
+ * In questo modulo sono implementati i metodi minimi necessari per il
+ * riconoscimento utente, preso di ispirazione da una applicazione che fa uso di
+ * questo service.
+ * 
+ * I metodi di login e logout da una sessione google single sign on garantiscono
+ * l'autenticita dell'utente google che richiede la registrazione
+ * all'applicazione.
+ * 
+ * I metodi checkIntegrity e verificaUtenza sono implementati a seconda le
+ * esigenze dell'applicazione e dal tipo di strategia di sicurezza adottata. In
+ * questa classe sono implementati due esempi di autenticazione.
+ * 
+ * @author Alessandro
+ *
+ */
 @Service
 @SuppressWarnings("unchecked")
 public class SecurityService extends GoToBusiness implements ISecurityService {

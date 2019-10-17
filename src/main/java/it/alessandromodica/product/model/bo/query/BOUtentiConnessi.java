@@ -7,8 +7,8 @@ import it.alessandromodica.product.model.bo.BOCommon;
 
 /**
  * Entita business mappata come result set della store procedure definita in customquery
- * @author alessandro.modica
  *
+ * @author Alessandro
  */
 @Entity
 //XXX: store procedure di esempio @NamedNativeQuery(name = "utentiLoggati", query = "{ call utentiLoggati(:periodo,:nickname)}", resultClass = BOUtentiConnessi.class)

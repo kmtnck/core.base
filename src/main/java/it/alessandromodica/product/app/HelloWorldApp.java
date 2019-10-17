@@ -23,7 +23,6 @@ public class HelloWorldApp extends MainApplication {
 	 * componenti personalizzati. Un esempio è il modulo consultazione, ma è
 	 * solo un esempio.
 	 * 
-	 * @param entityManager
 	 * @throws BusinessException
 	 */
 
