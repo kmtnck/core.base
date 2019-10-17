@@ -1,27 +1,31 @@
 # goToBusiness nome in codice: core.base
- Un modulo che prende cose e ne fa altre per soddisfare la felicita'
+ Un modulo che prende cose e ne fa altre per soddisfare la felicita' .
+ 
+ Una più ampia documentazione in stile javadoc e rigorosamente autogenerata la trovate qui https://alessandromodica.com/javadoc/gotobusiness/
+
  
 # Parametri inossidabili
-Si considerano inossidabili quelle configurazioni strutturali che sono comuni in qualsiasi applicazione e che richiedono un punto preciso su cui definirle.
+Si considerano inossidabli quelle configurazioni standard presenti in una canonica applicazione e che subiscono pochissime modifiche nel tempo.
 
-In questo progetto le configurazioni sono miste su xml o annotation a seconda le specifiche esigenze, in ogni caso possono essere "traslate" su qualsiasi altra configurazione strutturale dinamica. I parametri inossidabili rimangono invariati per la maggior parte del tempo o in ogni caso subiscono poche modifiche al netto di una prima configurazione.
+In questo progetto le configurazioni sono su xml o annotation, a seconda le specifiche esigenze.
 
 In elenco sono:
 
-a) parametri di deploy tramite plugin di maven o gradle
+a) parametri di compilazione e deploy tramite gli strumenti maven e gradle
 
-b) parametri di logging
+b) parametri di logging come può essere log4j o simili
 
-c) configurazione di accesso ad un datastorage : dominio, username/schema, credenziale. In generale si considera una generica connection 
-string . Nel nostro caso il file di configurazione è persistence.xml
+c) configurazione di accesso ad un datastorage : dominio, username/schema, credenziale.
 
 d) Stringhe magiche e parametri definiti a codice.
 
 
-## a) Parametri di compilazione e deploy con maven o gradle
- Ci sono alcuni parametri strutturali che ne definiscono gli accessi al deploy dell'application server (per ora tomcat) e il nome della web application frontend.
+## a) Parametri di compilazione e deploy 
+ Ci sono alcuni parametri strutturali che definiscono l'uri dell'application server (es Tomcat) per il deploy e il nome dell'artefatto finale.
  
- Tra le properties definite sul pom.xml ce ne sono due che definiscono il nome dell'artefatto .war (e relativo uri deployato) e l'uri dell'indirizzo di tomcat o dell'application server cui eseguire il deploy. Questa fase può essere gestita da un continuoos delivery opportuno
+Tra le properties presenti sul pom.xml ce ne sono due che definiscono:
+ a) il nome dell'artefatto .war 
+ b) l'uri dell'indirizzo manager di tomcat
  	
  	<webappname>appdeployata</webappname>
  		
@@ -31,7 +35,7 @@ d) Stringhe magiche e parametri definiti a codice.
  
  	mvn tomcat7:redeploy
  
- Per la compilazione e deploy in remoto tomcat con gradle i parametri da considerare sono il tag di configurazione di cargo, il plugin incaricato al deploy remoto su container
+Con gradle si considerano i parametri del tag di configurazione di cargo, il plugin incaricato al deploy remoto su container
  
 	 cargo {
 	    containerId = 'tomcat7x'
@@ -52,19 +56,18 @@ Per deployare il comando è il seguente
 
 	gradle cargoRedeployRemote
  
-## b) Log4j
- La configurazione log4j è la piu semplice e versatile possibile, ossia definito allo stesso package common nello scope resource.
- I vantaggi sostanziali sono due: 
- 1) predisposizione a essere inizializzato da un yaml
- 2) può essere automaticamente riconosciuto in qualsiasi classpath del package common, in modo da rendere granulare il suo uso in fase di testing o altri casi specifici.
+## b) Parametri di logging con Log4j
+La configurazione log4j è la piu semplice e versatile possibile: è definito allo stesso package common nello scope resource.
+ Si ha una predisposizione per essere inizializzato da un yaml
+ Può essere automaticamente riconosciuto in qualsiasi classpath del package common, in modo da rendere granulare il suo uso in fase di testing o altri casi specifici. Qui di seguito la locazione presente in questo progetto.
 
 	./src/main/resources/it/alessandromodica/product/common/config/log4j.xml
 
 
-## c) Configurazione delle unità di persistenza su file persistence.xml
+## c) Configurazione della persistence unit tramite persistence.xml
  In java ci sono molteplici approcci per configurare un datastorage, e ancor di piu con l'introduzione delle configurazioni dinamiche yaml kubernets oriented.
- Questa applicazione si basa sulle java EE annotation per la persistenza di oggetti ejb con framework Hibernate all'ultima release di cui si scrive questo README. L'approccio delle transazione è il classico RESOURCE_LOCAL.
- Un supporto JTA richiede un minimo adattamento dei repository, ma necessita di un application server JTA compliance. Attualmente l'application server supportato è il canonico tomcat/nodejs/cordova. L'ambiente enterprise è stato predisposto in evoluzioni future.
+ Questa applicazione si basa sulle annotation JPA e Hibernate. La modalità delle transazione è il classico RESOURCE_LOCAL.
+La modalità JTA richiede un minimo di adattamento dei repository, ma necessita di un application server JTA compliance. Attualmente l'application server supportato è tomcat ma potrebbe essere incapsulato in un container cordova in un contesto nodejs.
  
 I parametri fondamentali da immettere rimangono comunque i seguenti:
 
@@ -72,7 +75,7 @@ I parametri fondamentali da immettere rimangono comunque i seguenti:
 	%USERNAME% username/nomeistanza
 	%PASSWORD% la password di accesso
 
-L'applicazione è configurata di default per accedere ad un database su file hdbsql di nome storageapp. Il database mappato sul persistence.xml ed è creato a runtime. La base dati iniziale è già usufruibile per fare junit.
+L'applicazione è configurata di default per accedere ad un database su file hdbsql di nome storageapp. Il database mappato sul persistence.xml ed è creato a runtime. La base dati iniziale è già usufruibile per fare junit. Si ha libertà di modificare le coordinate di accesso al databse che si preferisce tramite il persistence.xml.
 
 ### Autogenerazione con Hibernate Tools
 
@@ -89,15 +92,15 @@ Nella classe
 	
 è stata definita una variabile statica in cui è valorizzato il nome dell'app sui log. 
 
-	public static final String BRUTALE_VARIABILE_NOME_APP = "[bla bla]";
+	public static final String TITOLO_APP = "goToBusiness";
 
-Non è fondamentale ai fini dell'applicazione, ma è utile se si vuole dare una personalizzazione ai log, ora dice bla bla bla
+Non è fondamentale ai fini dell'applicazione, ma è utile se si vuole dare una personalizzazione ai log.
 
-Esiste la classe
+La classe
 
 	it.alessandromodica.product.common.MagicString
 	
-in cui sono definite tutte le costanti stringhe significative utilizzate da un applicativo.
+definisce tutte le costanti stringhe significative utilizzate dall'applicazione.
 
 # Annotation e policy
 
@@ -106,7 +109,7 @@ L'uso delle annotation si limita pertanto nei seguenti casi:
 
 Al package
 
-	it.alessandromodica.product.common.bo.query
+	it.alessandromodica.product.model.bo.query
 
 Sono raccolti tutti i bean che vengono ritornati da una chiamata sql legacy pura o qualsiasi sia supportata dalle namequery
 
@@ -124,13 +127,9 @@ La classe
 istruendo Spring a gestirla come classe di configurazione. 
 Per ora è definito il 
 
-	@ComponentScan
+	@ComponentScan(basePackages="it.alessandromodica.product")
 
 che istruisce il package di ricerca delle annotation IOC (@Component, @Autowired ...)
-
-L'annotation ComponentScan è importante per veicolare lo scanning dei bean Spring IOC sia  nell'istanziarli a startup, sia nell'iniettarli tramite le dipendenze Autowired.
-
-Nota: Possono essere previsti vari configurator, ma di norma ne è sufficiente uno. 
 
 La classe GoToBusiness definisce in Autowired i repository per l'accesso ai dati, usati dall'infrastruttura per le varie funzionalità
 
@@ -213,3 +212,28 @@ presenti nel servizio
 	it.alessandromodica.product.services.SecurityService
 	
 possono poi essere implementati a seconda le esigenze specifiche. Sono presenti due esempi di implementazione.
+
+# Accesso ai dati con gli oggetti repository
+
+In uno dei junit definiti è possibile vedere il modo in cui è possibile eseguire una lettura dati tramite hibernate, utilizzando il comodo oggetto repository implementato in questo progetto, e vero fulcro innovativo di tutta l'applicazione
+
+			BOLikeClause testSearch = new BOLikeClause();
+			testSearch.set_nameField("email");
+			testSearch.set_value("alessandro.modica@gmail.com");
+			BOSearchApp criteria = new BOSearchApp();
+			criteria.get_listLikeClause().add(testSearch);
+
+			List<PluginGestioneUtenti> fromDb = repoquery.setEntity(PluginGestioneUtenti.class)
+					.search(criteria.getSerialized());
+
+			if (fromDb.isEmpty())
+				Assert.assertTrue("I dati non sono stati trovati, ma la query è stata eseguita correttamente", true);
+			else {
+				for (PluginGestioneUtenti pluginCommonLogaccesso : fromDb) {
+
+					log.info(pluginCommonLogaccesso.getNickname());
+				}
+				Assert.assertTrue(true);
+			}
+
+L'oggetto BOSearchApp rappresenta la maggior parte delle operazioni di lettura che si può fare su un database. L'esempio mostra come eseguire una ricerca in forma like, in cui si chiede il recupero di dati dalla tabella plugingestioneutenti che abbiano la mia email. In pratica si vuole cercare l'utenza del creatore di questa applicazione.
