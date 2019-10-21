@@ -1,7 +1,5 @@
 package it.alessandromodica.product.common.config;
 
-import java.io.IOException;
-
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.springframework.context.annotation.ComponentScan;
