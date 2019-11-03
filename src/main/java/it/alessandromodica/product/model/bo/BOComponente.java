@@ -1,6 +1,6 @@
 package it.alessandromodica.product.model.bo;
 
-public abstract class BOComponente {
+public abstract class BOComponente extends BOCommon {
 
 	private String nome;
 

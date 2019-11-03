@@ -1,6 +1,6 @@
 package it.alessandromodica.product.model.bo;
 
-public class BOTeam {
+public class BOTeam extends BOComponente {
 
 	private String nome;
 
@@ -11,6 +11,5 @@ public class BOTeam {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
 
 }
