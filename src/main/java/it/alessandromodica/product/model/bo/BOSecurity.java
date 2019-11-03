@@ -1,6 +1,6 @@
 package it.alessandromodica.product.model.bo;
 
-public class BOSecurity {
+public class BOSecurity extends BOCommon {
 
 	/*
 	 * 

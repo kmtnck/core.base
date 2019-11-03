@@ -1,6 +1,6 @@
 package it.alessandromodica.product.model.bo;
 
-public class BODecoderAddress {
+public class BODecoderAddress extends BOCommon {
 
 	private String formatted_address = "Non disponibile";
 

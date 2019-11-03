@@ -4,7 +4,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 
-public class BOCoordinate {
+public class BOCoordinate extends BOComponente{
 
 	private String coordinate;
 	private Double lat;
