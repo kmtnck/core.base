@@ -28,7 +28,7 @@ public class BOSerializeCriteria {
 	private List<String> listIsNotNull = new ArrayList<String>();
 	private List<String> listIsZero = new ArrayList<String>();
 	private List<String> _listIsNotEmpty = new ArrayList<String>();
-	private List<Map.Entry<String, Boolean>> listValueBool = new ArrayList<Map.Entry<String, Boolean>>();
+	private Map<String, Boolean> _listValueBool = new HashMap<String, Boolean>();
 	private List<BOSerializeCriteria> listOrClause = new ArrayList<BOSerializeCriteria>();
 	private boolean _isDescendent = false;
 	private Map.Entry<String,String> _filterProfilo = null;
@@ -108,14 +108,6 @@ public class BOSerializeCriteria {
 		this.listIsZero = listIsZero;
 	}
 
-	public List<Map.Entry<String, Boolean>> getListValueBool() {
-		return listValueBool;
-	}
-
-	public void setListValueBool(List<Map.Entry<String, Boolean>> listValueBool) {
-		this.listValueBool = listValueBool;
-	}
-
 	public List<BOSerializeCriteria> getListOrClause() {
 		return listOrClause;
 	}
@@ -172,5 +164,13 @@ public class BOSerializeCriteria {
 
 	public void setFirstResult(int firstResult) {
 		this.firstResult = firstResult;
+	}
+
+	public Map<String, Boolean> get_listValueBool() {
+		return _listValueBool;
+	}
+
+	public void set_listValueBool(Map<String, Boolean> _listValueBool) {
+		this._listValueBool = _listValueBool;
 	}
 }

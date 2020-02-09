@@ -20,7 +20,7 @@ public class HelloWorldApp extends MainApplication {
 
 		TITOLO_APP = "Una nuova app che fa cose";
 
-		InitApp("appjpa-mysql");
+		InitApp("appjpa");
 
 	}
 

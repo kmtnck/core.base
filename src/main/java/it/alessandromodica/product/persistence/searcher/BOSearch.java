@@ -52,7 +52,18 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	private List<String> _listIsNotEmpty = new ArrayList<String>();
 	private List<String> _listIsZero = new ArrayList<String>();
 	private List<BOSearch> _listOrClause = new ArrayList<BOSearch>();
-	private List<Map.Entry<String, Boolean>> _listValueBool = new ArrayList<Map.Entry<String, Boolean>>();
+	private Map<String, Boolean> _listValueBool = new HashMap<String, Boolean>();
+
+	//TODO: implementare gestione in not in
+	//TODO: generalizzare la gestione del between considerando anche gli insiemi aperti
+	
+	public Map<String, Boolean> get_listValueBool() {
+		return _listValueBool;
+	}
+
+	public void set_listValueBool(Map<String, Boolean> _listValueBool) {
+		this._listValueBool = _listValueBool;
+	}
 
 	private int maxResult;
 
@@ -128,14 +139,6 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		this._listOrClause = _listOrClause;
 	}
 
-	public List<Map.Entry<String, Boolean>> get_listValueBool() {
-		return _listValueBool;
-	}
-
-	public void set_listValueBool(List<Map.Entry<String, Boolean>> _listValueBool) {
-		this._listValueBool = _listValueBool;
-	}
-
 	public BOSerializeCriteria getSerialized() throws RepositoryException {
 		return _buildItemClause(this);
 	}
@@ -196,8 +199,8 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			result.getListOrderBy().add(cOrderBy);
 		}
 
-		for (Map.Entry<String, Boolean> cValueBool : searcher.get_listValueBool()) {
-			result.getListValueBool().add(cValueBool);
+		for (String cValueBool : searcher.get_listValueBool().keySet()) {
+			result.get_listValueBool().put(cValueBool,searcher.get_listValueBool().get(cValueBool));
 		}
 
 		if (searcher.is_isDescendent()) {

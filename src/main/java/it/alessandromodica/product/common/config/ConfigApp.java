@@ -23,4 +23,5 @@ public class ConfigApp {
 		DOMConfigurator.configure(ConfigApp.class.getResource("log4j.xml"));
 		log.info("Istanziato il logger");
 	}
+	
 }

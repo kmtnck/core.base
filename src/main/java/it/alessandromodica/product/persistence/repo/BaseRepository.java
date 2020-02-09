@@ -154,8 +154,9 @@ public abstract class BaseRepository<T> {
 			predicates.add(builder.equal(root.get(fieldHB), resultEq.get(cKey)));
 		}
 
-		for (Map.Entry<String, Boolean> cBool : serializeCriteria.getListValueBool()) {
-			predicates.add(builder.equal(root.get(cBool.getKey()), cBool.getValue()));
+		for (String cBool : serializeCriteria.get_listValueBool().keySet()) {
+			
+			predicates.add(builder.equal(root.get(cBool), serializeCriteria.get_listValueBool().get(cBool)));
 		}
 
 		for (Map<String, Object> cLike : serializeCriteria.getListLike()) {
