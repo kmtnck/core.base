@@ -34,7 +34,10 @@ public class BOSerializeCriteria {
 	private Map.Entry<String,String> _filterProfilo = null;
 	private int maxResult;
 	private int firstResult;
-	
+	private List<String> _listFieldsProjection = new ArrayList<String>();
+	private Map<String, Object[]> listIn = new HashMap<String, Object[]>();
+	private Map<String, Object[]> listNotIn = new HashMap<String, Object[]>();
+
 	public Map<String, Object> getListEquals() {
 		return listEquals;
 	}
@@ -108,6 +111,14 @@ public class BOSerializeCriteria {
 		this.listIsZero = listIsZero;
 	}
 
+	/*public List<Map.Entry<String, Boolean>> getListValueBool() {
+		return listValueBool;
+	}
+
+	public void setListValueBool(List<Map.Entry<String, Boolean>> listValueBool) {
+		this.listValueBool = listValueBool;
+	}*/
+
 	public List<BOSerializeCriteria> getListOrClause() {
 		return listOrClause;
 	}
@@ -166,6 +177,22 @@ public class BOSerializeCriteria {
 		this.firstResult = firstResult;
 	}
 
+	public Map<String, Object[]> getListIn() {
+		return listIn;
+	}
+
+	public void setListIn(Map<String, Object[]> listIn) {
+		this.listIn = listIn;
+	}
+
+	public Map<String, Object[]> getListNotIn() {
+		return listNotIn;
+	}
+
+	public void setListNotIn(Map<String, Object[]> listNotIn) {
+		this.listNotIn = listNotIn;
+	}
+
 	public Map<String, Boolean> get_listValueBool() {
 		return _listValueBool;
 	}
@@ -173,4 +200,21 @@ public class BOSerializeCriteria {
 	public void set_listValueBool(Map<String, Boolean> _listValueBool) {
 		this._listValueBool = _listValueBool;
 	}
+
+	public List<String> get_listFieldsProjection() {
+		return _listFieldsProjection;
+	}
+
+	public void set_listFieldsProjection(List<String> _listFieldsProjection) {
+		this._listFieldsProjection = _listFieldsProjection;
+	}
+
+	/*public List<String> get_listExcludeProjection() {
+		return _listExcludeProjection;
+	}
+
+	public void set_listExcludeProjection(List<String> _listExcludeProjection) {
+		this._listExcludeProjection = _listExcludeProjection;
+	}*/
+
 }

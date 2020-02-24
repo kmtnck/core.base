@@ -16,6 +16,7 @@ import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,31 @@ public abstract class BaseRepository<T> {
 		return buildCriteriaQuery(null, serializeCriteria, em);
 	}
 
+	
+	@SuppressWarnings("rawtypes")
+	private static <Y extends Comparable<? super Y>> Predicate createRangePredicate(CriteriaBuilder builder,
+			Expression field, Object start, Object end, Class<?> typeData) {
+		if (start != null && end != null) {
+			// TODO :asserts!
+
+			if (start.equals(end))
+				return builder.equal(field, (Y) start);
+
+			if (typeData == null || !typeData.getName().contains("String")) {
+				return builder.between(field, (Y) start, (Y) end);
+			} else {
+				return builder.and(builder.greaterThanOrEqualTo(field, (Y) start),
+						builder.lessThanOrEqualTo(field, (Y) end));
+			}
+
+		} else if (start != null) {
+			return builder.greaterThanOrEqualTo(field, (Y) start);
+		} else {
+			return builder.lessThanOrEqualTo(field, (Y) end);
+		}
+	}
+	
+	@SuppressWarnings("rawtypes")
 	protected Query buildCriteriaQuery(String alias, BOSerializeCriteria serializeCriteria, EntityManager em)
 			throws RepositoryException {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
@@ -81,6 +107,14 @@ public abstract class BaseRepository<T> {
 		if (alias != null)
 			root.alias(alias);
 
+		if (serializeCriteria.get_listFieldsProjection().size() > 0) {
+			Selection[] projections = getProjections(serializeCriteria.get_listFieldsProjection(), root);
+			if (projections.length > 0)
+				query.multiselect(projections).distinct(true);
+		}
+		else
+			query = query.select(root).distinct(true);
+		
 		query = query.select(root);
 
 		List<Predicate> predicates = composeQuery(builder, root, serializeCriteria);
@@ -131,7 +165,22 @@ public abstract class BaseRepository<T> {
 
 		return predicates;
 	}
-
+	
+	
+	private Selection[] getProjections(List<String> fieldsprojection, Root<?> root) {
+		List<Selection> projections = new ArrayList<Selection>();
+		for (String cField : fieldsprojection) {
+			try {
+					projections.add(root.get(cField));
+			} catch (Exception e) {
+				continue;
+			}
+		}
+		
+		return projections.toArray(new Selection[projections.size()]);
+		
+	}
+	
 	@SuppressWarnings("rawtypes")
 	private List<Predicate> composeQuery(CriteriaBuilder builder, Root<T> root, BOSerializeCriteria serializeCriteria)
 			throws RepositoryException {
@@ -173,7 +222,7 @@ public abstract class BaseRepository<T> {
 			predicates.add(builder.like(builder.lower(rootField), value.toString().toLowerCase()));
 		}
 
-		for (Map<String, Object> cBT : serializeCriteria.getListbetween()) {
+		/*for (Map<String, Object> cBT : serializeCriteria.getListbetween()) {
 
 			Class<?> typeData = (Class) cBT.get(BOSearch.TYPE_DATA);
 			String field = cBT.get(BOSearch.NAME_FIELD).toString();
@@ -201,7 +250,24 @@ public abstract class BaseRepository<T> {
 				predicates.add(builder.between(rootField, valueFrom, valueTo));
 
 			}
-		}
+		}*/
+		// Vincoli di controllo tra due valori, vale per il tipo integer, double e date
+		for (Map<String, Object> cBT : serializeCriteria.getListbetween()) {
+
+			Class<?> typeData = (Class) cBT.get(BOSearch.TYPE_DATA);
+			String field = cBT.get(BOSearch.NAME_FIELD).toString();
+
+			Expression rootField = root.get(field);
+			Object valueTo = null;
+			Object valueFrom = null;
+			if (cBT.get(BOSearch.VALUE_TO) != null)
+				valueTo = cBT.get(BOSearch.VALUE_TO);
+			if (cBT.get(BOSearch.VALUE_FROM) != null)
+				valueFrom = cBT.get(BOSearch.VALUE_FROM);
+
+			predicates.add(createRangePredicate(builder, rootField, valueFrom, valueTo, typeData));
+
+		}		
 
 		for (Map<String, Object> cOper : serializeCriteria.getListOperator()) {
 			String field = cOper.get(BOSearch.NAME_FIELD).toString();
@@ -254,6 +320,20 @@ public abstract class BaseRepository<T> {
 			}
 
 			predicates.add(predicato);
+		}
+		
+		for (String cIn : serializeCriteria.getListIn().keySet()) {
+
+			Object[] listIn = serializeCriteria.getListIn().get(cIn);
+
+			predicates.add(root.get(cIn).in(listIn));
+
+		}
+
+		for (String cNotIn : serializeCriteria.getListNotIn().keySet()) {
+
+			Object[] listNotIn = serializeCriteria.getListNotIn().get(cNotIn);
+			predicates.add(root.get(cNotIn).in(listNotIn).not());
 		}
 
 		for (String cIsNull : serializeCriteria.getListIsNull()) {

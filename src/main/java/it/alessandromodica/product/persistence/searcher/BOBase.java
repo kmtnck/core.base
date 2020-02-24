@@ -25,6 +25,8 @@ public class BOBase implements Serializable {
 	 */
 	private static final long serialVersionUID = 9150468309827097773L;
 
+	protected Class<?> classEntity;
+
 	/**
 	 * Metodo che serializza tramite reflection i fields definiti dalla classe che
 	 * la estende
@@ -86,6 +88,14 @@ public class BOBase implements Serializable {
 			throw new RepositoryException("Errore durante la serializzazione di un oggetto", ex);
 		}
 
+	}
+
+	public Class<?> getClassEntity() {
+		return classEntity;
+	}
+
+	public void setClassEntity(Class<?> classEntity) {
+		this.classEntity = classEntity;
 	}
 
 }

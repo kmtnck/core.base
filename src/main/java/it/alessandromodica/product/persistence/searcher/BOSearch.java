@@ -1,12 +1,15 @@
 package it.alessandromodica.product.persistence.searcher;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.commons.lang.StringUtils;
 
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 
@@ -42,6 +45,9 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	public static final String VALUE_TO_DATE = "_valueToDate";
 	public static final String VALUE_FROM_DATE = "_valueFromDate";
 
+	private List<String> _listFieldsProjection = new ArrayList<String>();
+	private List<String> _listExcludeProjection = new ArrayList<String>();
+
 	private List<BOBetweenClause> _listBetweenClause = new ArrayList<BOBetweenClause>();
 	private List<BOLikeClause> _listLikeClause = new ArrayList<BOLikeClause>();
 	private List<BOOperatorClause> _listOperatorClause = new ArrayList<BOOperatorClause>();
@@ -53,9 +59,42 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	private List<String> _listIsZero = new ArrayList<String>();
 	private List<BOSearch> _listOrClause = new ArrayList<BOSearch>();
 	private Map<String, Boolean> _listValueBool = new HashMap<String, Boolean>();
+	private Map<String, Object[]> _listIn = new HashMap<String, Object[]>();
+	private Map<String, Object[]> _listNotIn = new HashMap<String, Object[]>();
 
-	//TODO: implementare gestione in not in
-	//TODO: generalizzare la gestione del between considerando anche gli insiemi aperti
+	private int maxResult;
+	private int firstResult;
+
+	public static void setClauseInList(String nameField, Object[] data, BOSearch searcher) {
+		if (data != null && data.length > 0)
+			searcher.get_listIn().put(nameField, data);
+	}
+
+	public static void setClauseNotInList(String nameField, Object[] data, BOSearch searcher) {
+		if (data != null && data.length > 0)
+			searcher.get_listNotIn().put(nameField, data);
+	}
+
+	public static void setLikeClause(String value, String nameField, BOSearch searcher) {
+		if (StringUtils.isNotBlank(value)) {
+			BOLikeClause likeCl = new BOLikeClause();
+			likeCl.set_nameField(nameField);
+			likeCl.set_value("%" + value + "%");
+			searcher.get_listLikeClause().add(likeCl);
+		}
+	}
+
+	public static void setBetweenClause(Object valueFrom, Object valueTo, String nameField, BOSearch searcher,
+			Class<?> typeData) {
+		if (valueFrom != null) {
+			BOBetweenClause btw = new BOBetweenClause();
+			btw.set_nameField(nameField);
+			btw.set_valueFrom(valueFrom);
+			btw.set_valueTo(valueTo);
+			btw.setTypeData(typeData);
+			searcher.get_listBetweenClause().add(btw);
+		}
+	}
 	
 	public Map<String, Boolean> get_listValueBool() {
 		return _listValueBool;
@@ -64,8 +103,6 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	public void set_listValueBool(Map<String, Boolean> _listValueBool) {
 		this._listValueBool = _listValueBool;
 	}
-
-	private int maxResult;
 
 	public List<BOBetweenClause> get_listBetweenClause() {
 		return _listBetweenClause;
@@ -203,6 +240,14 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			result.get_listValueBool().put(cValueBool,searcher.get_listValueBool().get(cValueBool));
 		}
 
+		for (String cIn : searcher.get_listIn().keySet()) {
+			result.getListIn().put(cIn, searcher.get_listIn().get(cIn));
+		}
+
+		for (String cNotIn : searcher.get_listNotIn().keySet()) {
+			result.getListNotIn().put(cNotIn, searcher.get_listNotIn().get(cNotIn));
+		}
+		
 		if (searcher.is_isDescendent()) {
 			result.set_isDescendent(searcher.is_isDescendent());
 		}
@@ -215,9 +260,58 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			BOSerializeCriteria orSerialized = _buildItemClause(cOr);
 			result.getListOrClause().add(orSerialized);
 		}
+		
+		// La strategia di esclusione field dalla projections e' includere tutti quelli
+		// non presenti in questa lista
+		if (searcher.get_listExcludeProjection().size() > 0) {
 
-		if (searcher.getMaxResult() > 0)
+			Class<?> classEntity = searcher.getClassEntity();
+
+			if (classEntity == null)
+				throw new RepositoryException(
+						"E' stato definito un set di campi da escludere in proiezione, ma non e' stata indicata la classe entita di riferimento");
+
+			Field[] fieldsclass = classEntity.getDeclaredFields();
+			Field[] fieldsuperclass = classEntity.getSuperclass().getDeclaredFields();
+
+	        int aLen = fieldsclass.length;
+	        int bLen = fieldsuperclass.length;
+	        Field[] fields = new Field[aLen + bLen];
+
+	        System.arraycopy(fieldsclass, 0, fields, 0, aLen);
+	        System.arraycopy(fieldsuperclass, 0, fields, aLen, bLen);
+	        
+			
+			for (Object cobj : fields) {
+				Field cfield = (Field)cobj;
+				
+				boolean isStaticField = java.lang.reflect.Modifier.isStatic(cfield.getModifiers())
+						&& java.lang.reflect.Modifier.isFinal(cfield.getModifiers());
+				if (isStaticField)
+					continue;
+
+				String cName = cfield.getName();
+				boolean canInclude = true;
+				for (String exclude : searcher.get_listExcludeProjection()) {
+					if (cName.equals(exclude)) {
+						canInclude = false;
+						break;
+					}
+				}
+				if (canInclude && !cName.equals("version"))
+					result.get_listFieldsProjection().add(cName);
+			}
+		} else {
+			for (String cField : searcher.get_listFieldsProjection()) {
+				result.get_listFieldsProjection().add(cField);
+			}
+		}
+		
+		if (searcher.getMaxResult() > 0) {
 			result.setMaxResult(searcher.getMaxResult());
+			result.setFirstResult(searcher.getFirstResult());
+		}
+
 		return result;
 	}
 
@@ -241,6 +335,10 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	public List<String> get_listIsNotEmpty() {
 		return _listIsNotEmpty;
 	}
+	
+	public void set_listIsNotEmpty(List<String> _listIsNotEmpty) {
+		this._listIsNotEmpty = _listIsNotEmpty;
+	}
 
 	public void set_listIsNotWhiteSpace(List<String> listIsNotEmpty) {
 		this._listIsNotEmpty = listIsNotEmpty;
@@ -253,4 +351,45 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	public void setMaxResult(int maxResult) {
 		this.maxResult = maxResult;
 	}
+
+	public Map<String, Object[]> get_listIn() {
+		return _listIn;
+	}
+
+	public void set_listIn(Map<String, Object[]> _listIn) {
+		this._listIn = _listIn;
+	}
+
+	public Map<String, Object[]> get_listNotIn() {
+		return _listNotIn;
+	}
+
+	public void set_listNotIn(Map<String, Object[]> _listNotIn) {
+		this._listNotIn = _listNotIn;
+	}
+
+	public List<String> get_listFieldsProjection() {
+		return _listFieldsProjection;
+	}
+
+	public void set_listFieldsProjection(List<String> _listFieldsProjection) {
+		this._listFieldsProjection = _listFieldsProjection;
+	}
+
+	public List<String> get_listExcludeProjection() {
+		return _listExcludeProjection;
+	}
+
+	public void set_listExcludeProjection(List<String> _listExcludeProjection) {
+		this._listExcludeProjection = _listExcludeProjection;
+	}
+
+	public int getFirstResult() {
+		return firstResult;
+	}
+
+	public void setFirstResult(int firstResult) {
+		this.firstResult = firstResult;
+	}
+
 }
