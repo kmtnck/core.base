@@ -25,6 +25,7 @@ import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.interfaces.IBulkTransaction;
 import it.alessandromodica.product.persistence.interfaces.IUnitOfWork;
 import it.alessandromodica.product.persistence.searcher.BOOperatorClause;
+import it.alessandromodica.product.persistence.searcher.BOOperatorClause.Operators;
 import it.alessandromodica.product.persistence.searcher.BOSearch;
 import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
 import it.alessandromodica.product.persistence.uow.UnitOfWork;
@@ -269,7 +270,7 @@ public abstract class BaseRepository<T> {
 
 		}		
 
-		for (Map<String, Object> cOper : serializeCriteria.getListOperator()) {
+		/*for (Map<String, Object> cOper : serializeCriteria.getListOperator()) {
 			String field = cOper.get(BOSearch.NAME_FIELD).toString();
 			Class<?> typeData = (Class) cOper.get(BOSearch.TYPE_DATA);
 			String operatore = cOper.get("_operatore").toString();
@@ -320,7 +321,31 @@ public abstract class BaseRepository<T> {
 			}
 
 			predicates.add(predicato);
+		}*/
+		
+		for (Map<String, Object> cOper : serializeCriteria.getListOperator()) {
+
+			Class<?> typeData = (Class) cOper.get(BOSearch.TYPE_DATA);
+			Predicate predicato = null;
+			if (typeData != null) {
+				OperatorClause buildPredicato = null;
+
+				if (typeData.getName().contains("Date")) {
+					buildPredicato = new OperatorClause<Date>();
+				} else if (typeData.getName().contains("Integer")) {
+					buildPredicato = new OperatorClause<Integer>();
+				} else if (typeData.getName().contains("Double")) {
+					buildPredicato = new OperatorClause<Double>();
+				} else
+					throw new RepositoryException(
+							"Entita' di clausola operatore non riconosciuta " + typeData.getName());
+
+				predicato = buildPredicato.buildPredicato(builder, cOper, root);
+			}
+
+			predicates.add(predicato);
 		}
+
 		
 		for (String cIn : serializeCriteria.getListIn().keySet()) {
 
@@ -371,6 +396,49 @@ public abstract class BaseRepository<T> {
 
 	}
 
+	/**
+	 * Classe per la composizione del predicato operatore
+	 * 
+	 * @author amodica
+	 *
+	 * @param <K>
+	 */
+	private class OperatorClause<K extends Comparable<? super K>> {
+
+		public Predicate buildPredicato(CriteriaBuilder builder, Map<String, Object> cOper, Root<T> root) {
+
+			Predicate predicato = null;
+
+			String field = cOper.get(BOSearch.NAME_FIELD).toString();
+			Operators operatore =   Enum.valueOf(Operators.class, cOper.get("_operatore").toString());
+
+			Expression<K> rootField = root.get(field);
+			K value = (K) cOper.get(BOSearch.VALUE_FIELD);
+
+			switch (operatore) {
+			case minusequals:
+				predicato = builder.lessThanOrEqualTo(rootField, value);
+				break;
+			case minus:
+				predicato = builder.lessThan(rootField, value);
+				break;
+			case majorequals:
+				predicato = builder.greaterThanOrEqualTo(rootField, value);
+				break;
+			case major:
+				predicato = builder.greaterThan(rootField, value);
+				break;
+			case disequals:
+				predicato = builder.notEqual(rootField, value);
+				break;
+			default:
+				break;
+			}
+
+			return predicato;
+		}
+
+	}
 	@Autowired
 	private Create<T> createctx;
 

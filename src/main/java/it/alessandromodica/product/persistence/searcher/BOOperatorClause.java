@@ -13,13 +13,18 @@ public class BOOperatorClause extends BOBase {
 	 * 
 	 */
 	private static final long serialVersionUID = 387882826647999114L;
-
+/*
 	public static final String MINUSEQUALS = "<=";
 	public static final String MINUS = "<";
 	public static final String MAJOREQUALS = ">=";
 	public static final String MAJOR = ">";
 	public static final String DISEQUALS = "!=";
-
+*/
+	public enum Operators
+	{
+		minusequals, minus, majorequals, major, disequals
+	}
+	
 	private Class<?> typeData;
 	private Object _value;
 	private String _nameField;
