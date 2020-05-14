@@ -65,7 +65,7 @@ public class BOBase implements Serializable {
 					// XXX: sono accettati valori di tipo stringa, int, char, double, date e un
 					// generico tipo Class
 					if (value instanceof String || value instanceof Integer || value instanceof Character
-							|| value instanceof Double || value instanceof Date || (value instanceof Class<?>)) {
+							|| value instanceof Double || value instanceof Long || value instanceof Date || (value instanceof Class<?>)) {
 
 						// XXX: il dato viene castato in modo opportuno per essere inserito nella mappa
 						// result finale
@@ -73,6 +73,7 @@ public class BOBase implements Serializable {
 								|| (value instanceof Character && !StringUtils.isBlank(value.toString()))
 								|| (value instanceof Integer && Integer.parseInt(value.toString()) != 0)
 								|| (value instanceof Double && Double.parseDouble(value.toString()) != 0.0)
+								|| (value instanceof Long && Long.parseLong(value.toString()) != 0.0)
 								|| (value instanceof Date) || (value instanceof Class<?>)) {
 
 							result.put(nameField, value);
