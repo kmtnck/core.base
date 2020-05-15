@@ -124,12 +124,27 @@ public abstract class BaseRepository<T> {
 		List<Order> listsOrder = new ArrayList<Order>(0);
 		for (String cOrderBy : serializeCriteria.getListOrderBy()) {
 			Order cOrder = null;
+
+			boolean isDescendent = false;
+			if(serializeCriteria.getMapDescendent().containsKey(cOrderBy))
+			{
+				isDescendent = serializeCriteria.getMapDescendent().get(cOrderBy);
+			}
+			
+			if (serializeCriteria.is_isDescendent() || isDescendent) {
+				cOrder = builder.desc(root.get(cOrderBy));
+			} else {
+				cOrder = builder.asc(root.get(cOrderBy));
+			}
+			listsOrder.add(cOrder);			
+			/*
 			if (serializeCriteria.is_isDescendent()) {
 				cOrder = builder.desc(root.get(cOrderBy));
 			} else {
 				cOrder = builder.asc(root.get(cOrderBy));
 			}
 			listsOrder.add(cOrder);
+			*/
 
 		}
 		query.orderBy(listsOrder);

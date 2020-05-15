@@ -31,6 +31,8 @@ public class BOSerializeCriteria {
 	private Map<String, Boolean> _listValueBool = new HashMap<String, Boolean>();
 	private List<BOSerializeCriteria> listOrClause = new ArrayList<BOSerializeCriteria>();
 	private boolean _isDescendent = false;
+	private Map<String,Boolean> mapDescendent = new HashMap<String,Boolean>();
+
 	private Map.Entry<String,String> _filterProfilo = null;
 	private int maxResult;
 	private int firstResult;
@@ -207,6 +209,14 @@ public class BOSerializeCriteria {
 
 	public void set_listFieldsProjection(List<String> _listFieldsProjection) {
 		this._listFieldsProjection = _listFieldsProjection;
+	}
+
+	public Map<String, Boolean> getMapDescendent() {
+		return mapDescendent;
+	}
+
+	public void setMapDescendent(Map<String, Boolean> mapDescendent) {
+		this.mapDescendent = mapDescendent;
 	}
 
 	/*public List<String> get_listExcludeProjection() {

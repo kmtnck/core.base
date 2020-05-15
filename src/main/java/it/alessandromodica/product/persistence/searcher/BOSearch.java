@@ -51,7 +51,11 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	private List<BOBetweenClause> _listBetweenClause = new ArrayList<BOBetweenClause>();
 	private List<BOLikeClause> _listLikeClause = new ArrayList<BOLikeClause>();
 	private List<BOOperatorClause> _listOperatorClause = new ArrayList<BOOperatorClause>();
+
+	@Deprecated
 	private boolean _isDescendent = false;
+	private Map<String,Boolean> mapDescendent = new HashMap<String,Boolean>();
+	
 	private List<String> _listOrderBy = new ArrayList<String>();
 	private List<String> _listIsNull = new ArrayList<String>();
 	private List<String> _listIsNotNull = new ArrayList<String>();
@@ -128,10 +132,12 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		this._listOperatorClause = _listOperatorClause;
 	}
 
+	@Deprecated
 	public boolean is_isDescendent() {
 		return _isDescendent;
 	}
 
+	@Deprecated
 	public void set_isDescendent(boolean _isDescendent) {
 		this._isDescendent = _isDescendent;
 	}
@@ -236,6 +242,10 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			result.getListOrderBy().add(cOrderBy);
 		}
 
+		for (Map.Entry<String, Boolean> cValueDesc : searcher.getMapDescendent().entrySet()) {
+			result.getMapDescendent().put(cValueDesc.getKey(), cValueDesc.getValue());
+		}
+		
 		for (String cValueBool : searcher.get_listValueBool().keySet()) {
 			result.get_listValueBool().put(cValueBool,searcher.get_listValueBool().get(cValueBool));
 		}
@@ -247,7 +257,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		for (String cNotIn : searcher.get_listNotIn().keySet()) {
 			result.getListNotIn().put(cNotIn, searcher.get_listNotIn().get(cNotIn));
 		}
-		
+
 		if (searcher.is_isDescendent()) {
 			result.set_isDescendent(searcher.is_isDescendent());
 		}
@@ -260,7 +270,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			BOSerializeCriteria orSerialized = _buildItemClause(cOr);
 			result.getListOrClause().add(orSerialized);
 		}
-		
+
 		// La strategia di esclusione field dalla projections e' includere tutti quelli
 		// non presenti in questa lista
 		if (searcher.get_listExcludeProjection().size() > 0) {
@@ -306,7 +316,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 				result.get_listFieldsProjection().add(cField);
 			}
 		}
-		
+
 		if (searcher.getMaxResult() > 0) {
 			result.setMaxResult(searcher.getMaxResult());
 			result.setFirstResult(searcher.getFirstResult());
@@ -321,7 +331,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 		Map<String, Object> resultSearch = toDictionary(searcher);
 		for (Iterator keys = resultSearch.entrySet().iterator(); keys.hasNext();) {
-			Entry cEntry = (Entry)keys.next();
+			Entry cEntry = (Entry) keys.next();
 			String cKey = cEntry.getKey().toString();
 
 			effective.put(cKey, resultSearch.get(cKey));
@@ -392,4 +402,11 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		this.firstResult = firstResult;
 	}
 
+	public Map<String, Boolean> getMapDescendent() {
+		return mapDescendent;
+	}
+
+	public void setMapDescendent(Map<String, Boolean> mapDescendent) {
+		this.mapDescendent = mapDescendent;
+	}
 }
