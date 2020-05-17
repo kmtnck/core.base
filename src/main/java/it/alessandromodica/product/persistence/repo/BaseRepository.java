@@ -766,7 +766,7 @@ public abstract class BaseRepository<T> {
 	public T getSingle(BOSerializeCriteria serializeCriteria) throws RepositoryException {
 		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
 
-		return getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.single, em);
+		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.single, em);
 	}
 
 	public T getSingleOrDefault(CriteriaQuery<T> criteria) throws RepositoryException {
@@ -777,12 +777,12 @@ public abstract class BaseRepository<T> {
 	public T getSingleOrDefault(BOSerializeCriteria serializeCriteria) throws RepositoryException {
 		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
 
-		return getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.singledefault, em);
+		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.singledefault, em);
 	}
 
 	public T getSingleOrDefault(BOSerializeCriteria serializeCriteria, EntityManager em) throws RepositoryException {
 
-		return getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.singledefault, em);
+		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.singledefault, em);
 	}
 
 	public T getSingleOrDefault(CriteriaQuery<T> criteria, EntityManager em) throws RepositoryException {
@@ -798,7 +798,7 @@ public abstract class BaseRepository<T> {
 	public T getFirst(BOSerializeCriteria serializeCriteria) throws RepositoryException {
 		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
 
-		return getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.first, em);
+		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.first, em);
 	}
 
 	public T getFirstOrDefault(CriteriaQuery<T> criteria) throws RepositoryException {
@@ -809,12 +809,12 @@ public abstract class BaseRepository<T> {
 	public T getFirstOrDefault(BOSerializeCriteria serializeCriteria) throws RepositoryException {
 		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
 
-		return getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.firstdefault, em);
+		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.firstdefault, em);
 	}
 
 	public T getFirstOrDefault(BOSerializeCriteria serializeCriteria, EntityManager em) throws RepositoryException {
 
-		return getRetrieveActiveSession(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.firstdefault, em);
+		return (T)getRetrieveActiveSession(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.firstdefault, em);
 	}
 
 	public T getFirstOrDefault(CriteriaQuery<T> criteria, EntityManager em) throws RepositoryException {
