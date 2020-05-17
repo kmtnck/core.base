@@ -27,13 +27,12 @@ public class BOSerializeCriteria {
 	private List<String> listIsNull = new ArrayList<String>();
 	private List<String> listIsNotNull = new ArrayList<String>();
 	private List<String> listIsZero = new ArrayList<String>();
-	private List<String> _listIsNotEmpty = new ArrayList<String>();
-	private Map<String, Boolean> _listValueBool = new HashMap<String, Boolean>();
+	private List<String> listIsNotEmpty = new ArrayList<String>();
+	private Map<String, Boolean> listValueBool = new HashMap<String, Boolean>();
 	private List<BOSerializeCriteria> listOrClause = new ArrayList<BOSerializeCriteria>();
-	private boolean _isDescendent = false;
+	private Boolean descendent = false;
 	private Map<String,Boolean> mapDescendent = new HashMap<String,Boolean>();
 
-	private Map.Entry<String,String> _filterProfilo = null;
 	private int maxResult;
 	private int firstResult;
 	private List<String> _listFieldsProjection = new ArrayList<String>();
@@ -129,14 +128,6 @@ public class BOSerializeCriteria {
 		this.listOrClause = listOrClause;
 	}
 
-	public boolean is_isDescendent() {
-		return _isDescendent;
-	}
-
-	public void set_isDescendent(boolean _isDescendent) {
-		this._isDescendent = _isDescendent;
-	}
-
 	@SuppressWarnings("rawtypes")
 	public void setClassSearcher(Class classSearcher) {
 		this.classSearcher = classSearcher;
@@ -147,20 +138,12 @@ public class BOSerializeCriteria {
 		return classSearcher;
 	}
 
-	public Map.Entry<String, String> get_filterProfilo() {
-		return _filterProfilo;
-	}
-
-	public void set_filterProfilo(Map.Entry<String, String> _filterProfilo) {
-		this._filterProfilo = _filterProfilo;
-	}
-
 	public List<String> get_listIsNotEmpty() {
-		return _listIsNotEmpty;
+		return listIsNotEmpty;
 	}
 
 	public void set_listIsNotEmpty(List<String> listIsNotEmpty) {
-		this._listIsNotEmpty = listIsNotEmpty;
+		this.listIsNotEmpty = listIsNotEmpty;
 	}
 
 	public int getMaxResult() {
@@ -196,11 +179,11 @@ public class BOSerializeCriteria {
 	}
 
 	public Map<String, Boolean> get_listValueBool() {
-		return _listValueBool;
+		return listValueBool;
 	}
 
 	public void set_listValueBool(Map<String, Boolean> _listValueBool) {
-		this._listValueBool = _listValueBool;
+		this.listValueBool = _listValueBool;
 	}
 
 	public List<String> get_listFieldsProjection() {
@@ -217,6 +200,14 @@ public class BOSerializeCriteria {
 
 	public void setMapDescendent(Map<String, Boolean> mapDescendent) {
 		this.mapDescendent = mapDescendent;
+	}
+
+	public Boolean getDescendent() {
+		return descendent;
+	}
+
+	public void setDescendent(Boolean descendent) {
+		this.descendent = descendent;
 	}
 
 	/*public List<String> get_listExcludeProjection() {

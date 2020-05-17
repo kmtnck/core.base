@@ -17,32 +17,27 @@ public class BOLikeClause extends BOBase {
 
 	public static final String LIKE_STANDARD = "%";
 
-	private String _nameField;
-	private String _value;
-	private boolean _isInsensitive = true;
-
-	public String get_nameField() {
-		return _nameField;
+	private String nameField;
+	private String value;
+	private boolean insensitive = true;
+	
+	public String getNameField() {
+		return nameField;
 	}
-
-	public void set_nameField(String _nameField) {
-		this._nameField = _nameField;
+	public void setNameField(String nameField) {
+		this.nameField = nameField;
 	}
-
-	public String get_value() {
-		return _value;
+	public String getValue() {
+		return value;
 	}
-
-	public void set_value(String _value) {
-		this._value = _value;
+	public void setValue(String value) {
+		this.value = value;
 	}
-
-	public boolean is_isInsensitive() {
-		return _isInsensitive;
+	public boolean isInsensitive() {
+		return insensitive;
 	}
-
-	public void set_isInsensitive(boolean _isInsensitive) {
-		this._isInsensitive = _isInsensitive;
+	public void setInsensitive(boolean insensitive) {
+		this.insensitive = insensitive;
 	}
 
 }

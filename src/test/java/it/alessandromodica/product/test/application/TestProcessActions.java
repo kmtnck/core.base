@@ -129,8 +129,8 @@ public class TestProcessActions extends TestCase {
 
 		try {
 			BOLikeClause testSearch = new BOLikeClause();
-			testSearch.set_nameField("email");
-			testSearch.set_value("alessandro.modica@gmail.com");
+			testSearch.setNameField("email");
+			testSearch.setValue("alessandro.modica@gmail.com");
 			BOSearchApp criteria = new BOSearchApp();
 			criteria.get_listLikeClause().add(testSearch);
 
@@ -211,9 +211,9 @@ public class TestProcessActions extends TestCase {
 		String searcher = "min";
 		BOSearchApp criteria = new BOSearchApp();
 		BOLikeClause likeClause = new BOLikeClause();
-		likeClause.set_isInsensitive(true);
-		likeClause.set_nameField("nickname");
-		likeClause.set_value("%" + searcher + "%");
+		likeClause.setInsensitive(true);
+		likeClause.setNameField("nickname");
+		likeClause.setValue("%" + searcher + "%");
 		criteria.get_listLikeClause().add(likeClause);
 		criteria.get_listOrderBy().add("nickname");
 		try {

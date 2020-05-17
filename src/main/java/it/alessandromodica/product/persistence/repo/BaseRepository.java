@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.interfaces.IBulkTransaction;
 import it.alessandromodica.product.persistence.interfaces.IUnitOfWork;
-import it.alessandromodica.product.persistence.searcher.BOOperatorClause;
 import it.alessandromodica.product.persistence.searcher.BOOperatorClause.Operators;
 import it.alessandromodica.product.persistence.searcher.BOSearch;
 import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
@@ -131,7 +130,7 @@ public abstract class BaseRepository<T> {
 				isDescendent = serializeCriteria.getMapDescendent().get(cOrderBy);
 			}
 			
-			if (serializeCriteria.is_isDescendent() || isDescendent) {
+			if (serializeCriteria.getDescendent() || isDescendent) {
 				cOrder = builder.desc(root.get(cOrderBy));
 			} else {
 				cOrder = builder.asc(root.get(cOrderBy));

@@ -29,21 +29,21 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	 */
 	private static final long serialVersionUID = -3897039654760798485L;
 
-	public static final String NAME_FIELD = "_nameField";
+	public static final String NAME_FIELD = "nameField";
 	public static final String TYPE_DATA = "typeData";
-	public static final String VALUE_FIELD = "_value";
-	public static final String VALUE_FROM = "_valueFrom";
-	public static final String VALUE_TO = "_valueTo";
-	public static final String VALUE_INT = "_valueInt";
-	public static final String VALUE_DOUBLE = "_valueDouble";
-	public static final String VALUE_DATE = "_valueDate";
+	public static final String VALUE_FIELD = "value";
+	public static final String VALUE_FROM = "valueFrom";
+	public static final String VALUE_TO = "valueTo";
+	public static final String VALUE_INT = "valueInt";
+	public static final String VALUE_DOUBLE = "valueDouble";
+	public static final String VALUE_DATE = "valueDate";
 
-	public static final String VALUE_TO_DOUBLE = "_valueToDouble";
-	public static final String VALUE_FROM_DOUBLE = "_valueFromDouble";
-	public static final String VALUE_FROM_INT = "_valueFromInt";
-	public static final String VALUE_TO_INT = "_valueToInt";
-	public static final String VALUE_TO_DATE = "_valueToDate";
-	public static final String VALUE_FROM_DATE = "_valueFromDate";
+	public static final String VALUE_TO_DOUBLE = "valueToDouble";
+	public static final String VALUE_FROM_DOUBLE = "valueFromDouble";
+	public static final String VALUE_FROM_INT = "valueFromInt";
+	public static final String VALUE_TO_INT = "valueToInt";
+	public static final String VALUE_TO_DATE = "valueToDate";
+	public static final String VALUE_FROM_DATE = "valueFromDate";
 
 	private List<String> _listFieldsProjection = new ArrayList<String>();
 	private List<String> _listExcludeProjection = new ArrayList<String>();
@@ -53,7 +53,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	private List<BOOperatorClause> _listOperatorClause = new ArrayList<BOOperatorClause>();
 
 	@Deprecated
-	private boolean _isDescendent = false;
+	private boolean descendent = false;
 	private Map<String,Boolean> mapDescendent = new HashMap<String,Boolean>();
 	
 	private List<String> _listOrderBy = new ArrayList<String>();
@@ -82,8 +82,8 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	public static void setLikeClause(String value, String nameField, BOSearch searcher) {
 		if (StringUtils.isNotBlank(value)) {
 			BOLikeClause likeCl = new BOLikeClause();
-			likeCl.set_nameField(nameField);
-			likeCl.set_value("%" + value + "%");
+			likeCl.setNameField(nameField);
+			likeCl.setValue("%" + value + "%");
 			searcher.get_listLikeClause().add(likeCl);
 		}
 	}
@@ -130,16 +130,6 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 	public void set_listOperatorClause(List<BOOperatorClause> _listOperatorClause) {
 		this._listOperatorClause = _listOperatorClause;
-	}
-
-	@Deprecated
-	public boolean is_isDescendent() {
-		return _isDescendent;
-	}
-
-	@Deprecated
-	public void set_isDescendent(boolean _isDescendent) {
-		this._isDescendent = _isDescendent;
 	}
 
 	public List<String> get_listOrderBy() {
@@ -207,7 +197,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		}
 
 		for (BOLikeClause cLike : searcher.get_listLikeClause()) {
-			if (cLike.is_isInsensitive())
+			if (cLike.isInsensitive())
 				result.getListLikeInsensitive().add(_serializeBusinessClause(cLike));
 			else
 				result.getListLike().add(_serializeBusinessClause(cLike));
@@ -258,8 +248,8 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			result.getListNotIn().put(cNotIn, searcher.get_listNotIn().get(cNotIn));
 		}
 
-		if (searcher.is_isDescendent()) {
-			result.set_isDescendent(searcher.is_isDescendent());
+		if (searcher.isDescendent()) {
+			result.setDescendent(searcher.isDescendent());
 		}
 
 		for (BOSearch cOr : searcher.get_listOrClause()) {
@@ -408,5 +398,13 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 	public void setMapDescendent(Map<String, Boolean> mapDescendent) {
 		this.mapDescendent = mapDescendent;
+	}
+
+	public boolean isDescendent() {
+		return descendent;
+	}
+
+	public void setDescendent(boolean descendent) {
+		this.descendent = descendent;
 	}
 }

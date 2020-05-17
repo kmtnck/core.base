@@ -26,40 +26,33 @@ public class BOOperatorClause extends BOBase {
 	}
 	
 	private Class<?> typeData;
-	private Object _value;
-	private String _nameField;
-	private String _operatore;
-
-	public String get_nameField() {
-		return _nameField;
-	}
-
-	public void set_nameField(String _nameField) {
-		this._nameField = _nameField;
-	}
-
-	public String get_operatore() {
-		return _operatore;
-	}
-
-	public void set_operatore(String _operatore) {
-		this._operatore = _operatore;
-	}
-
+	private Object value;
+	private String nameField;
+	private String operatore;
+	
 	public Class<?> getTypeData() {
 		return typeData;
 	}
-
 	public void setTypeData(Class<?> typeData) {
 		this.typeData = typeData;
 	}
-
-	public Object get_value() {
-		return _value;
+	public Object getValue() {
+		return value;
 	}
-
-	public void set_value(Object _value) {
-		this._value = _value;
+	public void setValue(Object value) {
+		this.value = value;
+	}
+	public String getNameField() {
+		return nameField;
+	}
+	public void setNameField(String nameField) {
+		this.nameField = nameField;
+	}
+	public String getOperatore() {
+		return operatore;
+	}
+	public void setOperatore(String operatore) {
+		this.operatore = operatore;
 	}
 
 }
