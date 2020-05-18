@@ -38,6 +38,18 @@ public abstract class GoToBusiness {
 
 	private static final Logger log = Logger.getLogger(GoToBusiness.class);
 
+	/**
+	 * Elenco di costanti immutabili che non hanno bisogno di essere parametrizzate
+	 * e che sono tollerabili riavvii qualora debbano cambiare per forza
+	 */
+	private static final String SPLIT_ASCDESC = "-";
+	private static final String SPLIT_ORDERS = "_";
+	public static final String CODICEPDD = "pddCodice";
+	public static final String CODICEFORNITORE = "interlCodice";
+	public static final String ISMERCEOLOGIA = "ismerceologia";
+	public static final String ORDERBY = "orderby";
+	public static final String CLASSNAME = "classname";
+	
 	@Autowired
 	protected IMainService mainService;
 
