@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -39,6 +40,7 @@ import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
  *         forbidden
  *
  */
+@SuppressWarnings({ "unchecked", "rawtypes" })
 @Component
 @Path(value = "/entity")
 public class EntityRest implements IEntityRest {
@@ -91,6 +93,7 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 }
 
 	 * */
+
 	@Override
 	@POST
 	@Path(value = "/search")
@@ -114,7 +117,7 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 	}
 	
 	@Override
-	@POST
+	@GET
 	@Path(value = "/get/{id}")
 	@Consumes(value = MediaType.APPLICATION_JSON)
 	@Produces(value = MediaType.APPLICATION_JSON)

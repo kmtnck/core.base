@@ -37,7 +37,11 @@
 
 		</properties>
 	</persistence-unit>
-
+<!-- 
+%URI_DB% jdbc:mysql://svr1.alessandromodica.com/aless175_saktools_res?useSSL=true
+aless175_kmtnck
+Nsl80cdm
+-->
 	<persistence-unit name="appjpa-mysql"
 		transaction-type="RESOURCE_LOCAL">
 		<!-- Persistence provider -->
