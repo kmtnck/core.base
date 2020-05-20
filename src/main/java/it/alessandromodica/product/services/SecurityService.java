@@ -392,7 +392,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 
 				criteria = new BOSearchApp();
 
-				criteria.get_listIsNull().add("keyaccess");
+				criteria.getListIsNull().add("keyaccess");
 
 				check = repoquery.setEntity(PluginCommonBlacklist.class).getCount(criteria.getSerialized());
 
@@ -486,7 +486,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 						// XXX: fase di registrazione di un nuovo utente
 						criteria = new BOSearchApp();
 						// criteria.setPlayer(utenteCorrente.getNickname());
-						criteria.get_listIsNotNull().add("keyaccess");
+						criteria.getListIsNotNull().add("keyaccess");
 						List<PluginCommonBlacklist> list = repoquery.setEntity(PluginCommonBlacklist.class)
 								.search(criteria.getSerialized());
 
@@ -601,7 +601,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 
 				criteria = new BOSearchApp();
 				criteria.setNickname(utenteCorrente.getNickname());
-				criteria.get_listIsNotNull().add("keyaccess");
+				criteria.getListIsNotNull().add("keyaccess");
 				PluginCommonBlacklist info = (PluginCommonBlacklist) repoquery.setEntity(PluginCommonBlacklist.class)
 						.getSingleOrDefault(criteria.getSerialized());
 

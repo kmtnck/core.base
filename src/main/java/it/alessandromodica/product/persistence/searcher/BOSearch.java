@@ -45,38 +45,38 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	public static final String VALUE_TO_DATE = "valueToDate";
 	public static final String VALUE_FROM_DATE = "valueFromDate";
 
-	private List<String> _listFieldsProjection = new ArrayList<String>();
-	private List<String> _listExcludeProjection = new ArrayList<String>();
+	private List<String> listFieldsProjection = new ArrayList<String>();
+	private List<String> listExcludeProjection = new ArrayList<String>();
 
-	private List<BOBetweenClause> _listBetweenClause = new ArrayList<BOBetweenClause>();
-	private List<BOLikeClause> _listLikeClause = new ArrayList<BOLikeClause>();
-	private List<BOOperatorClause> _listOperatorClause = new ArrayList<BOOperatorClause>();
+	private List<BOBetweenClause> listBetweenClause = new ArrayList<BOBetweenClause>();
+	private List<BOLikeClause> listLikeClause = new ArrayList<BOLikeClause>();
+	private List<BOOperatorClause> listOperatorClause = new ArrayList<BOOperatorClause>();
 
 	@Deprecated
 	private boolean descendent = false;
 	private Map<String,Boolean> mapDescendent = new HashMap<String,Boolean>();
 	
-	private List<String> _listOrderBy = new ArrayList<String>();
-	private List<String> _listIsNull = new ArrayList<String>();
-	private List<String> _listIsNotNull = new ArrayList<String>();
-	private List<String> _listIsNotEmpty = new ArrayList<String>();
-	private List<String> _listIsZero = new ArrayList<String>();
-	private List<BOSearch> _listOrClause = new ArrayList<BOSearch>();
-	private Map<String, Boolean> _listValueBool = new HashMap<String, Boolean>();
-	private Map<String, Object[]> _listIn = new HashMap<String, Object[]>();
-	private Map<String, Object[]> _listNotIn = new HashMap<String, Object[]>();
+	private List<String> listOrderBy = new ArrayList<String>();
+	private List<String> listIsNull = new ArrayList<String>();
+	private List<String> listIsNotNull = new ArrayList<String>();
+	private List<String> listIsNotEmpty = new ArrayList<String>();
+	private List<String> listIsZero = new ArrayList<String>();
+	private List<BOSearch> listOrClause = new ArrayList<BOSearch>();
+	private Map<String, Boolean> listValueBool = new HashMap<String, Boolean>();
+	private Map<String, Object[]> listIn = new HashMap<String, Object[]>();
+	private Map<String, Object[]> listNotIn = new HashMap<String, Object[]>();
 
 	private int maxResult;
 	private int firstResult;
 
 	public static void setClauseInList(String nameField, Object[] data, BOSearch searcher) {
 		if (data != null && data.length > 0)
-			searcher.get_listIn().put(nameField, data);
+			searcher.getListIn().put(nameField, data);
 	}
 
 	public static void setClauseNotInList(String nameField, Object[] data, BOSearch searcher) {
 		if (data != null && data.length > 0)
-			searcher.get_listNotIn().put(nameField, data);
+			searcher.getListNotIn().put(nameField, data);
 	}
 
 	public static void setLikeClause(String value, String nameField, BOSearch searcher) {
@@ -84,7 +84,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			BOLikeClause likeCl = new BOLikeClause();
 			likeCl.setNameField(nameField);
 			likeCl.setValue("%" + value + "%");
-			searcher.get_listLikeClause().add(likeCl);
+			searcher.getListLikeClause().add(likeCl);
 		}
 	}
 
@@ -96,82 +96,10 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			btw.set_valueFrom(valueFrom);
 			btw.set_valueTo(valueTo);
 			btw.setTypeData(typeData);
-			searcher.get_listBetweenClause().add(btw);
+			searcher.getListBetweenClause().add(btw);
 		}
 	}
 	
-	public Map<String, Boolean> get_listValueBool() {
-		return _listValueBool;
-	}
-
-	public void set_listValueBool(Map<String, Boolean> _listValueBool) {
-		this._listValueBool = _listValueBool;
-	}
-
-	public List<BOBetweenClause> get_listBetweenClause() {
-		return _listBetweenClause;
-	}
-
-	public void set_listBetweenClause(List<BOBetweenClause> _listBetweenClause) {
-		this._listBetweenClause = _listBetweenClause;
-	}
-
-	public List<BOLikeClause> get_listLikeClause() {
-		return _listLikeClause;
-	}
-
-	public void set_listLikeClause(List<BOLikeClause> _listLikeClause) {
-		this._listLikeClause = _listLikeClause;
-	}
-
-	public List<BOOperatorClause> get_listOperatorClause() {
-		return _listOperatorClause;
-	}
-
-	public void set_listOperatorClause(List<BOOperatorClause> _listOperatorClause) {
-		this._listOperatorClause = _listOperatorClause;
-	}
-
-	public List<String> get_listOrderBy() {
-		return _listOrderBy;
-	}
-
-	public void set_listOrderBy(List<String> _listOrderBy) {
-		this._listOrderBy = _listOrderBy;
-	}
-
-	public List<String> get_listIsNull() {
-		return _listIsNull;
-	}
-
-	public void set_listIsNull(List<String> _listIsNull) {
-		this._listIsNull = _listIsNull;
-	}
-
-	public List<String> get_listIsNotNull() {
-		return _listIsNotNull;
-	}
-
-	public void set_listIsNotNull(List<String> _listIsNotNull) {
-		this._listIsNotNull = _listIsNotNull;
-	}
-
-	public List<String> get_listIsZero() {
-		return _listIsZero;
-	}
-
-	public void set_listIsZero(List<String> _listIsZero) {
-		this._listIsZero = _listIsZero;
-	}
-
-	public List<BOSearch> get_listOrClause() {
-		return _listOrClause;
-	}
-
-	public void set_listOrClause(List<BOSearch> _listOrClause) {
-		this._listOrClause = _listOrClause;
-	}
-
 	public BOSerializeCriteria getSerialized() throws RepositoryException {
 		return _buildItemClause(this);
 	}
@@ -185,7 +113,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		result.setListEquals(_serializeBusinessClause(searcher));
 
 		// between
-		for (BOBetweenClause cBT : searcher.get_listBetweenClause()) {
+		for (BOBetweenClause cBT : searcher.getListBetweenClause()) {
 			Map<String, Object> serializeBT = new HashMap<String, Object>();
 
 			serializeBT.put(NAME_FIELD, cBT.get_nameField());
@@ -196,14 +124,14 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			result.getListbetween().add(serializeBT);
 		}
 
-		for (BOLikeClause cLike : searcher.get_listLikeClause()) {
+		for (BOLikeClause cLike : searcher.getListLikeClause()) {
 			if (cLike.isInsensitive())
 				result.getListLikeInsensitive().add(_serializeBusinessClause(cLike));
 			else
 				result.getListLike().add(_serializeBusinessClause(cLike));
 		}
 
-		for (BOOperatorClause cOper : searcher.get_listOperatorClause()) {
+		for (BOOperatorClause cOper : searcher.getListOperatorClause()) {
 			Map<String, Object> serOper = _serializeBusinessClause(cOper);
 			/*if (cOper.get_valueDouble() == 0 && cOper.get_valueInt() == 0) {
 				serOper.put(VALUE_INT, 0);
@@ -212,23 +140,23 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			result.getListOperator().add(serOper);
 		}
 
-		for (String cIsNull : searcher.get_listIsNull()) {
+		for (String cIsNull : searcher.getListIsNull()) {
 			result.getListIsNull().add(cIsNull);
 		}
 
-		for (String cIsNotNull : searcher.get_listIsNotNull()) {
+		for (String cIsNotNull : searcher.getListIsNotNull()) {
 			result.getListIsNotNull().add(cIsNotNull);
 		}
 
-		for (String cIsZero : searcher.get_listIsZero()) {
+		for (String cIsZero : searcher.getListIsZero()) {
 			result.getListIsZero().add(cIsZero);
 		}
 
-		for (String cIsZero : searcher.get_listIsNotEmpty()) {
-			result.get_listIsNotEmpty().add(cIsZero);
+		for (String cIsZero : searcher.getListIsNotEmpty()) {
+			result.getListIsNotEmpty().add(cIsZero);
 		}
 
-		for (String cOrderBy : searcher.get_listOrderBy()) {
+		for (String cOrderBy : searcher.getListOrderBy()) {
 			result.getListOrderBy().add(cOrderBy);
 		}
 
@@ -236,24 +164,24 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			result.getMapDescendent().put(cValueDesc.getKey(), cValueDesc.getValue());
 		}
 		
-		for (String cValueBool : searcher.get_listValueBool().keySet()) {
-			result.get_listValueBool().put(cValueBool,searcher.get_listValueBool().get(cValueBool));
+		for (String cValueBool : searcher.getListValueBool().keySet()) {
+			result.getListValueBool().put(cValueBool,searcher.getListValueBool().get(cValueBool));
 		}
 
-		for (String cIn : searcher.get_listIn().keySet()) {
-			result.getListIn().put(cIn, searcher.get_listIn().get(cIn));
+		for (String cIn : searcher.getListIn().keySet()) {
+			result.getListIn().put(cIn, searcher.getListIn().get(cIn));
 		}
 
-		for (String cNotIn : searcher.get_listNotIn().keySet()) {
-			result.getListNotIn().put(cNotIn, searcher.get_listNotIn().get(cNotIn));
+		for (String cNotIn : searcher.getListNotIn().keySet()) {
+			result.getListNotIn().put(cNotIn, searcher.getListNotIn().get(cNotIn));
 		}
 
 		if (searcher.isDescendent()) {
 			result.setDescendent(searcher.isDescendent());
 		}
 
-		for (BOSearch cOr : searcher.get_listOrClause()) {
-			if (cOr.get_listOrderBy().size() > 0)
+		for (BOSearch cOr : searcher.getListOrClause()) {
+			if (cOr.getListOrderBy().size() > 0)
 				throw new RepositoryException(
 						"Non e' permesso impostare criteri di ordinamento in una clausola OR. Utilizzare l'istanza BOSearch principale per impostare l'oggetto ListOrderBy");
 
@@ -263,7 +191,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 		// La strategia di esclusione field dalla projections e' includere tutti quelli
 		// non presenti in questa lista
-		if (searcher.get_listExcludeProjection().size() > 0) {
+		if (searcher.getListExcludeProjection().size() > 0) {
 
 			Class<?> classEntity = searcher.getClassEntity();
 
@@ -292,18 +220,18 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 				String cName = cfield.getName();
 				boolean canInclude = true;
-				for (String exclude : searcher.get_listExcludeProjection()) {
+				for (String exclude : searcher.getListExcludeProjection()) {
 					if (cName.equals(exclude)) {
 						canInclude = false;
 						break;
 					}
 				}
 				if (canInclude && !cName.equals("version"))
-					result.get_listFieldsProjection().add(cName);
+					result.getListFieldsProjection().add(cName);
 			}
 		} else {
-			for (String cField : searcher.get_listFieldsProjection()) {
-				result.get_listFieldsProjection().add(cField);
+			for (String cField : searcher.getListFieldsProjection()) {
+				result.getListFieldsProjection().add(cField);
 			}
 		}
 
@@ -332,56 +260,12 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 	public abstract boolean checkCompositeId(String nameProperty);
 
-	public List<String> get_listIsNotEmpty() {
-		return _listIsNotEmpty;
-	}
-	
-	public void set_listIsNotEmpty(List<String> _listIsNotEmpty) {
-		this._listIsNotEmpty = _listIsNotEmpty;
-	}
-
-	public void set_listIsNotWhiteSpace(List<String> listIsNotEmpty) {
-		this._listIsNotEmpty = listIsNotEmpty;
-	}
-
 	public int getMaxResult() {
 		return maxResult;
 	}
 
 	public void setMaxResult(int maxResult) {
 		this.maxResult = maxResult;
-	}
-
-	public Map<String, Object[]> get_listIn() {
-		return _listIn;
-	}
-
-	public void set_listIn(Map<String, Object[]> _listIn) {
-		this._listIn = _listIn;
-	}
-
-	public Map<String, Object[]> get_listNotIn() {
-		return _listNotIn;
-	}
-
-	public void set_listNotIn(Map<String, Object[]> _listNotIn) {
-		this._listNotIn = _listNotIn;
-	}
-
-	public List<String> get_listFieldsProjection() {
-		return _listFieldsProjection;
-	}
-
-	public void set_listFieldsProjection(List<String> _listFieldsProjection) {
-		this._listFieldsProjection = _listFieldsProjection;
-	}
-
-	public List<String> get_listExcludeProjection() {
-		return _listExcludeProjection;
-	}
-
-	public void set_listExcludeProjection(List<String> _listExcludeProjection) {
-		this._listExcludeProjection = _listExcludeProjection;
 	}
 
 	public int getFirstResult() {
@@ -406,5 +290,117 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 	public void setDescendent(boolean descendent) {
 		this.descendent = descendent;
+	}
+
+	public List<String> getListFieldsProjection() {
+		return listFieldsProjection;
+	}
+
+	public void setListFieldsProjection(List<String> listFieldsProjection) {
+		this.listFieldsProjection = listFieldsProjection;
+	}
+
+	public List<String> getListExcludeProjection() {
+		return listExcludeProjection;
+	}
+
+	public void setListExcludeProjection(List<String> listExcludeProjection) {
+		this.listExcludeProjection = listExcludeProjection;
+	}
+
+	public List<BOBetweenClause> getListBetweenClause() {
+		return listBetweenClause;
+	}
+
+	public void setListBetweenClause(List<BOBetweenClause> listBetweenClause) {
+		this.listBetweenClause = listBetweenClause;
+	}
+
+	public List<BOLikeClause> getListLikeClause() {
+		return listLikeClause;
+	}
+
+	public void setListLikeClause(List<BOLikeClause> listLikeClause) {
+		this.listLikeClause = listLikeClause;
+	}
+
+	public List<BOOperatorClause> getListOperatorClause() {
+		return listOperatorClause;
+	}
+
+	public void setListOperatorClause(List<BOOperatorClause> listOperatorClause) {
+		this.listOperatorClause = listOperatorClause;
+	}
+
+	public List<String> getListOrderBy() {
+		return listOrderBy;
+	}
+
+	public void setListOrderBy(List<String> listOrderBy) {
+		this.listOrderBy = listOrderBy;
+	}
+
+	public List<String> getListIsNull() {
+		return listIsNull;
+	}
+
+	public void setListIsNull(List<String> listIsNull) {
+		this.listIsNull = listIsNull;
+	}
+
+	public List<String> getListIsNotNull() {
+		return listIsNotNull;
+	}
+
+	public void setListIsNotNull(List<String> listIsNotNull) {
+		this.listIsNotNull = listIsNotNull;
+	}
+
+	public List<String> getListIsNotEmpty() {
+		return listIsNotEmpty;
+	}
+
+	public void setListIsNotEmpty(List<String> listIsNotEmpty) {
+		this.listIsNotEmpty = listIsNotEmpty;
+	}
+
+	public List<String> getListIsZero() {
+		return listIsZero;
+	}
+
+	public void setListIsZero(List<String> listIsZero) {
+		this.listIsZero = listIsZero;
+	}
+
+	public List<BOSearch> getListOrClause() {
+		return listOrClause;
+	}
+
+	public void setListOrClause(List<BOSearch> listOrClause) {
+		this.listOrClause = listOrClause;
+	}
+
+	public Map<String, Boolean> getListValueBool() {
+		return listValueBool;
+	}
+
+	public void setListValueBool(Map<String, Boolean> listValueBool) {
+		this.listValueBool = listValueBool;
+	}
+
+	public Map<String, Object[]> getListIn() {
+		return listIn;
+	}
+
+	public void setListIn(Map<String, Object[]> listIn) {
+		this.listIn = listIn;
+	}
+
+	public Map<String, Object[]> getListNotIn() {
+		return listNotIn;
+	}
+
+	public void setListNotIn(Map<String, Object[]> listNotIn) {
+		this.listNotIn = listNotIn;
 	}
 }

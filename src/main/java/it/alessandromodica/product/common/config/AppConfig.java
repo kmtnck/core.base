@@ -12,9 +12,9 @@ import it.alessandromodica.product.common.exceptions.BusinessException;
 
 @Configuration
 @ComponentScan(basePackages="it.alessandromodica.product")
-public class ConfigApp {
+public class AppConfig {
 
-	private static final Logger log = Logger.getLogger(ConfigApp.class);
+	private static final Logger log = Logger.getLogger(AppConfig.class);
 
 	/**
 	 * Metodo per inizializzare i parametri di configurazione del client sso
@@ -24,13 +24,13 @@ public class ConfigApp {
 	 * @throws BusinessException 
 	 * 
 	 */
-	public ConfigApp() throws BusinessException
+	public AppConfig() throws BusinessException
 	{
 		HelloWorldApp.InitApp();
 	}
 
 	public static void initLog() throws FactoryConfigurationError {
-		DOMConfigurator.configure(ConfigApp.class.getResource("log4j.xml"));
+		DOMConfigurator.configure(AppConfig.class.getResource("log4j.xml"));
 		log.info("Istanziato il logger");
 	}
 	

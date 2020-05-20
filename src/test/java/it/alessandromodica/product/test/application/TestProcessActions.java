@@ -10,7 +10,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import it.alessandromodica.product.app.HelloWorldApp;
 import it.alessandromodica.product.app.MainApplication;
 import it.alessandromodica.product.common.OutputData;
-import it.alessandromodica.product.common.config.ConfigApp;
+import it.alessandromodica.product.common.config.AppConfig;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
@@ -57,7 +57,7 @@ public class TestProcessActions extends TestCase {
 		HelloWorldApp.InitApp();
 
 		// Avviare contesto spring
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ConfigApp.class);
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 		appservice = context.getBean(IAppService.class);
 		security = context.getBean(ISecurity.class);
 		repocommand = context.getBean(IRepositoryCommands.class);
@@ -132,7 +132,7 @@ public class TestProcessActions extends TestCase {
 			testSearch.setNameField("email");
 			testSearch.setValue("alessandro.modica@gmail.com");
 			BOSearchApp criteria = new BOSearchApp();
-			criteria.get_listLikeClause().add(testSearch);
+			criteria.getListLikeClause().add(testSearch);
 
 			List<PluginGestioneUtenti> fromDb = repoquery.setEntity(PluginGestioneUtenti.class)
 					.search(criteria.getSerialized());
@@ -214,8 +214,8 @@ public class TestProcessActions extends TestCase {
 		likeClause.setInsensitive(true);
 		likeClause.setNameField("nickname");
 		likeClause.setValue("%" + searcher + "%");
-		criteria.get_listLikeClause().add(likeClause);
-		criteria.get_listOrderBy().add("nickname");
+		criteria.getListLikeClause().add(likeClause);
+		criteria.getListOrderBy().add("nickname");
 		try {
 			OutputData dataResult = new OutputData();
 
@@ -283,7 +283,7 @@ public class TestProcessActions extends TestCase {
 			BOSearchApp criteria;
 			criteria = new BOSearchApp();
 			criteria.setNickname("OBkppa");
-			criteria.get_listIsNull().add("keyaccess");
+			criteria.getListIsNull().add("keyaccess");
 
 			List<PluginCommonBlacklist> result = repoquery.setEntity(PluginCommonBlacklist.class)
 					.search(criteria.getSerialized());

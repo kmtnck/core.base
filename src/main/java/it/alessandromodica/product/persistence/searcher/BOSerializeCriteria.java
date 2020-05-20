@@ -38,7 +38,7 @@ public class BOSerializeCriteria implements Serializable  {
 
 	private int maxResult;
 	private int firstResult;
-	private List<String> _listFieldsProjection = new ArrayList<String>();
+	private List<String> listFieldsProjection = new ArrayList<String>();
 	private Map<String, Object[]> listIn = new HashMap<String, Object[]>();
 	private Map<String, Object[]> listNotIn = new HashMap<String, Object[]>();
 
@@ -131,14 +131,6 @@ public class BOSerializeCriteria implements Serializable  {
 		return classSearcher;
 	}
 
-	public List<String> get_listIsNotEmpty() {
-		return listIsNotEmpty;
-	}
-
-	public void set_listIsNotEmpty(List<String> listIsNotEmpty) {
-		this.listIsNotEmpty = listIsNotEmpty;
-	}
-
 	public int getMaxResult() {
 		return maxResult;
 	}
@@ -171,22 +163,6 @@ public class BOSerializeCriteria implements Serializable  {
 		this.listNotIn = listNotIn;
 	}
 
-	public Map<String, Boolean> get_listValueBool() {
-		return listValueBool;
-	}
-
-	public void set_listValueBool(Map<String, Boolean> _listValueBool) {
-		this.listValueBool = _listValueBool;
-	}
-
-	public List<String> get_listFieldsProjection() {
-		return _listFieldsProjection;
-	}
-
-	public void set_listFieldsProjection(List<String> _listFieldsProjection) {
-		this._listFieldsProjection = _listFieldsProjection;
-	}
-
 	public Map<String, Boolean> getMapDescendent() {
 		return mapDescendent;
 	}
@@ -201,5 +177,29 @@ public class BOSerializeCriteria implements Serializable  {
 
 	public void setDescendent(Boolean descendent) {
 		this.descendent = descendent;
+	}
+
+	public List<String> getListFieldsProjection() {
+		return listFieldsProjection;
+	}
+
+	public void setListFieldsProjection(List<String> listFieldsProjection) {
+		this.listFieldsProjection = listFieldsProjection;
+	}
+
+	public List<String> getListIsNotEmpty() {
+		return listIsNotEmpty;
+	}
+
+	public void setListIsNotEmpty(List<String> listIsNotEmpty) {
+		this.listIsNotEmpty = listIsNotEmpty;
+	}
+
+	public Map<String, Boolean> getListValueBool() {
+		return listValueBool;
+	}
+
+	public void setListValueBool(Map<String, Boolean> listValueBool) {
+		this.listValueBool = listValueBool;
 	}
 }

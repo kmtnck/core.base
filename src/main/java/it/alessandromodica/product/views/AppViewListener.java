@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import it.alessandromodica.product.app.HelloWorldApp;
-import it.alessandromodica.product.common.config.ConfigApp;
+import it.alessandromodica.product.common.config.AppConfig;
 
 /**
  * Classe listener che estende il classico ServletContextListener, che viene
@@ -32,8 +32,8 @@ public class AppViewListener implements ServletContextListener {
 		try {
 
 			// Configuration.Init();
-			ConfigApp.initLog();
-			context = new AnnotationConfigApplicationContext(ConfigApp.class);
+			AppConfig.initLog();
+			context = new AnnotationConfigApplicationContext(AppConfig.class);
 
 			log.info(HelloWorldApp.TITOLO_APP + " avviato con successo");
 

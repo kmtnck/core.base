@@ -107,8 +107,8 @@ public abstract class BaseRepository<T> {
 		if (alias != null)
 			root.alias(alias);
 
-		if (serializeCriteria.get_listFieldsProjection().size() > 0) {
-			Selection[] projections = getProjections(serializeCriteria.get_listFieldsProjection(), root);
+		if (serializeCriteria.getListFieldsProjection().size() > 0) {
+			Selection[] projections = getProjections(serializeCriteria.getListFieldsProjection(), root);
 			if (projections.length > 0)
 				query.multiselect(projections).distinct(true);
 		}
@@ -218,9 +218,9 @@ public abstract class BaseRepository<T> {
 			predicates.add(builder.equal(root.get(fieldHB), resultEq.get(cKey)));
 		}
 
-		for (String cBool : serializeCriteria.get_listValueBool().keySet()) {
+		for (String cBool : serializeCriteria.getListValueBool().keySet()) {
 			
-			predicates.add(builder.equal(root.get(cBool), serializeCriteria.get_listValueBool().get(cBool)));
+			predicates.add(builder.equal(root.get(cBool), serializeCriteria.getListValueBool().get(cBool)));
 		}
 
 		for (Map<String, Object> cLike : serializeCriteria.getListLike()) {
@@ -385,7 +385,7 @@ public abstract class BaseRepository<T> {
 
 		// XXX: la lista dei valori non vuoti converge con quelli non nulli.
 		// valutare se e' corretto il giro
-		for (String cIsNotWS : serializeCriteria.get_listIsNotEmpty()) {
+		for (String cIsNotWS : serializeCriteria.getListIsNotEmpty()) {
 			predicates.add(builder.isNotNull(root.get(cIsNotWS)));
 		}
 
