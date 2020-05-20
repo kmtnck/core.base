@@ -32,7 +32,7 @@ public class AppViewListener implements ServletContextListener {
 		try {
 
 			// Configuration.Init();
-			HelloWorldApp.InitApp();
+			ConfigApp.initLog();
 			context = new AnnotationConfigApplicationContext(ConfigApp.class);
 
 			log.info(HelloWorldApp.TITOLO_APP + " avviato con successo");

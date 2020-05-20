@@ -20,6 +20,8 @@ import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
 @Api(value = "modulo.entity", description = "Interfaccia per la gestione CRUD di una entita database")
 public interface IEntityRest<T> {
 
+	public Object test(String id);
+	
 	public Object get(int id, UriInfo info) throws RepositoryException;
 
 	public List<Object> ricerca(BOSerializeCriteria searcher, UriInfo info) throws RepositoryException;

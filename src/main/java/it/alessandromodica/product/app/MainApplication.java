@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import it.alessandromodica.product.callback.SettingCookie;
 import it.alessandromodica.product.common.AdapterGson;
 import it.alessandromodica.product.common.InputData;
-import it.alessandromodica.product.common.config.ConfigApp;
 import it.alessandromodica.product.common.enumerative.AppContext;
 import it.alessandromodica.product.common.enumerative.RequestVariable;
 import it.alessandromodica.product.common.exceptions.BusinessException;
@@ -65,7 +64,6 @@ public class MainApplication extends MainContext {
 
 	protected static void InitApp(String appcontext) throws BusinessException {
 
-		ConfigApp.initLog();
 		try {
 			setUp(appcontext);
 		} catch (RepositoryException exsso) {

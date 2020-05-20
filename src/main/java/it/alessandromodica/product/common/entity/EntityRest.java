@@ -1,6 +1,5 @@
 package it.alessandromodica.product.common.entity;
 
-
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -55,6 +54,18 @@ public class EntityRest implements IEntityRest {
 	@Autowired
 	IRepositoryCommands writer;
 
+	@Override
+	@GET
+	@Path(value = "/test/{id}")
+	@Consumes(value = MediaType.APPLICATION_JSON)
+	@Produces(value = MediaType.APPLICATION_JSON)
+	public Object test(@PathParam(value = "id") String id) {
+
+			String result = "Questo e' un test funzionalita rest e basta! " + id.toString();
+			
+			return result;
+
+	}
 	/*
 Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi client smart
 {
@@ -115,20 +126,19 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 		}
 
 	}
-	
+
 	@Override
 	@GET
 	@Path(value = "/get/{id}")
 	@Consumes(value = MediaType.APPLICATION_JSON)
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public Object get(@PathParam(value = "id") int id, @Context UriInfo info)
-			throws RepositoryException {
+	public Object get(@PathParam(value = "id") int id, @Context UriInfo info) throws RepositoryException {
 
 		try {
 
 			ExtractURIValue values = new ExtractURIValue(info);
 			Class<?> classEntity = Class.forName(values.getValue(GoToBusiness.CLASSNAME));
-			Object result = (List<Object>) reader.setEntity(classEntity).getById(id);
+			Object result = (Object) reader.setEntity(classEntity).getById(id);
 
 			return result;
 

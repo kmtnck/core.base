@@ -1,9 +1,12 @@
 package it.alessandromodica.product.persistence.searcher;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
  * La classe rappresenta l'oggetto dato in pasto al repository per poter generare la query HQL hibernate in modo automatico.
@@ -13,9 +16,9 @@ import java.util.Map;
  * @author Alessandro
  *
  */
-public class BOSerializeCriteria {
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class BOSerializeCriteria implements Serializable  {
 
-	@SuppressWarnings("rawtypes")
 	private Class classSearcher;
 	
 	private Map<String, Object> listEquals = new HashMap<String, Object>();
@@ -112,14 +115,6 @@ public class BOSerializeCriteria {
 		this.listIsZero = listIsZero;
 	}
 
-	/*public List<Map.Entry<String, Boolean>> getListValueBool() {
-		return listValueBool;
-	}
-
-	public void setListValueBool(List<Map.Entry<String, Boolean>> listValueBool) {
-		this.listValueBool = listValueBool;
-	}*/
-
 	public List<BOSerializeCriteria> getListOrClause() {
 		return listOrClause;
 	}
@@ -128,12 +123,10 @@ public class BOSerializeCriteria {
 		this.listOrClause = listOrClause;
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void setClassSearcher(Class classSearcher) {
 		this.classSearcher = classSearcher;
 	}
 
-	@SuppressWarnings("rawtypes")
 	public Class getClassSearcher() {
 		return classSearcher;
 	}
@@ -209,13 +202,4 @@ public class BOSerializeCriteria {
 	public void setDescendent(Boolean descendent) {
 		this.descendent = descendent;
 	}
-
-	/*public List<String> get_listExcludeProjection() {
-		return _listExcludeProjection;
-	}
-
-	public void set_listExcludeProjection(List<String> _listExcludeProjection) {
-		this._listExcludeProjection = _listExcludeProjection;
-	}*/
-
 }
