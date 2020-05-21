@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import it.alessandromodica.product.app.HelloWorldApp;
 import it.alessandromodica.product.app.MainApplication;
 import it.alessandromodica.product.common.OutputData;
 import it.alessandromodica.product.common.config.AppConfig;
@@ -54,7 +53,7 @@ public class TestProcessActions extends TestCase {
 	protected void setUp() throws Exception {
 		// TODO Auto-generated method stub
 		super.setUp();
-		HelloWorldApp.InitApp();
+		AppConfig.InitApp();
 
 		// Avviare contesto spring
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);

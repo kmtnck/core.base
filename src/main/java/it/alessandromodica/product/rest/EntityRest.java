@@ -1,4 +1,4 @@
-package it.alessandromodica.product.common.entity;
+package it.alessandromodica.product.rest;
 
 import java.util.List;
 
@@ -14,15 +14,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.jboss.logging.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import it.alessandromodica.product.app.AppRoot.ExtractURIValue;
 import it.alessandromodica.product.app.GoToBusiness;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
-import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
-import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
 import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
 
 /***
@@ -40,19 +36,11 @@ import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
  *
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-@Component
+@Service
 @Path(value = "/entity")
 public class EntityRest implements IEntityRest {
 
 	protected static final Logger logger = Logger.getLogger(EntityRest.class);
-
-	/**
-	 * Nuovi Componenti
-	 */
-	@Autowired
-	IRepositoryQueries reader;
-	@Autowired
-	IRepositoryCommands writer;
 
 	@Override
 	@GET
@@ -117,7 +105,8 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 
 			ExtractURIValue values = new ExtractURIValue(info);
 			Class<?> classEntity = Class.forName(values.getValue(GoToBusiness.CLASSNAME));
-			List<Object> result = (List<Object>) reader.setEntity(classEntity).search(searcher);
+			
+			List<Object> result = (List<Object>) AppRoot.reader.setEntity(classEntity).search(searcher);
 
 			return result;
 
@@ -138,7 +127,7 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 
 			ExtractURIValue values = new ExtractURIValue(info);
 			Class<?> classEntity = Class.forName(values.getValue(GoToBusiness.CLASSNAME));
-			Object result = (Object) reader.setEntity(classEntity).getById(id);
+			Object result = (Object) AppRoot.reader.setEntity(classEntity).getById(id);
 
 			return result;
 
@@ -158,7 +147,7 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 
 			ExtractURIValue values = new ExtractURIValue(info);
 			Class<?> classEntity = Class.forName(values.getValue(GoToBusiness.CLASSNAME));
-			int result = reader.setEntity(classEntity).getCount(searcher);
+			int result = AppRoot.reader.setEntity(classEntity).getCount(searcher);
 
 			return result;
 
@@ -174,7 +163,7 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 	@RolesAllowed("authenticated")
 	public void save(@RequestBody Object toSave) throws RepositoryException {
 
-		writer.add(toSave);
+		AppRoot.writer.add(toSave);
 	}
 
 }

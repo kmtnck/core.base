@@ -4,9 +4,10 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import it.alessandromodica.product.app.HelloWorldApp;
+import it.alessandromodica.product.app.MainApplication;
 import it.alessandromodica.product.common.config.AppConfig;
 
 /**
@@ -17,10 +18,12 @@ import it.alessandromodica.product.common.config.AppConfig;
  * @author Alessandro
  *
  */
+@Deprecated
 public class AppViewListener implements ServletContextListener {
 
 	private static final Logger log = Logger.getLogger(AppViewListener.class);
 
+	
 	public static AnnotationConfigApplicationContext context;
 
 	/**
@@ -31,11 +34,12 @@ public class AppViewListener implements ServletContextListener {
 
 		try {
 
-			// Configuration.Init();
-			AppConfig.initLog();
+			DOMConfigurator.configure(AppConfig.class.getResource("log4j.xml"));
+			log.info("Istanziato il logger");
+			
 			context = new AnnotationConfigApplicationContext(AppConfig.class);
+			log.info(MainApplication.TITOLO_APP + " e contesto appliactivo avviato con successo");
 
-			log.info(HelloWorldApp.TITOLO_APP + " avviato con successo");
 
 		} catch (Exception e) {
 			// il log potrebbe non essere stato istanziato, pertanto si utilizza

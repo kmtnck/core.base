@@ -62,7 +62,7 @@ public class MainApplication extends MainContext {
 		return result;
 	}
 
-	protected static void InitApp(String appcontext) throws BusinessException {
+	public static void InitApp(String appcontext) throws BusinessException {
 
 		try {
 			setUp(appcontext);

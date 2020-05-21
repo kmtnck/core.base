@@ -1,4 +1,4 @@
-package it.alessandromodica.product.common.entity;
+package it.alessandromodica.product.rest;
 
 
 import java.util.List;

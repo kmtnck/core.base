@@ -19,8 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import it.alessandromodica.product.common.OutputData;
 import it.alessandromodica.product.common.InputData;
+import it.alessandromodica.product.common.OutputData;
 import it.alessandromodica.product.common.enumerative.AppContext;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
@@ -32,7 +32,6 @@ import it.alessandromodica.product.model.bo.BOCoordinate;
 import it.alessandromodica.product.model.bo.BODecoderAddress;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.po.PluginGestioneUtenti;
-import it.alessandromodica.product.services.interfaces.IMainService;
 
 /**
  * La classe MainContext rappresenta il punto unico della gestione dei vari
@@ -67,13 +66,6 @@ public abstract class MainContext extends GoToBusiness {
 	protected Cassaforte cassaforte;
 
 	/**
-	 * Servizio principale dell'applicazione utilizzato per recuperare le
-	 * informazioni utente e loggare dove serve le attivita'
-	 */
-	@Autowired
-	protected IMainService _mainService;
-
-	/**
 	 * Set di componenti specifici dell'applicazione, in questo caso sono
 	 * consultazione, un componente gis e il modulo per l'accesso al dato
 	 */
@@ -105,7 +97,7 @@ public abstract class MainContext extends GoToBusiness {
 				String value = utente.getNickname() != null ? utente.getNickname() : null;
 				log.info("Utente corrente identificato :" + value);
 
-				PluginGestioneUtenti data = _mainService.getUtente(value);
+				PluginGestioneUtenti data = mainService.getUtente(value);
 				if (data != null) {
 					utenteCorrente.setIdutente(data.getIdutente());
 					utenteCorrente.setPublickey(data.getPublickey());
@@ -151,7 +143,7 @@ public abstract class MainContext extends GoToBusiness {
 
 				switch (appcontext) {
 				case utenticonnessi:
-					_mainService.logAccesso("Richiesta utenti online", utenteCorrente);
+					mainService.logAccesso("Richiesta utenti online", utenteCorrente);
 					return consultazione.getUtentiConnessi();
 				default:
 					break;

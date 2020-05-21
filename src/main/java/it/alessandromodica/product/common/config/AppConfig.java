@@ -1,20 +1,19 @@
 package it.alessandromodica.product.common.config;
 
-import javax.xml.parsers.FactoryConfigurationError;
-
-import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import it.alessandromodica.product.app.HelloWorldApp;
+import it.alessandromodica.product.app.GoToBusiness;
+import it.alessandromodica.product.app.MainApplication;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 
+@EnableAutoConfiguration
 @Configuration
 @ComponentScan(basePackages="it.alessandromodica.product")
+//@EnableWebMvc
 public class AppConfig {
-
-	private static final Logger log = Logger.getLogger(AppConfig.class);
 
 	/**
 	 * Metodo per inizializzare i parametri di configurazione del client sso
@@ -26,12 +25,15 @@ public class AppConfig {
 	 */
 	public AppConfig() throws BusinessException
 	{
-		HelloWorldApp.InitApp();
+		InitApp();
 	}
 
-	public static void initLog() throws FactoryConfigurationError {
-		DOMConfigurator.configure(AppConfig.class.getResource("log4j.xml"));
-		log.info("Istanziato il logger");
+	public static void InitApp() throws BusinessException {
+
+		GoToBusiness.TITOLO_APP = "Una nuova app che fa cose";
+
+		MainApplication.InitApp("appjpa-mysql");
+
 	}
 	
 }

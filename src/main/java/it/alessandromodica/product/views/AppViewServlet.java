@@ -20,8 +20,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import it.alessandromodica.product.app.HelloWorldApp;
+import it.alessandromodica.product.app.MainApplication;
 import it.alessandromodica.product.common.AdapterGson;
 import it.alessandromodica.product.common.InputData;
 import it.alessandromodica.product.common.MagicString;
@@ -46,7 +47,8 @@ public class AppViewServlet extends HttpServlet {
 
 	private static final Logger log = Logger.getLogger(AppViewServlet.class);
 
-	HelloWorldApp mainApp = AppViewListener.context.getBean(HelloWorldApp.class);
+	@Autowired
+	MainApplication mainApp = AppViewListener.context.getBean(MainApplication.class);
 
 	/**
 	 * Convertitore Json
@@ -62,7 +64,8 @@ public class AppViewServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		try {
-
+			//mainApp = AppSpringInitializer.context.getBean(MainApplication.class);
+			
 			Object dataToSendClient = null;
 			// <<<--------------------------------------------------
 			try {

@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.model.bo.query.BOUtentiConnessi;
@@ -22,7 +22,7 @@ import it.alessandromodica.product.persistence.uow.UnitOfWork;
  *
  * @param <T>
  */
-@Component
+@Repository
 public class AppRepository<T> extends BaseRepository<T> implements IRepositoryQueries<T>, IRepositoryCommands<T> {
 
 	private static final Logger log = Logger.getLogger(AppRepository.class);
