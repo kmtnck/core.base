@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-public class PluginGestioneUtentiInfoautenticazione implements Serializable {
+public class GestioneUtentiInfoautenticazione implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -32,7 +32,7 @@ public class PluginGestioneUtentiInfoautenticazione implements Serializable {
 
 	private String valueparametro;
 
-	public PluginGestioneUtentiInfoautenticazione() {
+	public GestioneUtentiInfoautenticazione() {
 	}
 
 	public int getIdinfo() {

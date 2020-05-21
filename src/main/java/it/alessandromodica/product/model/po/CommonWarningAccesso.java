@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-public class PluginCommonWarningAccesso implements Serializable {
+public class CommonWarningAccesso implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int idwarning;
 	private String descrizione;
@@ -28,7 +28,7 @@ public class PluginCommonWarningAccesso implements Serializable {
 	}
 
 
-	public PluginCommonWarningAccesso() {
+	public CommonWarningAccesso() {
 	}
 
 

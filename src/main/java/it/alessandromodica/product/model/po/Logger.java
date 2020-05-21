@@ -10,7 +10,7 @@ import java.util.Date;
  * 
  */
 @Entity
-public class PluginLogger implements Serializable {
+public class Logger implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -30,7 +30,7 @@ public class PluginLogger implements Serializable {
 	@Column(length=4000)
 	private String messaggio;
 
-	public PluginLogger() {
+	public Logger() {
 	}
 
 	public int getIdlogger() {

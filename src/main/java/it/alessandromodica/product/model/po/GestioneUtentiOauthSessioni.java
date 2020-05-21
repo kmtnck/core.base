@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-public class PluginGestioneUtentiOauthSessioni implements Serializable {
+public class GestioneUtentiOauthSessioni implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -46,9 +46,9 @@ public class PluginGestioneUtentiOauthSessioni implements Serializable {
 	//bi-directional many-to-one association to PluginGestioneUtentiOauth
 	@ManyToOne
 	@JoinColumn(name="idouth")
-	private PluginGestioneUtentiOauth pluginGestioneUtentiOauth;
+	private GestioneUtentiOauth pluginGestioneUtentiOauth;
 
-	public PluginGestioneUtentiOauthSessioni() {
+	public GestioneUtentiOauthSessioni() {
 	}
 
 	public int getIdouthsessione() {
@@ -139,11 +139,11 @@ public class PluginGestioneUtentiOauthSessioni implements Serializable {
 		this.validita = validita;
 	}
 
-	public PluginGestioneUtentiOauth getPluginGestioneUtentiOauth() {
+	public GestioneUtentiOauth getPluginGestioneUtentiOauth() {
 		return this.pluginGestioneUtentiOauth;
 	}
 
-	public void setPluginGestioneUtentiOauth(PluginGestioneUtentiOauth pluginGestioneUtentiOauth) {
+	public void setPluginGestioneUtentiOauth(GestioneUtentiOauth pluginGestioneUtentiOauth) {
 		this.pluginGestioneUtentiOauth = pluginGestioneUtentiOauth;
 	}
 

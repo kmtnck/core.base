@@ -15,9 +15,9 @@ import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.context.interfaces.ISecurity;
 import it.alessandromodica.product.model.bo.BOUtente;
-import it.alessandromodica.product.model.po.PluginCommonBlacklist;
-import it.alessandromodica.product.model.po.PluginCommonLogaccesso;
-import it.alessandromodica.product.model.po.PluginGestioneUtenti;
+import it.alessandromodica.product.model.po.CommonBlacklist;
+import it.alessandromodica.product.model.po.CommonLogaccesso;
+import it.alessandromodica.product.model.po.GestioneUtenti;
 import it.alessandromodica.product.model.po.VUtentiLoggatiDettaglio;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
@@ -133,13 +133,13 @@ public class TestProcessActions extends TestCase {
 			BOSearchApp criteria = new BOSearchApp();
 			criteria.getListLikeClause().add(testSearch);
 
-			List<PluginGestioneUtenti> fromDb = repoquery.setEntity(PluginGestioneUtenti.class)
+			List<GestioneUtenti> fromDb = repoquery.setEntity(GestioneUtenti.class)
 					.search(criteria.getSerialized());
 
 			if (fromDb.isEmpty())
 				Assert.assertTrue("I dati non sono stati trovati, ma la query è stata eseguita correttamente", true);
 			else {
-				for (PluginGestioneUtenti pluginCommonLogaccesso : fromDb) {
+				for (GestioneUtenti pluginCommonLogaccesso : fromDb) {
 
 					log.info(pluginCommonLogaccesso.getNickname());
 				}
@@ -159,13 +159,13 @@ public class TestProcessActions extends TestCase {
 			BOSearchApp criteria = new BOSearchApp();
 			criteria.setNickname("Gunny13");
 
-			List<PluginGestioneUtenti> fromDb = repoquery.setEntity(PluginGestioneUtenti.class)
+			List<GestioneUtenti> fromDb = repoquery.setEntity(GestioneUtenti.class)
 					.search(criteria.getSerialized());
 
 			if (fromDb.isEmpty())
 				Assert.assertTrue("I dati non ci sono , ma la query è stata eseguita correttamente", true);
 			else {
-				for (PluginGestioneUtenti pluginCommonLogaccesso : fromDb) {
+				for (GestioneUtenti pluginCommonLogaccesso : fromDb) {
 
 					log.info(pluginCommonLogaccesso.getNickname());
 				}
@@ -218,7 +218,7 @@ public class TestProcessActions extends TestCase {
 		try {
 			OutputData dataResult = new OutputData();
 
-			List<PluginGestioneUtenti> result = repoquery.setEntity(PluginGestioneUtenti.class)
+			List<GestioneUtenti> result = repoquery.setEntity(GestioneUtenti.class)
 					.search(criteria.getSerialized());
 			dataResult.setPayload(result);
 
@@ -236,15 +236,15 @@ public class TestProcessActions extends TestCase {
 
 			String msg = "Adesso facciamo un altro test!!";
 
-			PluginCommonLogaccesso toAdd = new PluginCommonLogaccesso();
+			CommonLogaccesso toAdd = new CommonLogaccesso();
 			toAdd.setIpaddress("questo e un test");
 			toAdd.setDescrizione(msg);
 			toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
-			repocommand.setEntity(PluginCommonLogaccesso.class).add(toAdd);
+			repocommand.setEntity(CommonLogaccesso.class).add(toAdd);
 
 			BOSearchApp testsearch = new BOSearchApp();
 			testsearch.setDescrizione("Adesso facciamo un altro test!!");
-			List<PluginCommonLogaccesso> resulttest = repoquery.setEntity(PluginCommonLogaccesso.class)
+			List<CommonLogaccesso> resulttest = repoquery.setEntity(CommonLogaccesso.class)
 					.search(testsearch.getSerialized());
 
 			if (resulttest == null)
@@ -253,13 +253,13 @@ public class TestProcessActions extends TestCase {
 				if (resulttest.size() > 1) {
 					log.info("E' strano che ce ne siano " + resulttest.size());
 
-					for (PluginCommonLogaccesso obj : resulttest) {
+					for (CommonLogaccesso obj : resulttest) {
 
-						repocommand.setEntity(PluginCommonLogaccesso.class).delete(obj);
+						repocommand.setEntity(CommonLogaccesso.class).delete(obj);
 					}
 					Assert.assertTrue(repoquery.search(testsearch.getSerialized()).size() == 0);
 				} else if (resulttest.size() == 1) {
-					PluginCommonLogaccesso data = resulttest.get(0);
+					CommonLogaccesso data = resulttest.get(0);
 					Assert.assertTrue(msg.equals(data.getDescrizione()));
 				}
 			}
@@ -284,11 +284,11 @@ public class TestProcessActions extends TestCase {
 			criteria.setNickname("OBkppa");
 			criteria.getListIsNull().add("keyaccess");
 
-			List<PluginCommonBlacklist> result = repoquery.setEntity(PluginCommonBlacklist.class)
+			List<CommonBlacklist> result = repoquery.setEntity(CommonBlacklist.class)
 					.search(criteria.getSerialized());
 
 			Assert.assertTrue(result != null);
-			int value = repoquery.setEntity(PluginCommonBlacklist.class).getCount(criteria.getSerialized());
+			int value = repoquery.setEntity(CommonBlacklist.class).getCount(criteria.getSerialized());
 
 			Assert.assertTrue(value == 0);
 

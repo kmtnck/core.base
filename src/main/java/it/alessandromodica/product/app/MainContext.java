@@ -31,7 +31,7 @@ import it.alessandromodica.product.context.security.Cassaforte;
 import it.alessandromodica.product.model.bo.BOCoordinate;
 import it.alessandromodica.product.model.bo.BODecoderAddress;
 import it.alessandromodica.product.model.bo.BOUtente;
-import it.alessandromodica.product.model.po.PluginGestioneUtenti;
+import it.alessandromodica.product.model.po.GestioneUtenti;
 
 /**
  * La classe MainContext rappresenta il punto unico della gestione dei vari
@@ -97,7 +97,7 @@ public abstract class MainContext extends GoToBusiness {
 				String value = utente.getNickname() != null ? utente.getNickname() : null;
 				log.info("Utente corrente identificato :" + value);
 
-				PluginGestioneUtenti data = mainService.getUtente(value);
+				GestioneUtenti data = mainService.getUtente(value);
 				if (data != null) {
 					utenteCorrente.setIdutente(data.getIdutente());
 					utenteCorrente.setPublickey(data.getPublickey());

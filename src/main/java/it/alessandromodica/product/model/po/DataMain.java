@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-public class PluginDataMain implements Serializable {
+public class DataMain implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -38,7 +38,7 @@ public class PluginDataMain implements Serializable {
 	@Column(nullable=false, length=256)
 	private String titolo;
 
-	public PluginDataMain() {
+	public DataMain() {
 	}
 
 	public String getGuid() {

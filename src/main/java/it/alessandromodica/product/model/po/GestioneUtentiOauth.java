@@ -11,7 +11,7 @@ import java.util.List;
  * 
  */
 @Entity
-public class PluginGestioneUtentiOauth implements Serializable {
+public class GestioneUtentiOauth implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -38,9 +38,9 @@ public class PluginGestioneUtentiOauth implements Serializable {
 
 	//bi-directional many-to-one association to PluginGestioneUtentiOauthSessioni
 	@OneToMany(mappedBy="pluginGestioneUtentiOauth")
-	private List<PluginGestioneUtentiOauthSessioni> pluginGestioneUtentiOauthSessionis;
+	private List<GestioneUtentiOauthSessioni> pluginGestioneUtentiOauthSessionis;
 
-	public PluginGestioneUtentiOauth() {
+	public GestioneUtentiOauth() {
 	}
 
 	public int getIdouth() {
@@ -99,22 +99,22 @@ public class PluginGestioneUtentiOauth implements Serializable {
 		this.nomeutente = nomeutente;
 	}
 
-	public List<PluginGestioneUtentiOauthSessioni> getPluginGestioneUtentiOauthSessionis() {
+	public List<GestioneUtentiOauthSessioni> getPluginGestioneUtentiOauthSessionis() {
 		return this.pluginGestioneUtentiOauthSessionis;
 	}
 
-	public void setPluginGestioneUtentiOauthSessionis(List<PluginGestioneUtentiOauthSessioni> pluginGestioneUtentiOauthSessionis) {
+	public void setPluginGestioneUtentiOauthSessionis(List<GestioneUtentiOauthSessioni> pluginGestioneUtentiOauthSessionis) {
 		this.pluginGestioneUtentiOauthSessionis = pluginGestioneUtentiOauthSessionis;
 	}
 
-	public PluginGestioneUtentiOauthSessioni addPluginGestioneUtentiOauthSessioni(PluginGestioneUtentiOauthSessioni pluginGestioneUtentiOauthSessioni) {
+	public GestioneUtentiOauthSessioni addPluginGestioneUtentiOauthSessioni(GestioneUtentiOauthSessioni pluginGestioneUtentiOauthSessioni) {
 		getPluginGestioneUtentiOauthSessionis().add(pluginGestioneUtentiOauthSessioni);
 		pluginGestioneUtentiOauthSessioni.setPluginGestioneUtentiOauth(this);
 
 		return pluginGestioneUtentiOauthSessioni;
 	}
 
-	public PluginGestioneUtentiOauthSessioni removePluginGestioneUtentiOauthSessioni(PluginGestioneUtentiOauthSessioni pluginGestioneUtentiOauthSessioni) {
+	public GestioneUtentiOauthSessioni removePluginGestioneUtentiOauthSessioni(GestioneUtentiOauthSessioni pluginGestioneUtentiOauthSessioni) {
 		getPluginGestioneUtentiOauthSessionis().remove(pluginGestioneUtentiOauthSessioni);
 		pluginGestioneUtentiOauthSessioni.setPluginGestioneUtentiOauth(null);
 

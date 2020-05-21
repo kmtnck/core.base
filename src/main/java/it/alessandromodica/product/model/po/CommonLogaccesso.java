@@ -10,14 +10,14 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-public class PluginCommonLogaccesso implements Serializable {
+public class CommonLogaccesso implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private int idaccesso;
 	private String descrizione;
 	private String ipaddress;
 	private Timestamp istante;
 
-	public PluginCommonLogaccesso() {
+	public CommonLogaccesso() {
 	}
 
 

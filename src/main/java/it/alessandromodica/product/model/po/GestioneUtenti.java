@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-public class PluginGestioneUtenti implements Serializable {
+public class GestioneUtenti implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -44,7 +44,7 @@ public class PluginGestioneUtenti implements Serializable {
 	@Column(length=256)
 	private String usernametelegram;
 
-	public PluginGestioneUtenti() {
+	public GestioneUtenti() {
 	}
 
 	public int getIdutente() {

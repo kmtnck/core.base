@@ -33,11 +33,11 @@ import it.alessandromodica.product.model.bo.BOVerificaToken;
 import it.alessandromodica.product.model.bo.BOPayloadAuth.GoogleUser;
 import it.alessandromodica.product.model.bo.BOPayloadAuth.ProfiloUtente;
 import it.alessandromodica.product.model.bo.BOPayloadAuth.GoogleUser.Token;
-import it.alessandromodica.product.model.po.PluginCommonBlacklist;
-import it.alessandromodica.product.model.po.PluginGestioneApps;
-import it.alessandromodica.product.model.po.PluginGestioneUtenti;
-import it.alessandromodica.product.model.po.PluginGestioneUtentiOauth;
-import it.alessandromodica.product.model.po.PluginGestioneUtentiOauthSessioni;
+import it.alessandromodica.product.model.po.CommonBlacklist;
+import it.alessandromodica.product.model.po.GestioneApps;
+import it.alessandromodica.product.model.po.GestioneUtenti;
+import it.alessandromodica.product.model.po.GestioneUtentiOauth;
+import it.alessandromodica.product.model.po.GestioneUtentiOauthSessioni;
 import it.alessandromodica.product.model.po.VGestioneUtenti;
 import it.alessandromodica.product.model.po.VGestioneUtentiOuth;
 import it.alessandromodica.product.persistence.searcher.BOSearchApp;
@@ -108,11 +108,11 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 			result.setPasscode(utenteCorrente.getPublickey() + utenteCorrente.getPrivatekey());
 			try {
 
-				PluginGestioneUtenti data = _mainService.getUtente(utenteCorrente.getNickname());
+				GestioneUtenti data = _mainService.getUtente(utenteCorrente.getNickname());
 				String scarabocchio = RandomScraps.generaFrase();
 				result.setScarabocchio(scarabocchio);
 				data.setScarabocchio(scarabocchio);
-				repocommands.setEntity(PluginGestioneUtenti.class).update(data);
+				repocommands.setEntity(GestioneUtenti.class).update(data);
 
 			} catch (ServiceException | RepositoryException e) {
 				log.warn("Non e' stato possibile recuperare i dati dell'utente", e);
@@ -134,13 +134,13 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 
 			BOSearchApp criteria = new BOSearchApp();
 			criteria.setEmail(email);
-			PluginGestioneUtentiOauth data = (PluginGestioneUtentiOauth) repoquery
-					.setEntity(PluginGestioneUtentiOauth.class).getSingleOrDefault(criteria.getSerialized());
+			GestioneUtentiOauth data = (GestioneUtentiOauth) repoquery
+					.setEntity(GestioneUtentiOauth.class).getSingleOrDefault(criteria.getSerialized());
 
 			if (data != null) {
-				repocommands.setEntity(PluginGestioneUtentiOauthSessioni.class).deleteFromId(data.getIdouth(),
+				repocommands.setEntity(GestioneUtentiOauthSessioni.class).deleteFromId(data.getIdouth(),
 						"idouth");
-				repocommands.setEntity(PluginGestioneUtentiOauth.class).delete(data);
+				repocommands.setEntity(GestioneUtentiOauth.class).delete(data);
 				result.setEsito("Utente " + email + " rimosso con successo!");
 			}
 
@@ -204,18 +204,18 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 					BOSearchApp criteria = new BOSearchApp();
 					criteria.setEmail(email);
 
-					int checkauth = repoquery.setEntity(PluginGestioneUtentiOauth.class)
+					int checkauth = repoquery.setEntity(GestioneUtentiOauth.class)
 							.getCount(criteria.getSerialized());
 
 					if (checkauth == 0) {
-						PluginGestioneUtentiOauth toAdd = new PluginGestioneUtentiOauth();
+						GestioneUtentiOauth toAdd = new GestioneUtentiOauth();
 						toAdd.setNomeutente(username);
 						toAdd.setFoto(uriFoto);
 						toAdd.setIdtoken(idtoken);
 						toAdd.setEmail(email);
 						toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
 
-						repocommands.setEntity(PluginGestioneUtentiOauth.class).add(toAdd);
+						repocommands.setEntity(GestioneUtentiOauth.class).add(toAdd);
 
 						result.setEsito("Utente registrato con successo al " + MainContext.TITOLO_APP + ".");
 						result.setStato("SUCCESSLOGIN");
@@ -225,7 +225,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 						criteria = new BOSearchApp();
 						criteria.setIdtoken(idtoken);
 
-						int checksessione = repoquery.setEntity(PluginGestioneUtentiOauthSessioni.class)
+						int checksessione = repoquery.setEntity(GestioneUtentiOauthSessioni.class)
 								.getCount(criteria.getSerialized());
 
 						if (checksessione == 0) {
@@ -243,11 +243,11 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 						criteria = new BOSearchApp();
 						criteria.setEmail(email);
 
-						PluginGestioneUtentiOauth poauth = ((PluginGestioneUtentiOauth) repoquery
-								.setEntity(PluginGestioneUtentiOauth.class)
+						GestioneUtentiOauth poauth = ((GestioneUtentiOauth) repoquery
+								.setEntity(GestioneUtentiOauth.class)
 								.getFirstOrDefault(criteria.getSerialized()));
 
-						PluginGestioneUtentiOauthSessioni toAdd = new PluginGestioneUtentiOauthSessioni();
+						GestioneUtentiOauthSessioni toAdd = new GestioneUtentiOauthSessioni();
 						// toAdd.setIdouthsessione(max);
 						toAdd.setPluginGestioneUtentiOauth(poauth);
 						toAdd.setIdtoken(idtoken);
@@ -260,7 +260,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 						toAdd.setValidita(tokenInfo.getExpires_in().intValue());
 						toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
 						// toAdd.setDataemissione(tokenInfo.getFirst_issued_at());
-						repocommands.setEntity(PluginGestioneUtentiOauthSessioni.class).add(toAdd);
+						repocommands.setEntity(GestioneUtentiOauthSessioni.class).add(toAdd);
 					}
 
 					criteria = new BOSearchApp();
@@ -394,7 +394,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 
 				criteria.getListIsNull().add("keyaccess");
 
-				check = repoquery.setEntity(PluginCommonBlacklist.class).getCount(criteria.getSerialized());
+				check = repoquery.setEntity(CommonBlacklist.class).getCount(criteria.getSerialized());
 
 				// XXX: l'utente non è in blacklist.
 				// si verifica che tipo di utente e'
@@ -416,7 +416,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 						criteria = new BOSearchApp();
 						criteria.setNickname(utenteCorrente.getNickname());
 						VGestioneUtenti inforegistrazione = (VGestioneUtenti) repoquery
-								.setEntity(PluginGestioneUtenti.class).getSingleOrDefault(criteria.getSerialized());
+								.setEntity(GestioneUtenti.class).getSingleOrDefault(criteria.getSerialized());
 
 						// se l'autenticazione è andata a buon fine decidi
 						// tu che cosa vuoi farli fare a questo utente (e
@@ -487,7 +487,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 						criteria = new BOSearchApp();
 						// criteria.setPlayer(utenteCorrente.getNickname());
 						criteria.getListIsNotNull().add("keyaccess");
-						List<PluginCommonBlacklist> list = repoquery.setEntity(PluginCommonBlacklist.class)
+						List<CommonBlacklist> list = repoquery.setEntity(CommonBlacklist.class)
 								.search(criteria.getSerialized());
 
 						String registerpasscode = null;
@@ -495,7 +495,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 
 							registerpasscode = md5(LocalDateTime.now().toString());
 
-							PluginCommonBlacklist info;
+							CommonBlacklist info;
 							String scarabocchio = RandomScraps.generaFrase();
 
 							if (list.size() == 1) {
@@ -506,11 +506,11 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 								info.setScarabocchio(scarabocchio);
 								info.setCookie(utenteCorrente.getCookies());
 
-								repocommands.setEntity(PluginCommonBlacklist.class).update(info);
+								repocommands.setEntity(CommonBlacklist.class).update(info);
 
 							} else {
 
-								info = new PluginCommonBlacklist();
+								info = new CommonBlacklist();
 								info.setUtente(utenteCorrente.getNickname());
 								info.setKeyaccess(registerpasscode);
 								info.setDescrizione(esito);
@@ -518,7 +518,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 								info.setScarabocchio(scarabocchio);
 								info.setCookie(utenteCorrente.getCookies());
 								info.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
-								repocommands.setEntity(PluginCommonBlacklist.class).add(info);
+								repocommands.setEntity(CommonBlacklist.class).add(info);
 
 							}
 
@@ -581,12 +581,12 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 
 			BOSearchApp criteria = new BOSearchApp();
 			criteria.setNickname(utenteCorrente.getNickname());
-			PluginGestioneUtenti utenteregistrato = (PluginGestioneUtenti) repoquery
-					.setEntity(PluginGestioneUtenti.class).getSingleOrDefault(criteria.getSerialized());
+			GestioneUtenti utenteregistrato = (GestioneUtenti) repoquery
+					.setEntity(GestioneUtenti.class).getSingleOrDefault(criteria.getSerialized());
 
 			if (utenteregistrato != null) {
-				PluginGestioneUtentiOauth dataoauth = (PluginGestioneUtentiOauth) repoquery
-						.setEntity(PluginGestioneUtentiOauth.class).getSingleOrDefault(criteria.getSerialized());
+				GestioneUtentiOauth dataoauth = (GestioneUtentiOauth) repoquery
+						.setEntity(GestioneUtentiOauth.class).getSingleOrDefault(criteria.getSerialized());
 
 				if (utenteCorrente != null) {
 					if (dataoauth != null) {
@@ -602,7 +602,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 				criteria = new BOSearchApp();
 				criteria.setNickname(utenteCorrente.getNickname());
 				criteria.getListIsNotNull().add("keyaccess");
-				PluginCommonBlacklist info = (PluginCommonBlacklist) repoquery.setEntity(PluginCommonBlacklist.class)
+				CommonBlacklist info = (CommonBlacklist) repoquery.setEntity(CommonBlacklist.class)
 						.getSingleOrDefault(criteria.getSerialized());
 
 				if (info != null) {
@@ -613,8 +613,8 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 
 					criteria = new BOSearchApp();
 					criteria.setNickname(utenteCorrente.getNickname());
-					PluginGestioneUtentiOauth dataoauth = (PluginGestioneUtentiOauth) repoquery
-							.setEntity(PluginGestioneUtentiOauth.class).getSingleOrDefault(criteria.getSerialized());
+					GestioneUtentiOauth dataoauth = (GestioneUtentiOauth) repoquery
+							.setEntity(GestioneUtentiOauth.class).getSingleOrDefault(criteria.getSerialized());
 
 					if (dataoauth != null) {
 
@@ -626,20 +626,20 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 							/*
 							 * registra utente nuovo
 							 */
-							PluginGestioneUtenti newUser = new PluginGestioneUtenti();
+							GestioneUtenti newUser = new GestioneUtenti();
 							newUser.setEmail(email);
 							newUser.setIdgruppo(2);
 							newUser.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
 							newUser.setNickname(utenteCorrente.getNickname());
 							newUser.setPublickey(keys[0]);
 							newUser.setPrivatekey(keys[1]);
-							repocommands.setEntity(PluginGestioneUtenti.class).add(newUser);
+							repocommands.setEntity(GestioneUtenti.class).add(newUser);
 
 							BOSearchApp searcher = new BOSearchApp();
 							searcher.setNickname(utenteCorrente.getNickname());
-							PluginCommonBlacklist removeBlackListed = (PluginCommonBlacklist) repoquery
-									.setEntity(PluginCommonBlacklist.class).getSingle(searcher.getSerialized());
-							repocommands.setEntity(PluginCommonBlacklist.class).delete(removeBlackListed);
+							CommonBlacklist removeBlackListed = (CommonBlacklist) repoquery
+									.setEntity(CommonBlacklist.class).getSingle(searcher.getSerialized());
+							repocommands.setEntity(CommonBlacklist.class).delete(removeBlackListed);
 
 							esito = "Registrazione avvenuta con successo! Benvenuto " + utenteCorrente.getNickname()
 									+ "!! " + avvertenza;
@@ -693,7 +693,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 				BOSearchApp criteria = new BOSearchApp();
 				criteria.setTokenapp(utenteCorrente.getTokenapp());
 				try {
-					repoquery.setEntity(PluginGestioneApps.class).getSingle(criteria.getSerialized());
+					repoquery.setEntity(GestioneApps.class).getSingle(criteria.getSerialized());
 					esito = true;
 
 				} catch (Exception e) {
@@ -744,11 +744,11 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 
 		BOSecurity result = new BOSecurity();
 
-		PluginCommonBlacklist toAdd = new PluginCommonBlacklist();
+		CommonBlacklist toAdd = new CommonBlacklist();
 		toAdd.setIpaddress(utenteCorrente.getInforemote());
 		toAdd.setDescrizione(esito);
 		toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
-		repocommands.setEntity(PluginCommonBlacklist.class).add(toAdd);
+		repocommands.setEntity(CommonBlacklist.class).add(toAdd);
 
 		result.setUsername(utenteCorrente.getNickname());
 		result.setEsito(esito);
@@ -762,7 +762,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 		try {
 
 			try {
-				PluginGestioneUtenti utente = _mainService.getUtente(utenteCorrente.getNickname());
+				GestioneUtenti utente = _mainService.getUtente(utenteCorrente.getNickname());
 
 				if (utente == null)
 					return false;

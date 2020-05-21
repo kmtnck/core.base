@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.model.bo.BOUtente;
-import it.alessandromodica.product.model.po.PluginGestioneUtentiInfoautenticazione;
+import it.alessandromodica.product.model.po.GestioneUtentiInfoautenticazione;
 import it.alessandromodica.product.persistence.interfaces.IBulkTransaction;
 import it.alessandromodica.product.persistence.searcher.BOSearchApp;
 
@@ -47,7 +47,7 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 					log.info("Cookie da aggiungere: " + cCookie);
 					try {
 
-						PluginGestioneUtentiInfoautenticazione obj = (PluginGestioneUtentiInfoautenticazione) repoquery.setEntity(PluginGestioneUtentiInfoautenticazione.class)
+						GestioneUtentiInfoautenticazione obj = (GestioneUtentiInfoautenticazione) repoquery.setEntity(GestioneUtentiInfoautenticazione.class)
 								.getSingleOrDefault(criteria.getSerialized());
 
 						if (obj != null) {
@@ -55,9 +55,9 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 								obj.setValueparametro(valoreparametro);
 
 								if (em == null)
-									repocommands.setEntity(PluginGestioneUtentiInfoautenticazione.class).update(obj);
+									repocommands.setEntity(GestioneUtentiInfoautenticazione.class).update(obj);
 								else
-									repocommands.setEntity(PluginGestioneUtentiInfoautenticazione.class).update(obj, em);
+									repocommands.setEntity(GestioneUtentiInfoautenticazione.class).update(obj, em);
 
 								log.info("<<<S Il Cookie e' stato aggiornato: da [" + obj.getValueparametro() + "] a ["
 										+ valoreparametro + "]");
@@ -65,7 +65,7 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 								log.info("<<<S Il cookie non ha subito modifiche");
 						} else {
 							// int idobj = 0;
-							PluginGestioneUtentiInfoautenticazione pObj = new PluginGestioneUtentiInfoautenticazione();
+							GestioneUtentiInfoautenticazione pObj = new GestioneUtentiInfoautenticazione();
 							pObj.setContesto("cookie");
 							// pObj.setIdinfo(idobj);
 							pObj.setIdutente(utenteCorrente.getIdutente());

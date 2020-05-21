@@ -11,8 +11,8 @@ import it.alessandromodica.product.app.MainContext;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.model.bo.BOUtente;
-import it.alessandromodica.product.model.po.PluginCommonLogaccesso;
-import it.alessandromodica.product.model.po.PluginGestioneUtenti;
+import it.alessandromodica.product.model.po.CommonLogaccesso;
+import it.alessandromodica.product.model.po.GestioneUtenti;
 import it.alessandromodica.product.persistence.searcher.BOSearchApp;
 import it.alessandromodica.product.services.interfaces.IMainService;
 
@@ -45,14 +45,14 @@ public class MainService extends GoToBusiness implements IMainService {
 	/**
 	 * Recupera le informazioni dell'utente corrente
 	 */
-	public PluginGestioneUtenti getUtente(String nickname) throws ServiceException {
+	public GestioneUtenti getUtente(String nickname) throws ServiceException {
 		BOSearchApp search = new BOSearchApp();
 		search.setNickname(nickname);
 		try {
 
-			PluginGestioneUtenti result;
+			GestioneUtenti result;
 			try {
-				result = (PluginGestioneUtenti) repoquery.setEntity(PluginGestioneUtenti.class)
+				result = (GestioneUtenti) repoquery.setEntity(GestioneUtenti.class)
 						.getSingleOrDefault(search.getSerialized());
 				return result;
 
@@ -76,11 +76,11 @@ public class MainService extends GoToBusiness implements IMainService {
 
 		try {
 
-			PluginCommonLogaccesso toAdd = new PluginCommonLogaccesso();
+			CommonLogaccesso toAdd = new CommonLogaccesso();
 			toAdd.setIpaddress(utentecorrente.getInforemote());
 			toAdd.setDescrizione(messaggio);
 			toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
-			repocommands.setEntity(PluginCommonLogaccesso.class).add(toAdd);
+			repocommands.setEntity(CommonLogaccesso.class).add(toAdd);
 
 			log.info("---> " + messaggio);
 

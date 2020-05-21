@@ -10,7 +10,7 @@ import java.sql.Timestamp;
  * 
  */
 @Entity
-public class PluginCommonBlacklist implements Serializable {
+public class CommonBlacklist implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -39,7 +39,7 @@ public class PluginCommonBlacklist implements Serializable {
 		this.utente = utente;
 	}
 
-	public PluginCommonBlacklist() {
+	public CommonBlacklist() {
 	}
 
 	public int getIdblacklist() {

@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.model.bo.BOUtente;
-import it.alessandromodica.product.model.po.PluginGestioneUtenti;
+import it.alessandromodica.product.model.po.GestioneUtenti;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
 import it.alessandromodica.product.persistence.repo.AppRepository;
@@ -78,7 +78,7 @@ public abstract class GoToBusiness {
 				if (value != null) {
 					log.info("Utente corrente identificato :" + value);
 
-					PluginGestioneUtenti data = mainService.getUtente(value);
+					GestioneUtenti data = mainService.getUtente(value);
 					if (data != null) {
 						utenteCorrente.setIdutente(data.getIdutente());
 						utenteCorrente.setPublickey(data.getPublickey());

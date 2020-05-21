@@ -11,7 +11,7 @@ import java.util.Date;
  * 
  */
 @Entity
-public class PluginDataTrack implements Serializable {
+public class DataTrack implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -28,7 +28,7 @@ public class PluginDataTrack implements Serializable {
 	@Column(nullable=false)
 	private Time ora;
 
-	public PluginDataTrack() {
+	public DataTrack() {
 	}
 
 	public String getIdtrack() {
