@@ -46,7 +46,7 @@ public abstract class BaseRepository<T> {
 
 	@PersistenceContext
 	EntityManager em;
-	
+
 	private static final Logger log = Logger.getLogger(BaseRepository.class);
 
 	protected Class<T> classEntity;
@@ -68,16 +68,11 @@ public abstract class BaseRepository<T> {
 		uow.submit(bulkoperation);
 	}
 
-	public void executeNoTransaction(IBulkTransaction bulkoperation) throws RepositoryException {
-		uow.submitNoTransaction(bulkoperation);
-	}
-
-	protected Query buildCriteriaQuery(BOSerializeCriteria serializeCriteria, EntityManager em)
+	protected Query buildCriteriaQuery(BOSerializeCriteria serializeCriteria)
 			throws RepositoryException {
-		return buildCriteriaQuery(null, serializeCriteria, em);
+		return buildCriteriaQuery(null, serializeCriteria);
 	}
 
-	
 	@SuppressWarnings("rawtypes")
 	private static <Y extends Comparable<? super Y>> Predicate createRangePredicate(CriteriaBuilder builder,
 			Expression field, Object start, Object end, Class<?> typeData) {
@@ -100,9 +95,9 @@ public abstract class BaseRepository<T> {
 			return builder.lessThanOrEqualTo(field, (Y) end);
 		}
 	}
-	
+
 	@SuppressWarnings("rawtypes")
-	protected Query buildCriteriaQuery(String alias, BOSerializeCriteria serializeCriteria, EntityManager em)
+	protected Query buildCriteriaQuery(String alias, BOSerializeCriteria serializeCriteria)
 			throws RepositoryException {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<T> query = builder.createQuery(classEntity);
@@ -115,10 +110,9 @@ public abstract class BaseRepository<T> {
 			Selection[] projections = getProjections(serializeCriteria.getListFieldsProjection(), root);
 			if (projections.length > 0)
 				query.multiselect(projections).distinct(true);
-		}
-		else
+		} else
 			query = query.select(root).distinct(true);
-		
+
 		query = query.select(root);
 
 		List<Predicate> predicates = composeQuery(builder, root, serializeCriteria);
@@ -129,25 +123,21 @@ public abstract class BaseRepository<T> {
 			Order cOrder = null;
 
 			boolean isDescendent = false;
-			if(serializeCriteria.getMapDescendent().containsKey(cOrderBy))
-			{
+			if (serializeCriteria.getMapDescendent().containsKey(cOrderBy)) {
 				isDescendent = serializeCriteria.getMapDescendent().get(cOrderBy);
 			}
-			
+
 			if (serializeCriteria.getDescendent() || isDescendent) {
 				cOrder = builder.desc(root.get(cOrderBy));
 			} else {
 				cOrder = builder.asc(root.get(cOrderBy));
 			}
-			listsOrder.add(cOrder);			
-			/*
-			if (serializeCriteria.is_isDescendent()) {
-				cOrder = builder.desc(root.get(cOrderBy));
-			} else {
-				cOrder = builder.asc(root.get(cOrderBy));
-			}
 			listsOrder.add(cOrder);
-			*/
+			/*
+			 * if (serializeCriteria.is_isDescendent()) { cOrder =
+			 * builder.desc(root.get(cOrderBy)); } else { cOrder =
+			 * builder.asc(root.get(cOrderBy)); } listsOrder.add(cOrder);
+			 */
 
 		}
 		query.orderBy(listsOrder);
@@ -184,22 +174,21 @@ public abstract class BaseRepository<T> {
 
 		return predicates;
 	}
-	
-	
+
 	private Selection[] getProjections(List<String> fieldsprojection, Root<?> root) {
 		List<Selection> projections = new ArrayList<Selection>();
 		for (String cField : fieldsprojection) {
 			try {
-					projections.add(root.get(cField));
+				projections.add(root.get(cField));
 			} catch (Exception e) {
 				continue;
 			}
 		}
-		
+
 		return projections.toArray(new Selection[projections.size()]);
-		
+
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	private List<Predicate> composeQuery(CriteriaBuilder builder, Root<T> root, BOSerializeCriteria serializeCriteria)
 			throws RepositoryException {
@@ -223,7 +212,7 @@ public abstract class BaseRepository<T> {
 		}
 
 		for (String cBool : serializeCriteria.getListValueBool().keySet()) {
-			
+
 			predicates.add(builder.equal(root.get(cBool), serializeCriteria.getListValueBool().get(cBool)));
 		}
 
@@ -241,35 +230,29 @@ public abstract class BaseRepository<T> {
 			predicates.add(builder.like(builder.lower(rootField), value.toString().toLowerCase()));
 		}
 
-		/*for (Map<String, Object> cBT : serializeCriteria.getListbetween()) {
-
-			Class<?> typeData = (Class) cBT.get(BOSearch.TYPE_DATA);
-			String field = cBT.get(BOSearch.NAME_FIELD).toString();
-			if (typeData != null && typeData.getName().contains("Date")) {
-				Expression<Date> rootField = root.get(field);
-				Date dateTo = null;
-				Date dateFrom = null;
-				dateTo = (Date) cBT.get(BOSearch.VALUE_TO);
-				dateFrom = (Date) cBT.get(BOSearch.VALUE_FROM);
-				predicates.add(builder.between(rootField, dateFrom, dateTo));
-			} else if (typeData != null && typeData.getName().contains("Integer")) {
-				Expression<Integer> rootField = root.get(field);
-				Integer valueTo = null;
-				Integer valueFrom = null;
-				valueTo = (Integer) cBT.get(BOSearch.VALUE_TO);
-				valueFrom = (Integer) cBT.get(BOSearch.VALUE_FROM);
-				predicates.add(builder.between(rootField, valueFrom, valueTo));
-
-			} else if (typeData != null && typeData.getName().contains("Double")) {
-				Expression<Double> rootField = root.get(field);
-				Double valueTo = null;
-				Double valueFrom = null;
-				valueTo = (Double) cBT.get(BOSearch.VALUE_TO);
-				valueFrom = (Double) cBT.get(BOSearch.VALUE_FROM);
-				predicates.add(builder.between(rootField, valueFrom, valueTo));
-
-			}
-		}*/
+		/*
+		 * for (Map<String, Object> cBT : serializeCriteria.getListbetween()) {
+		 * 
+		 * Class<?> typeData = (Class) cBT.get(BOSearch.TYPE_DATA); String field =
+		 * cBT.get(BOSearch.NAME_FIELD).toString(); if (typeData != null &&
+		 * typeData.getName().contains("Date")) { Expression<Date> rootField =
+		 * root.get(field); Date dateTo = null; Date dateFrom = null; dateTo = (Date)
+		 * cBT.get(BOSearch.VALUE_TO); dateFrom = (Date) cBT.get(BOSearch.VALUE_FROM);
+		 * predicates.add(builder.between(rootField, dateFrom, dateTo)); } else if
+		 * (typeData != null && typeData.getName().contains("Integer")) {
+		 * Expression<Integer> rootField = root.get(field); Integer valueTo = null;
+		 * Integer valueFrom = null; valueTo = (Integer) cBT.get(BOSearch.VALUE_TO);
+		 * valueFrom = (Integer) cBT.get(BOSearch.VALUE_FROM);
+		 * predicates.add(builder.between(rootField, valueFrom, valueTo));
+		 * 
+		 * } else if (typeData != null && typeData.getName().contains("Double")) {
+		 * Expression<Double> rootField = root.get(field); Double valueTo = null; Double
+		 * valueFrom = null; valueTo = (Double) cBT.get(BOSearch.VALUE_TO); valueFrom =
+		 * (Double) cBT.get(BOSearch.VALUE_FROM);
+		 * predicates.add(builder.between(rootField, valueFrom, valueTo));
+		 * 
+		 * } }
+		 */
 		// Vincoli di controllo tra due valori, vale per il tipo integer, double e date
 		for (Map<String, Object> cBT : serializeCriteria.getListbetween()) {
 
@@ -286,61 +269,55 @@ public abstract class BaseRepository<T> {
 
 			predicates.add(createRangePredicate(builder, rootField, valueFrom, valueTo, typeData));
 
-		}		
+		}
 
-		/*for (Map<String, Object> cOper : serializeCriteria.getListOperator()) {
-			String field = cOper.get(BOSearch.NAME_FIELD).toString();
-			Class<?> typeData = (Class) cOper.get(BOSearch.TYPE_DATA);
-			String operatore = cOper.get("_operatore").toString();
-			Predicate predicato = null;
+		/*
+		 * for (Map<String, Object> cOper : serializeCriteria.getListOperator()) {
+		 * String field = cOper.get(BOSearch.NAME_FIELD).toString(); Class<?> typeData =
+		 * (Class) cOper.get(BOSearch.TYPE_DATA); String operatore =
+		 * cOper.get("_operatore").toString(); Predicate predicato = null;
+		 * 
+		 * if (typeData != null && typeData.getName().contains("Date")) {
+		 * Expression<Date> rootField = root.get(field); Date value = (Date)
+		 * cOper.get(BOSearch.VALUE_FIELD); if
+		 * (operatore.equals(BOOperatorClause.MINUSEQUALS)) { predicato =
+		 * builder.lessThanOrEqualTo(rootField, value); } else if
+		 * (operatore.equals(BOOperatorClause.MINUS)) { predicato =
+		 * builder.lessThan(rootField, value); } else if
+		 * (operatore.equals(BOOperatorClause.MAJOREQUALS)) { predicato =
+		 * builder.greaterThanOrEqualTo(rootField, value); } else if
+		 * (operatore.equals(BOOperatorClause.MAJOR)) { predicato =
+		 * builder.greaterThan(rootField, value); } else if
+		 * (operatore.equals(BOOperatorClause.DISEQUALS)) { predicato =
+		 * builder.notEqual(rootField, value); } } else if (typeData != null &&
+		 * typeData.getName().contains("Integer")) { Expression<Integer> rootField =
+		 * root.get(field); Integer value = (Integer) cOper.get(BOSearch.VALUE_FIELD);
+		 * if (operatore.equals(BOOperatorClause.MINUSEQUALS)) { predicato =
+		 * builder.lessThanOrEqualTo(rootField, value); } else if
+		 * (operatore.equals(BOOperatorClause.MINUS)) { predicato =
+		 * builder.lessThan(rootField, value); } else if
+		 * (operatore.equals(BOOperatorClause.MAJOREQUALS)) { predicato =
+		 * builder.greaterThanOrEqualTo(rootField, value); } else if
+		 * (operatore.equals(BOOperatorClause.MAJOR)) { predicato =
+		 * builder.greaterThan(rootField, value); } else if
+		 * (operatore.equals(BOOperatorClause.DISEQUALS)) { predicato =
+		 * builder.notEqual(rootField, value); } } else if (typeData != null &&
+		 * typeData.getName().contains("Double")) { Expression<Double> rootField =
+		 * root.get(field); Double value = (Double) cOper.get(BOSearch.VALUE_FIELD); if
+		 * (operatore.equals(BOOperatorClause.MINUSEQUALS)) { predicato =
+		 * builder.lessThanOrEqualTo(rootField, value); } else if
+		 * (operatore.equals(BOOperatorClause.MINUS)) { predicato =
+		 * builder.lessThan(rootField, value); } else if
+		 * (operatore.equals(BOOperatorClause.MAJOREQUALS)) { predicato =
+		 * builder.greaterThanOrEqualTo(rootField, value); } else if
+		 * (operatore.equals(BOOperatorClause.MAJOR)) { predicato =
+		 * builder.greaterThan(rootField, value); } else if
+		 * (operatore.equals(BOOperatorClause.DISEQUALS)) { predicato =
+		 * builder.notEqual(rootField, value); } }
+		 * 
+		 * predicates.add(predicato); }
+		 */
 
-			if (typeData != null && typeData.getName().contains("Date")) {
-				Expression<Date> rootField = root.get(field);
-				Date value = (Date) cOper.get(BOSearch.VALUE_FIELD);
-				if (operatore.equals(BOOperatorClause.MINUSEQUALS)) {
-					predicato = builder.lessThanOrEqualTo(rootField, value);
-				} else if (operatore.equals(BOOperatorClause.MINUS)) {
-					predicato = builder.lessThan(rootField, value);
-				} else if (operatore.equals(BOOperatorClause.MAJOREQUALS)) {
-					predicato = builder.greaterThanOrEqualTo(rootField, value);
-				} else if (operatore.equals(BOOperatorClause.MAJOR)) {
-					predicato = builder.greaterThan(rootField, value);
-				} else if (operatore.equals(BOOperatorClause.DISEQUALS)) {
-					predicato = builder.notEqual(rootField, value);
-				}
-			} else if (typeData != null && typeData.getName().contains("Integer")) {
-				Expression<Integer> rootField = root.get(field);
-				Integer value = (Integer) cOper.get(BOSearch.VALUE_FIELD);
-				if (operatore.equals(BOOperatorClause.MINUSEQUALS)) {
-					predicato = builder.lessThanOrEqualTo(rootField, value);
-				} else if (operatore.equals(BOOperatorClause.MINUS)) {
-					predicato = builder.lessThan(rootField, value);
-				} else if (operatore.equals(BOOperatorClause.MAJOREQUALS)) {
-					predicato = builder.greaterThanOrEqualTo(rootField, value);
-				} else if (operatore.equals(BOOperatorClause.MAJOR)) {
-					predicato = builder.greaterThan(rootField, value);
-				} else if (operatore.equals(BOOperatorClause.DISEQUALS)) {
-					predicato = builder.notEqual(rootField, value);
-				}
-			} else if (typeData != null && typeData.getName().contains("Double")) {
-				Expression<Double> rootField = root.get(field);
-				Double value = (Double) cOper.get(BOSearch.VALUE_FIELD);
-				if (operatore.equals(BOOperatorClause.MINUSEQUALS)) {
-					predicato = builder.lessThanOrEqualTo(rootField, value);
-				} else if (operatore.equals(BOOperatorClause.MINUS)) {
-					predicato = builder.lessThan(rootField, value);
-				} else if (operatore.equals(BOOperatorClause.MAJOREQUALS)) {
-					predicato = builder.greaterThanOrEqualTo(rootField, value);
-				} else if (operatore.equals(BOOperatorClause.MAJOR)) {
-					predicato = builder.greaterThan(rootField, value);
-				} else if (operatore.equals(BOOperatorClause.DISEQUALS)) {
-					predicato = builder.notEqual(rootField, value);
-				}
-			}
-
-			predicates.add(predicato);
-		}*/
-		
 		for (Map<String, Object> cOper : serializeCriteria.getListOperator()) {
 
 			Class<?> typeData = (Class) cOper.get(BOSearch.TYPE_DATA);
@@ -364,7 +341,6 @@ public abstract class BaseRepository<T> {
 			predicates.add(predicato);
 		}
 
-		
 		for (String cIn : serializeCriteria.getListIn().keySet()) {
 
 			Object[] listIn = serializeCriteria.getListIn().get(cIn);
@@ -428,7 +404,7 @@ public abstract class BaseRepository<T> {
 			Predicate predicato = null;
 
 			String field = cOper.get(BOSearch.NAME_FIELD).toString();
-			Operators operatore =   Enum.valueOf(Operators.class, cOper.get("_operatore").toString());
+			Operators operatore = Enum.valueOf(Operators.class, cOper.get("_operatore").toString());
 
 			Expression<K> rootField = root.get(field);
 			K value = (K) cOper.get(BOSearch.VALUE_FIELD);
@@ -457,6 +433,7 @@ public abstract class BaseRepository<T> {
 		}
 
 	}
+
 	@Autowired
 	private Create<T> createctx;
 
@@ -469,35 +446,7 @@ public abstract class BaseRepository<T> {
 	@Autowired
 	private Search<T> searchctx;
 
-	/*
-	 * public class Create implements ICommand<T> {
-	 * 
-	 * @Override public void execute(T entity, EntityManager manager) throws
-	 * RepositoryException { manager.persist(entity); } }
-	 * 
-	 * public class Update implements ICommand<T> {
-	 * 
-	 * @Override public void execute(T entity, EntityManager manager) throws
-	 * RepositoryException { manager.merge(entity);
-	 * 
-	 * } }
-	 * 
-	 * public class Remove implements ICommand<T> {
-	 * 
-	 * @Override public void execute(T entity, EntityManager manager) throws
-	 * RepositoryException { manager.remove(manager.contains(entity) ? entity :
-	 * manager.merge(entity)); }
-	 * 
-	 * }
-	 * 
-	 * public class Search implements ISearcher<T> {
-	 * 
-	 * @Override public List<T> search(Query query) throws RepositoryException { //
-	 * TODO Auto-generated method stub return query.getResultList(); } }
-	 */
-
 	public List<T> getAll() throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 			List<T> obj = em.createQuery("from " + nameClass).getResultList();
 			return obj;
@@ -505,8 +454,6 @@ public abstract class BaseRepository<T> {
 			log.error("Errore durante il recupero di tutti gli elementi " + e.getMessage(), e);
 			throw new RepositoryException(e);
 
-		} finally {
-			//em.close();
 		}
 	}
 
@@ -518,7 +465,6 @@ public abstract class BaseRepository<T> {
 	 */
 	public List<T> getAll(Order orderby) throws RepositoryException {
 
-		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<T> cq = cb.createQuery(classEntity);
@@ -531,14 +477,10 @@ public abstract class BaseRepository<T> {
 			log.error("Errore durante il recupero di tutti gli elementi " + e.getMessage(), e);
 			throw new RepositoryException(e);
 
-		} finally {
-			//em.close();
 		}
 	}
 
 	public List<T> getAllOrdered(int elementAt, int amount, Order orderby) throws RepositoryException {
-
-		//EntityManager em = uow.getEntityManager().createEntityManager();
 
 		try {
 
@@ -555,15 +497,12 @@ public abstract class BaseRepository<T> {
 			log.error("Errore durante il recupero di tutti gli elementi " + e.getMessage(), e);
 			throw new RepositoryException(e);
 
-		} finally {
-			//em.close();
 		}
 	}
 
 	public T getByCompositeId(T objId) throws RepositoryException {
 
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-
+		
 		try {
 
 			Serializable id = (Serializable) objId;
@@ -573,62 +512,36 @@ public abstract class BaseRepository<T> {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e);
 
-		} finally {
-			//em.close();
-		}
+		} 
 	}
-	
+
 	@Transactional
 	public void add(T obj) throws RepositoryException {
 
-		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
-			//em.getTransaction().begin();
 			create(obj, em);
-			//em.getTransaction().commit();
 		} catch (RepositoryException ex) {
 			throw ex;
-		} finally {
-			//em.close();
 		}
-	}
-	
-	@Transactional
-	public void add(T obj, EntityManager em) throws RepositoryException {
-		create(obj, em);
 	}
 
 	@Transactional
 	public void update(T obj) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
-			//em.getTransaction().begin();
 			merge(obj, em);
-			//em.getTransaction().commit();
+			
 		} catch (RepositoryException ex) {
 			throw ex;
-		} finally {
-			//em.close();
-		}
-	}
-
-	@Transactional
-	public void update(T obj, EntityManager em) throws RepositoryException {
-		merge(obj, em);
+		} 
 	}
 
 	@Transactional
 	public void delete(T obj) throws RepositoryException {
 
-		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
-			//em.getTransaction().begin();
 			remove(obj, em);
-			//em.getTransaction().commit();
 		} catch (RepositoryException ex) {
 			throw ex;
-		} finally {
-			//em.close();
 		}
 
 	}
@@ -636,36 +549,18 @@ public abstract class BaseRepository<T> {
 	@Transactional
 	public void deleteFromId(Object id, String nameField) throws RepositoryException {
 
-		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 
-			//em.getTransaction().begin();
 			em.createQuery("DELETE FROM " + nameClass + " WHERE " + nameField + "=" + id).executeUpdate();
-			//em.getTransaction().commit();
-
+		
 		} catch (Exception ex) {
 			throw new RepositoryException(ex);
-		} finally {
-			//em.close();
 		}
 
 	}
 
 	@Transactional
-	public void delete(T obj, EntityManager em) throws RepositoryException {
-		remove(obj, em);
-	}
-
-	@Transactional
 	public void deleteAll() throws RepositoryException {
-		// TODO Auto-generated method stub
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-		String hql = "delete from " + nameClass;
-		em.createQuery(hql).executeUpdate();
-	}
-
-	@Transactional
-	public void deleteAll(EntityManager em) throws RepositoryException {
 		// TODO Auto-generated method stub
 		String hql = "delete from " + nameClass;
 		em.createQuery(hql).executeUpdate();
@@ -699,15 +594,13 @@ public abstract class BaseRepository<T> {
 	}
 
 	public T getById(int objId) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-
+		
 		return retrieveById(objId, em);
 
 	}
 
 	public T getById(String objId) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-
+		
 		return retrieveById(objId, em);
 	}
 
@@ -720,21 +613,7 @@ public abstract class BaseRepository<T> {
 			log.error("Errore durante il recupero di una entita dall'id " + e.getMessage(), e);
 			throw new RepositoryException(e);
 
-		} finally {
-			//em.close();
 		}
-	}
-
-	public T getById(int objId, EntityManager em) throws RepositoryException {
-		// TODO Auto-generated method stub
-		T obj = (T) em.find(classEntity, objId);
-		return obj;
-	}
-
-	public T getById(String objId, EntityManager em) throws RepositoryException {
-		// TODO Auto-generated method stub
-		T obj = (T) em.find(classEntity, objId);
-		return obj;
 	}
 
 	private enum UniqueStrategy {
@@ -742,22 +621,15 @@ public abstract class BaseRepository<T> {
 	}
 
 	public List<T> search(CriteriaQuery<T> criteria) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-		return search(em.createQuery(criteria), em);
+		return search(em.createQuery(criteria));
 	}
 
 	public List<T> search(BOSerializeCriteria serializeCriteria) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-
-		return search(buildCriteriaQuery(serializeCriteria, em), em);
+		
+		return search(buildCriteriaQuery(serializeCriteria));
 	}
 
-	public List<T> search(BOSerializeCriteria serializeCriteria, EntityManager em) throws RepositoryException {
-
-		return search(buildCriteriaQuery(serializeCriteria, em), em);
-	}
-
-	public List<T> search(Query query, EntityManager em) throws RepositoryException {
+	public List<T> search(Query query) throws RepositoryException {
 		List<T> result = null;
 		try {
 			result = searchctx.search(query);
@@ -766,101 +638,54 @@ public abstract class BaseRepository<T> {
 			log.error("Errore durante la ricerca di entita " + e.getMessage(), e);
 			throw new RepositoryException(e);
 
-		} finally {
-			//em.close();
-		}
+		} 
 	}
 
 	public T getSingle(CriteriaQuery<T> criteria) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-		return getRetrieve(em.createQuery(criteria), UniqueStrategy.single, em);
+		return getRetrieve(em.createQuery(criteria), UniqueStrategy.single);
 	}
 
 	public T getSingle(BOSerializeCriteria serializeCriteria) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-
-		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.single, em);
+		return (T) getRetrieve(buildCriteriaQuery(serializeCriteria), UniqueStrategy.single);
 	}
 
 	public T getSingleOrDefault(CriteriaQuery<T> criteria) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-		return getRetrieve(em.createQuery(criteria), UniqueStrategy.singledefault, em);
+		return getRetrieve(em.createQuery(criteria), UniqueStrategy.singledefault);
 	}
 
 	public T getSingleOrDefault(BOSerializeCriteria serializeCriteria) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-
-		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.singledefault, em);
-	}
-
-	public T getSingleOrDefault(BOSerializeCriteria serializeCriteria, EntityManager em) throws RepositoryException {
-
-		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.singledefault, em);
-	}
-
-	public T getSingleOrDefault(CriteriaQuery<T> criteria, EntityManager em) throws RepositoryException {
-
-		return getRetrieve(em.createQuery(criteria), UniqueStrategy.singledefault, em);
+		return (T) getRetrieve(buildCriteriaQuery(serializeCriteria), UniqueStrategy.singledefault);
 	}
 
 	public T getFirst(CriteriaQuery<T> criteria) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-		return getRetrieve(em.createQuery(criteria), UniqueStrategy.first, em);
+		return getRetrieve(em.createQuery(criteria), UniqueStrategy.first);
 	}
 
 	public T getFirst(BOSerializeCriteria serializeCriteria) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-
-		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.first, em);
+		return (T) getRetrieve(buildCriteriaQuery(serializeCriteria), UniqueStrategy.first);
 	}
 
 	public T getFirstOrDefault(CriteriaQuery<T> criteria) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-		return getRetrieve(em.createQuery(criteria), UniqueStrategy.firstdefault, em);
+		return getRetrieve(em.createQuery(criteria), UniqueStrategy.firstdefault);
 	}
 
 	public T getFirstOrDefault(BOSerializeCriteria serializeCriteria) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
-
-		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.firstdefault, em);
+		return (T) getRetrieve(buildCriteriaQuery(serializeCriteria), UniqueStrategy.firstdefault);
 	}
 
-	public T getFirstOrDefault(BOSerializeCriteria serializeCriteria, EntityManager em) throws RepositoryException {
-
-		return (T)getRetrieveActiveSession(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.firstdefault, em);
-	}
-
-	public T getFirstOrDefault(CriteriaQuery<T> criteria, EntityManager em) throws RepositoryException {
-		return getRetrieveActiveSession(em.createQuery(criteria), UniqueStrategy.firstdefault, em);
-	}
-
-	private T getRetrieveActiveSession(Query query, UniqueStrategy uniquestrategy, EntityManager em)
-			throws RepositoryException {
+	private T getRetrieve(Query query, UniqueStrategy uniquestrategy) throws RepositoryException {
 		T obj = null;
 		try {
-			obj = getUnique(query, uniquestrategy, em);
-			return obj;
-		} catch (RuntimeException e) {
-			log.error("Errore durante il recupero di una entita unique " + e.getMessage(), e);
-			throw new RepositoryException(e);
-		}
-	}
-
-	private T getRetrieve(Query query, UniqueStrategy uniquestrategy, EntityManager em) throws RepositoryException {
-		T obj = null;
-		try {
-			obj = getUnique(query, uniquestrategy, em);
+			obj = getUnique(query, uniquestrategy);
 			return obj;
 		} catch (RuntimeException e) {
 			log.error("Errore durante il recupero di entita " + e.getMessage(), e);
 			throw new RepositoryException(e);
 
-		} finally {
-			//em.close();
 		}
 	}
 
-	private T getUnique(Query query, UniqueStrategy uniquestrategy, EntityManager em) throws RepositoryException {
+	private T getUnique(Query query, UniqueStrategy uniquestrategy) throws RepositoryException {
 
 		T obj = null;
 
@@ -901,7 +726,6 @@ public abstract class BaseRepository<T> {
 	}
 
 	public int getCount(BOSerializeCriteria serializeCriteria) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 			CriteriaBuilder builder = em.getCriteriaBuilder();
 
@@ -921,13 +745,10 @@ public abstract class BaseRepository<T> {
 			log.error("Errore durante il count di entita " + e.getMessage(), e);
 			throw new RepositoryException(e);
 
-		} finally {
-			//em.close();
-		}
+		} 
 	}
 
 	public Number getMax(String nameField) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 
 			Number result = retrieveMax(nameField, em);
@@ -936,9 +757,7 @@ public abstract class BaseRepository<T> {
 			log.error("Errore durante il recupero del max di entita " + e.getMessage(), e);
 			throw new RepositoryException(e);
 
-		} finally {
-			//em.close();
-		}
+		} 
 	}
 
 	public Number getMax(String nameField, EntityManager em) throws RepositoryException {

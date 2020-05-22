@@ -12,7 +12,6 @@ import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.po.GestioneUtenti;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
-import it.alessandromodica.product.persistence.repo.AppRepository;
 import it.alessandromodica.product.services.interfaces.IMainService;
 
 /**

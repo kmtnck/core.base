@@ -14,7 +14,9 @@ import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
  * In questa classe repository è possibile definire tutti i metodi legacy
  * necessari ad accedere a sql puro
  * 
- * E' la classe repository dedicata al software che si vuole realizzare e estende la classe astratta BaseRepository
+ * E' la classe repository dedicata al software che si vuole realizzare e
+ * estende la classe astratta BaseRepository
+ * 
  * @author Alessandro
  *
  * @param <T>
@@ -29,10 +31,10 @@ public class AppRepository<T> extends BaseRepository<T> implements IRepositoryQu
 		// TODO Auto-generated method stub
 		setClass(classEntity);
 		return this;
-		
+
 	}
+
 	public List<BOUtentiConnessi> callUtentiLoggati(int periodo, String nickname) throws RepositoryException {
-		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 
 			List<BOUtentiConnessi> result = null;
@@ -47,11 +49,7 @@ public class AppRepository<T> extends BaseRepository<T> implements IRepositoryQu
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e);
-		} finally {
-			em.close();
 		}
 	}
-
-
 
 }

@@ -2,7 +2,6 @@ package it.alessandromodica.product.persistence.interfaces;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 
 import org.springframework.stereotype.Component;
@@ -20,15 +19,9 @@ public interface IRepositoryQueries<T> {
 	
 	public T getById(String objId) throws RepositoryException;
 	
-	public T getById(int objId, EntityManager em) throws RepositoryException;
-	
-	public T getById(String objId, EntityManager em) throws RepositoryException;
-	
 	public List<T> search(CriteriaQuery<T> criteria) throws RepositoryException;
 
 	public List<T> search(BOSerializeCriteria serializeCriteria) throws RepositoryException;
-
-	public List<T> search(BOSerializeCriteria serializeCriteria, EntityManager em) throws RepositoryException;
 
 	public T getSingle(CriteriaQuery<T> criteria) throws RepositoryException ;
 	
@@ -38,10 +31,6 @@ public interface IRepositoryQueries<T> {
 	
 	public T getSingleOrDefault(BOSerializeCriteria serializeCriteria) throws RepositoryException;
 	
-	public T getSingleOrDefault(BOSerializeCriteria serializeCriteria, EntityManager em) throws RepositoryException;
-	
-	public T getSingleOrDefault(CriteriaQuery<T> criteria, EntityManager em) throws RepositoryException;
-	
 	public T getFirst(CriteriaQuery<T> criteria) throws RepositoryException ;
 	
 	public T getFirst(BOSerializeCriteria serializeCriteria) throws RepositoryException;
@@ -50,13 +39,8 @@ public interface IRepositoryQueries<T> {
 	
 	public T getFirstOrDefault(BOSerializeCriteria serializeCriteria) throws RepositoryException;
 	
-	public T getFirstOrDefault(BOSerializeCriteria serializeCriteria, EntityManager em) throws RepositoryException;
-	
-	public T getFirstOrDefault(CriteriaQuery<T> criteria, EntityManager em) throws RepositoryException;
-	
 	int getCount(BOSerializeCriteria serializeCriteria) throws RepositoryException;
 
 	Number getMax(String nameField) throws RepositoryException;
 
-	Number getMax(String nameField, EntityManager em) throws RepositoryException;
 }

@@ -6,7 +6,4 @@ public interface IUnitOfWork {
 
 	public void submit(IBulkTransaction instructions) throws RepositoryException;
 
-	public void submitNoTransaction(IBulkTransaction instructions) throws RepositoryException;
-
-
 }

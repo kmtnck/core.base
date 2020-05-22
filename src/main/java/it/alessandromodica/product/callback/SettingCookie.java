@@ -30,7 +30,7 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public void persist(EntityManager em) throws RepositoryException {
+	public void persist() throws RepositoryException {
 		if (cookies != null && utenteCorrente.getIdutente() != 0)
 			for (String cCookie : cookies) {
 				String[] splitCookie = (cCookie.toString()).split("=", 2);
@@ -47,17 +47,15 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 					log.info("Cookie da aggiungere: " + cCookie);
 					try {
 
-						GestioneUtentiInfoautenticazione obj = (GestioneUtentiInfoautenticazione) repoquery.setEntity(GestioneUtentiInfoautenticazione.class)
+						GestioneUtentiInfoautenticazione obj = (GestioneUtentiInfoautenticazione) repoquery
+								.setEntity(GestioneUtentiInfoautenticazione.class)
 								.getSingleOrDefault(criteria.getSerialized());
 
 						if (obj != null) {
 							if (!obj.getValueparametro().equals(valoreparametro)) {
 								obj.setValueparametro(valoreparametro);
 
-								if (em == null)
-									repocommands.setEntity(GestioneUtentiInfoautenticazione.class).update(obj);
-								else
-									repocommands.setEntity(GestioneUtentiInfoautenticazione.class).update(obj, em);
+								repocommands.setEntity(GestioneUtentiInfoautenticazione.class).update(obj);
 
 								log.info("<<<S Il Cookie e' stato aggiornato: da [" + obj.getValueparametro() + "] a ["
 										+ valoreparametro + "]");
@@ -73,10 +71,7 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 							pObj.setValueparametro(valoreparametro);
 							pObj.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
 
-							if (em == null)
-								repocommands.add(pObj);
-							else
-								repocommands.add(pObj, em);
+							repocommands.add(pObj);
 
 							log.info("<<<S Il Cookie e' stato aggiunto: " + cCookie);
 						}

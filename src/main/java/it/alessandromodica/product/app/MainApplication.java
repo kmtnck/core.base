@@ -62,6 +62,7 @@ public class MainApplication extends MainContext {
 		return result;
 	}
 
+	@Deprecated
 	public static void InitApp(String appcontext) throws BusinessException {
 
 		try {
@@ -76,6 +77,7 @@ public class MainApplication extends MainContext {
 		}
 	}
 
+	@Deprecated
 	private static void setUp(String appcontext) throws RepositoryException {
 		log.info("Caricamento ambiente " + TITOLO_APP + " in corso del contesto [" + appcontext + "]...");
 		UnitOfWork.initSessionFactory(appcontext);

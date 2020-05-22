@@ -87,12 +87,4 @@ public class AppConfig {
 	    return properties;
 	}
 
-	public static void InitApp() throws BusinessException {
-
-		GoToBusiness.TITOLO_APP = "Una nuova app che fa cose";
-
-		MainApplication.InitApp("appjpa-mysql");
-
-	}
-
 }

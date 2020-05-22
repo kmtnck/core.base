@@ -6,13 +6,17 @@ import javax.xml.parsers.FactoryConfigurationError;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+/**
+ * Classe per inizializzare springboot. attualmente non è utilizzata perchè si preferisce caricare il contesto spring
+ * in futuro si incapsulerà tutto in una springapplication avviata da questo initializer
+ * @author kmtnck
+ *
+ */
 public class AppSpringInitializer /*extends AbstractAnnotationConfigDispatcherServletInitializer*/ {
 
 	private static final Logger log = Logger.getLogger(AppSpringInitializer.class);
-	public static AnnotationConfigApplicationContext context;
+	//public static AnnotationConfigApplicationContext context;
 
 	//@Override
 	public void onStartup(ServletContext container) throws ServletException {
