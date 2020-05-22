@@ -10,6 +10,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import it.alessandromodica.product.app.MainApplication;
 import it.alessandromodica.product.common.OutputData;
 import it.alessandromodica.product.common.config.AppConfig;
+import it.alessandromodica.product.common.config.AppSpringInitializer;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
@@ -49,20 +50,23 @@ public class TestProcessActions extends TestCase {
 	@SuppressWarnings("rawtypes")
 	private IRepositoryQueries repoquery;
 
+	AnnotationConfigApplicationContext context;
+	
 	@Override
 	protected void setUp() throws Exception {
 		// TODO Auto-generated method stub
 		super.setUp();
-		AppConfig.InitApp();
+		//AppSpringInitializer.initLog();
+		//AppConfig.InitApp();
 
 		// Avviare contesto spring
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+		context = new AnnotationConfigApplicationContext(AppConfig.class);
 		appservice = context.getBean(IAppService.class);
 		security = context.getBean(ISecurity.class);
 		repocommand = context.getBean(IRepositoryCommands.class);
 		repoquery = context.getBean(IRepositoryQueries.class);
 
-		context.close();
+		
 
 		// UnitOfWork.initSessionFactory("sakjpa-test");
 		/*
@@ -78,6 +82,14 @@ public class TestProcessActions extends TestCase {
 		hashscript = "d41d8cd98f00b204e9800998ecf8427e";
 		datacookie = "csrftoken=LHabpYvGfzIfld91PfsDHEH4XGI3WIVx; G_ENABLED_IDPS=google; sak-identification=; __utmz=24037858.1533052769.46.16.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=https://www.ingress.com/intel; sak-scraps=; sak-publickey=f121cd62727ee92b; SAK-Token=35fb4d2fb27564deb0426a5a8879346f; __utmc=24037858; G_AUTHUSER_H=0; ingress.intelmap.zoom=15; ingress.intelmap.lat=44.496413497351654; ingress.intelmap.lng=11.332612037658691; __utma=24037858.1341569233.1525252241.1536221514.1536226905.68; __utmt=1; __utmb=24037858.4.9.1536227685078";
 
+	}
+	
+	@Override
+	protected void tearDown() throws Exception {
+		// TODO Auto-generated method stub
+		super.tearDown();
+		
+		context.close();
 	}
 
 	/*

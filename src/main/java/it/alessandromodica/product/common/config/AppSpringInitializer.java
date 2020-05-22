@@ -9,7 +9,7 @@ import org.apache.log4j.xml.DOMConfigurator;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class AppSpringInitializer /*extends AbstractAnnotationConfigDispatcherServletInitializer */{
+public class AppSpringInitializer /*extends AbstractAnnotationConfigDispatcherServletInitializer*/ {
 
 	private static final Logger log = Logger.getLogger(AppSpringInitializer.class);
 	public static AnnotationConfigApplicationContext context;
@@ -42,7 +42,7 @@ public class AppSpringInitializer /*extends AbstractAnnotationConfigDispatcherSe
 		return new String[] { "/" };
 	}
 
-	private static void initLog() throws FactoryConfigurationError {
+	public static void initLog() throws FactoryConfigurationError {
 		DOMConfigurator.configure(AppConfig.class.getResource("log4j.xml"));
 		log.info("Istanziato il logger");
 	}

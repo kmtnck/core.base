@@ -59,8 +59,8 @@ public abstract class GoToBusiness {
 	@Autowired
 	protected IRepositoryCommands repocommands;
 
-	@Autowired
-	protected AppRepository reporawsql;
+	//@Autowired
+	//protected AppRepository reporawsql;
 
 	private static ObjectMapper mapper = new ObjectMapper();
 

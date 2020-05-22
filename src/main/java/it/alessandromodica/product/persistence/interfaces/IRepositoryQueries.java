@@ -5,12 +5,16 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaQuery;
 
+import org.springframework.stereotype.Component;
+
 import it.alessandromodica.product.common.exceptions.RepositoryException;
+import it.alessandromodica.product.persistence.repo.AppRepository;
 import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
 
+@Component
 public interface IRepositoryQueries<T> {
 
-	public IRepositoryQueries<T> setEntity(Class<T> classEntity);
+	public AppRepository<T> setEntity(Class<T> classEntity);
 	
 	public T getById(int objId) throws RepositoryException;
 	

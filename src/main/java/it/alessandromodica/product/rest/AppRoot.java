@@ -4,10 +4,13 @@ package it.alessandromodica.product.rest;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import org.springframework.stereotype.Component;
+
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
 import it.alessandromodica.product.views.AppViewListener;
 
+//@Component
 @ApplicationPath("/services")
 public class AppRoot extends Application {
 

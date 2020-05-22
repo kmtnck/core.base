@@ -4,6 +4,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import javax.persistence.criteria.CriteriaBuilder;
 
 import org.apache.log4j.Logger;
@@ -31,7 +33,13 @@ public class UnitOfWork implements IUnitOfWork {
 
 	private static final Logger log = Logger.getLogger(UnitOfWork.class);
 
-	private static EntityManagerFactory ENTITY_MANAGER_FACTORY;
+	private static EntityManagerFactory ENTITY_MANAGER_FACTORY_SINGLETON;
+
+	@PersistenceContext
+	EntityManager manager;
+	
+	//@PersistenceUnit(name = "appjpa-mysql")
+	//private EntityManagerFactory ENTITY_MANAGER_FACTORY;
 
 	/**
 	 * Inizializza il session factory hibernate.
@@ -39,11 +47,11 @@ public class UnitOfWork implements IUnitOfWork {
 	 * @throws RepositoryException
 	 */
 	public static void initSessionFactory() throws RepositoryException {
-		ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory("appjpa");
+		ENTITY_MANAGER_FACTORY_SINGLETON = Persistence.createEntityManagerFactory("appjpa");
 	}
 
 	public static void initSessionFactory(String namePersistenceUnit) throws RepositoryException {
-		ENTITY_MANAGER_FACTORY = Persistence.createEntityManagerFactory(namePersistenceUnit);
+		ENTITY_MANAGER_FACTORY_SINGLETON = Persistence.createEntityManagerFactory(namePersistenceUnit);
 	}
 
 	/**
@@ -56,7 +64,7 @@ public class UnitOfWork implements IUnitOfWork {
 	 */
 	public void submit(IBulkTransaction instructions) throws RepositoryException {
 		// Create an EntityManager
-		EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+		//EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
 		EntityTransaction transaction = null;
 
 		try {
@@ -94,7 +102,7 @@ public class UnitOfWork implements IUnitOfWork {
 	public void submitNoTransaction(IBulkTransaction instructions) throws RepositoryException {
 
 		// Create an EntityManager
-		EntityManager manager = ENTITY_MANAGER_FACTORY.createEntityManager();
+		//EntityManager em = ENTITY_MANAGER_FACTORY.createEntityManager();
 
 		instructions.persistNoTransaction(manager);
 
@@ -104,12 +112,12 @@ public class UnitOfWork implements IUnitOfWork {
 	 * Metodo statico, che ci permetterà di recuperare la SessionFactory, nella
 	 * nostra applicazione.
 	 */
-	public static EntityManagerFactory getEntityManager() {
-		return ENTITY_MANAGER_FACTORY;
+	public EntityManagerFactory getEntityManager() {
+		return ENTITY_MANAGER_FACTORY_SINGLETON;
 	}
 
 	public CriteriaBuilder getCriteriaBuilder() {
-		return ENTITY_MANAGER_FACTORY.getCriteriaBuilder();
+		return ENTITY_MANAGER_FACTORY_SINGLETON.getCriteriaBuilder();
 	}
 
 }

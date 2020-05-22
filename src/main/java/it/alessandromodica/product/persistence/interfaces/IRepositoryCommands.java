@@ -2,11 +2,15 @@ package it.alessandromodica.product.persistence.interfaces;
 
 import javax.persistence.EntityManager;
 
-import it.alessandromodica.product.common.exceptions.RepositoryException;
+import org.springframework.stereotype.Component;
 
+import it.alessandromodica.product.common.exceptions.RepositoryException;
+import it.alessandromodica.product.persistence.repo.AppRepository;
+
+@Component
 public interface IRepositoryCommands<T> {
 
-	public IRepositoryCommands<T> setEntity(Class<T> classEntity);
+	public AppRepository<T> setEntity(Class<T> classEntity);
 	
 	public void add(T obj) throws RepositoryException;
 

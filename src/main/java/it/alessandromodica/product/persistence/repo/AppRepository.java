@@ -2,8 +2,6 @@ package it.alessandromodica.product.persistence.repo;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 
@@ -11,7 +9,6 @@ import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.model.bo.query.BOUtentiConnessi;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
-import it.alessandromodica.product.persistence.uow.UnitOfWork;
 
 /**
  * In questa classe repository è possibile definire tutti i metodi legacy
@@ -35,7 +32,7 @@ public class AppRepository<T> extends BaseRepository<T> implements IRepositoryQu
 		
 	}
 	public List<BOUtentiConnessi> callUtentiLoggati(int periodo, String nickname) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 
 			List<BOUtentiConnessi> result = null;

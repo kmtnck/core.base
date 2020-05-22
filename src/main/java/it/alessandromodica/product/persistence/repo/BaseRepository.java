@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -23,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.interfaces.IBulkTransaction;
-import it.alessandromodica.product.persistence.interfaces.IUnitOfWork;
 import it.alessandromodica.product.persistence.searcher.BOOperatorClause.Operators;
 import it.alessandromodica.product.persistence.searcher.BOSearch;
 import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
@@ -43,6 +43,9 @@ import it.alessandromodica.product.persistence.uow.UnitOfWork;
 @SuppressWarnings("unchecked")
 public abstract class BaseRepository<T> {
 
+	@PersistenceContext
+	EntityManager em;
+	
 	private static final Logger log = Logger.getLogger(BaseRepository.class);
 
 	protected Class<T> classEntity;
@@ -58,7 +61,7 @@ public abstract class BaseRepository<T> {
 	protected String nameClass;
 
 	@Autowired
-	protected IUnitOfWork uow;
+	protected UnitOfWork uow;
 
 	public void executeTransaction(IBulkTransaction bulkoperation) throws RepositoryException {
 		uow.submit(bulkoperation);
@@ -493,7 +496,7 @@ public abstract class BaseRepository<T> {
 	 */
 
 	public List<T> getAll() throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 			List<T> obj = em.createQuery("from " + nameClass).getResultList();
 			return obj;
@@ -514,7 +517,7 @@ public abstract class BaseRepository<T> {
 	 */
 	public List<T> getAll(Order orderby) throws RepositoryException {
 
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 			CriteriaBuilder cb = em.getCriteriaBuilder();
 			CriteriaQuery<T> cq = cb.createQuery(classEntity);
@@ -534,7 +537,7 @@ public abstract class BaseRepository<T> {
 
 	public List<T> getAllOrdered(int elementAt, int amount, Order orderby) throws RepositoryException {
 
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 
 		try {
 
@@ -558,7 +561,7 @@ public abstract class BaseRepository<T> {
 
 	public T getByCompositeId(T objId) throws RepositoryException {
 
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 
 		try {
 
@@ -576,7 +579,7 @@ public abstract class BaseRepository<T> {
 
 	public void add(T obj) throws RepositoryException {
 
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 			em.getTransaction().begin();
 			create(obj, em);
@@ -593,7 +596,7 @@ public abstract class BaseRepository<T> {
 	}
 
 	public void update(T obj) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 			em.getTransaction().begin();
 			merge(obj, em);
@@ -611,7 +614,7 @@ public abstract class BaseRepository<T> {
 
 	public void delete(T obj) throws RepositoryException {
 
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 			em.getTransaction().begin();
 			remove(obj, em);
@@ -626,7 +629,7 @@ public abstract class BaseRepository<T> {
 
 	public void deleteFromId(Object id, String nameField) throws RepositoryException {
 
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 
 			em.getTransaction().begin();
@@ -647,7 +650,7 @@ public abstract class BaseRepository<T> {
 
 	public void deleteAll() throws RepositoryException {
 		// TODO Auto-generated method stub
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		String hql = "delete from " + nameClass;
 		em.createQuery(hql).executeUpdate();
 	}
@@ -686,14 +689,14 @@ public abstract class BaseRepository<T> {
 	}
 
 	public T getById(int objId) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 
 		return retrieveById(objId, em);
 
 	}
 
 	public T getById(String objId) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 
 		return retrieveById(objId, em);
 	}
@@ -729,12 +732,12 @@ public abstract class BaseRepository<T> {
 	}
 
 	public List<T> search(CriteriaQuery<T> criteria) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		return search(em.createQuery(criteria), em);
 	}
 
 	public List<T> search(BOSerializeCriteria serializeCriteria) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 
 		return search(buildCriteriaQuery(serializeCriteria, em), em);
 	}
@@ -759,23 +762,23 @@ public abstract class BaseRepository<T> {
 	}
 
 	public T getSingle(CriteriaQuery<T> criteria) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		return getRetrieve(em.createQuery(criteria), UniqueStrategy.single, em);
 	}
 
 	public T getSingle(BOSerializeCriteria serializeCriteria) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 
 		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.single, em);
 	}
 
 	public T getSingleOrDefault(CriteriaQuery<T> criteria) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		return getRetrieve(em.createQuery(criteria), UniqueStrategy.singledefault, em);
 	}
 
 	public T getSingleOrDefault(BOSerializeCriteria serializeCriteria) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 
 		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.singledefault, em);
 	}
@@ -791,23 +794,23 @@ public abstract class BaseRepository<T> {
 	}
 
 	public T getFirst(CriteriaQuery<T> criteria) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		return getRetrieve(em.createQuery(criteria), UniqueStrategy.first, em);
 	}
 
 	public T getFirst(BOSerializeCriteria serializeCriteria) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 
 		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.first, em);
 	}
 
 	public T getFirstOrDefault(CriteriaQuery<T> criteria) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		return getRetrieve(em.createQuery(criteria), UniqueStrategy.firstdefault, em);
 	}
 
 	public T getFirstOrDefault(BOSerializeCriteria serializeCriteria) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 
 		return (T)getRetrieve(buildCriteriaQuery(serializeCriteria, em), UniqueStrategy.firstdefault, em);
 	}
@@ -888,7 +891,7 @@ public abstract class BaseRepository<T> {
 	}
 
 	public int getCount(BOSerializeCriteria serializeCriteria) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 			CriteriaBuilder builder = em.getCriteriaBuilder();
 
@@ -914,7 +917,7 @@ public abstract class BaseRepository<T> {
 	}
 
 	public Number getMax(String nameField) throws RepositoryException {
-		EntityManager em = UnitOfWork.getEntityManager().createEntityManager();
+		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 
 			Number result = retrieveMax(nameField, em);
