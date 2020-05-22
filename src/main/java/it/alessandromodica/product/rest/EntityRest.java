@@ -14,14 +14,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
 
 import org.jboss.logging.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import it.alessandromodica.product.app.GoToBusiness;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
-import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
-import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
 import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
 
 /***
@@ -45,11 +41,11 @@ public class EntityRest implements IEntityRest {
 
 	protected static final Logger logger = Logger.getLogger(EntityRest.class);
 
-	//@Autowired
-	private IRepositoryQueries reader;
-
-	//@Autowired
-	private IRepositoryCommands writer;
+	/*
+	 * //@Autowired private IRepositoryQueries reader;
+	 * 
+	 * //@Autowired private IRepositoryCommands writer;
+	 */
 
 	@Override
 	@GET
