@@ -7,15 +7,15 @@
 		<!-- Persistence provider -->
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 
-		<class>it.alessandromodica.product.model.po.PluginCommonBlacklist</class>
-		<class>it.alessandromodica.product.model.po.PluginCommonLogaccesso</class>
-		<class>it.alessandromodica.product.model.po.PluginCommonWarningAccesso</class>
-		<class>it.alessandromodica.product.model.po.PluginGestioneApps</class>
-		<class>it.alessandromodica.product.model.po.PluginGestioneUtenti</class>
-		<class>it.alessandromodica.product.model.po.PluginGestioneUtentiInfoautenticazione</class>
-		<class>it.alessandromodica.product.model.po.PluginGestioneUtentiOauth</class>
-		<class>it.alessandromodica.product.model.po.PluginGestioneUtentiOauthSessioni</class>
-		<class>it.alessandromodica.product.model.po.PluginLogger</class>
+		<class>it.alessandromodica.product.model.po.CommonBlacklist</class>
+		<class>it.alessandromodica.product.model.po.CommonLogaccesso</class>
+		<class>it.alessandromodica.product.model.po.CommonWarningAccesso</class>
+		<class>it.alessandromodica.product.model.po.GestioneApps</class>
+		<class>it.alessandromodica.product.model.po.GestioneUtenti</class>
+		<class>it.alessandromodica.product.model.po.GestioneUtentiInfoautenticazione</class>
+		<class>it.alessandromodica.product.model.po.GestioneUtentiOauth</class>
+		<class>it.alessandromodica.product.model.po.GestioneUtentiOauthSessioni</class>
+		<class>it.alessandromodica.product.model.po.Logger</class>
 
 		<class>it.alessandromodica.product.model.po.VGestioneUtenti</class>
 		<class>it.alessandromodica.product.model.po.VGestioneUtentiOuth</class>
@@ -43,15 +43,15 @@
 		<!-- Persistence provider -->
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<!-- Entity classes -->
-		<class>it.alessandromodica.product.model.po.PluginCommonBlacklist</class>
-		<class>it.alessandromodica.product.model.po.PluginCommonLogaccesso</class>
-		<class>it.alessandromodica.product.model.po.PluginCommonWarningAccesso</class>
-		<class>it.alessandromodica.product.model.po.PluginGestioneApps</class>
-		<class>it.alessandromodica.product.model.po.PluginGestioneUtenti</class>
-		<class>it.alessandromodica.product.model.po.PluginGestioneUtentiInfoautenticazione</class>
-		<class>it.alessandromodica.product.model.po.PluginGestioneUtentiOauth</class>
-		<class>it.alessandromodica.product.model.po.PluginGestioneUtentiOauthSessioni</class>
-		<class>it.alessandromodica.product.model.po.PluginLogger</class>
+		<class>it.alessandromodica.product.model.po.CommonBlacklist</class>
+		<class>it.alessandromodica.product.model.po.CommonLogaccesso</class>
+		<class>it.alessandromodica.product.model.po.CommonWarningAccesso</class>
+		<class>it.alessandromodica.product.model.po.GestioneApps</class>
+		<class>it.alessandromodica.product.model.po.GestioneUtenti</class>
+		<class>it.alessandromodica.product.model.po.GestioneUtentiInfoautenticazione</class>
+		<class>it.alessandromodica.product.model.po.GestioneUtentiOauth</class>
+		<class>it.alessandromodica.product.model.po.GestioneUtentiOauthSessioni</class>
+		<class>it.alessandromodica.product.model.po.Logger</class>
 
 		<class>it.alessandromodica.product.model.po.VGestioneUtenti</class>
 		<class>it.alessandromodica.product.model.po.VGestioneUtentiOuth</class>
