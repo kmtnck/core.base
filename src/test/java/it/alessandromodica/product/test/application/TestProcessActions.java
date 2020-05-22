@@ -293,7 +293,7 @@ public class TestProcessActions extends TestCase {
 			 */
 			BOSearchApp criteria;
 			criteria = new BOSearchApp();
-			criteria.setNickname("OBkppa");
+			criteria.setDescrizione("test");
 			criteria.getListIsNull().add("keyaccess");
 
 			List<CommonBlacklist> result = repoquery.setEntity(CommonBlacklist.class)

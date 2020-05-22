@@ -21,6 +21,7 @@ import javax.persistence.criteria.Selection;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.interfaces.IBulkTransaction;
@@ -505,7 +506,7 @@ public abstract class BaseRepository<T> {
 			throw new RepositoryException(e);
 
 		} finally {
-			em.close();
+			//em.close();
 		}
 	}
 
@@ -531,7 +532,7 @@ public abstract class BaseRepository<T> {
 			throw new RepositoryException(e);
 
 		} finally {
-			em.close();
+			//em.close();
 		}
 	}
 
@@ -555,7 +556,7 @@ public abstract class BaseRepository<T> {
 			throw new RepositoryException(e);
 
 		} finally {
-			em.close();
+			//em.close();
 		}
 	}
 
@@ -573,81 +574,89 @@ public abstract class BaseRepository<T> {
 			throw new RepositoryException(e);
 
 		} finally {
-			em.close();
+			//em.close();
 		}
 	}
-
+	
+	@Transactional
 	public void add(T obj) throws RepositoryException {
 
 		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
-			em.getTransaction().begin();
+			//em.getTransaction().begin();
 			create(obj, em);
-			em.getTransaction().commit();
+			//em.getTransaction().commit();
 		} catch (RepositoryException ex) {
 			throw ex;
 		} finally {
-			em.close();
+			//em.close();
 		}
 	}
-
+	
+	@Transactional
 	public void add(T obj, EntityManager em) throws RepositoryException {
 		create(obj, em);
 	}
 
+	@Transactional
 	public void update(T obj) throws RepositoryException {
 		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
-			em.getTransaction().begin();
+			//em.getTransaction().begin();
 			merge(obj, em);
-			em.getTransaction().commit();
+			//em.getTransaction().commit();
 		} catch (RepositoryException ex) {
 			throw ex;
 		} finally {
-			em.close();
+			//em.close();
 		}
 	}
 
+	@Transactional
 	public void update(T obj, EntityManager em) throws RepositoryException {
 		merge(obj, em);
 	}
 
+	@Transactional
 	public void delete(T obj) throws RepositoryException {
 
 		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
-			em.getTransaction().begin();
+			//em.getTransaction().begin();
 			remove(obj, em);
-			em.getTransaction().commit();
+			//em.getTransaction().commit();
 		} catch (RepositoryException ex) {
 			throw ex;
 		} finally {
-			em.close();
+			//em.close();
 		}
 
 	}
 
+	@Transactional
 	public void deleteFromId(Object id, String nameField) throws RepositoryException {
 
 		//EntityManager em = uow.getEntityManager().createEntityManager();
 		try {
 
-			em.getTransaction().begin();
+			//em.getTransaction().begin();
 			em.createQuery("DELETE FROM " + nameClass + " WHERE " + nameField + "=" + id).executeUpdate();
-			em.getTransaction().commit();
+			//em.getTransaction().commit();
 
 		} catch (Exception ex) {
 			throw new RepositoryException(ex);
 		} finally {
-			em.close();
+			//em.close();
 		}
 
 	}
 
+	@Transactional
 	public void delete(T obj, EntityManager em) throws RepositoryException {
 		remove(obj, em);
 	}
 
+	@Transactional
 	public void deleteAll() throws RepositoryException {
 		// TODO Auto-generated method stub
 		//EntityManager em = uow.getEntityManager().createEntityManager();
@@ -655,6 +664,7 @@ public abstract class BaseRepository<T> {
 		em.createQuery(hql).executeUpdate();
 	}
 
+	@Transactional
 	public void deleteAll(EntityManager em) throws RepositoryException {
 		// TODO Auto-generated method stub
 		String hql = "delete from " + nameClass;
@@ -711,7 +721,7 @@ public abstract class BaseRepository<T> {
 			throw new RepositoryException(e);
 
 		} finally {
-			em.close();
+			//em.close();
 		}
 	}
 
@@ -757,7 +767,7 @@ public abstract class BaseRepository<T> {
 			throw new RepositoryException(e);
 
 		} finally {
-			em.close();
+			//em.close();
 		}
 	}
 
@@ -846,7 +856,7 @@ public abstract class BaseRepository<T> {
 			throw new RepositoryException(e);
 
 		} finally {
-			em.close();
+			//em.close();
 		}
 	}
 
@@ -912,7 +922,7 @@ public abstract class BaseRepository<T> {
 			throw new RepositoryException(e);
 
 		} finally {
-			em.close();
+			//em.close();
 		}
 	}
 
@@ -927,7 +937,7 @@ public abstract class BaseRepository<T> {
 			throw new RepositoryException(e);
 
 		} finally {
-			em.close();
+			//em.close();
 		}
 	}
 
