@@ -16,11 +16,6 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-
-import it.alessandromodica.product.app.GoToBusiness;
-import it.alessandromodica.product.app.MainApplication;
-import it.alessandromodica.product.common.exceptions.BusinessException;
 
 @EnableAutoConfiguration
 @Configuration
@@ -28,19 +23,6 @@ import it.alessandromodica.product.common.exceptions.BusinessException;
 //@EnableWebMvc
 @EnableTransactionManagement
 public class AppConfig {
-
-	/**
-	 * Metodo per inizializzare i parametri di configurazione del client sso
-	 * 
-	 * Inizializza il logger Definisce i parametri di configurazione usati
-	 * dall'applicazione
-	 * 
-	 * @throws BusinessException
-	 * 
-	 */
-	public AppConfig() throws BusinessException {
-		// InitApp();
-	}
 
 	@Bean
 	public DataSource dataSource() {
