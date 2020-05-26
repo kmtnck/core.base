@@ -8,7 +8,6 @@ import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
 import it.alessandromodica.product.views.AppViewListener;
 
-//@Component
 @ApplicationPath("/services")
 public class AppRoot extends Application {
 

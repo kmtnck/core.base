@@ -4,10 +4,8 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.xml.DOMConfigurator;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import it.alessandromodica.product.app.MainApplication;
 import it.alessandromodica.product.common.config.AppConfig;
 
 /**
@@ -34,17 +32,11 @@ public class AppViewListener implements ServletContextListener {
 
 		try {
 
-			DOMConfigurator.configure(AppConfig.class.getResource("log4j.xml"));
-			log.info("Istanziato il logger");
-			
 			context = new AnnotationConfigApplicationContext(AppConfig.class);
-			log.info(MainApplication.TITOLO_APP + " e contesto appliactivo avviato con successo");
-
-
 		} catch (Exception e) {
 			// il log potrebbe non essere stato istanziato, pertanto si utilizza
 			// il printstacktrace
-			e.printStackTrace();
+			log.error(e);
 		}
 	}
 

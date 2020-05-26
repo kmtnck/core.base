@@ -35,7 +35,6 @@ import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
  *
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-//@Service
 @Path(value = "/entity")
 public class EntityRest implements IEntityRest {
 
