@@ -92,9 +92,9 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			Class<?> typeData) {
 		if (valueFrom != null) {
 			BOBetweenClause btw = new BOBetweenClause();
-			btw.set_nameField(nameField);
-			btw.set_valueFrom(valueFrom);
-			btw.set_valueTo(valueTo);
+			btw.setNameField(nameField);
+			btw.setValueFrom(valueFrom);
+			btw.setValueTo(valueTo);
 			btw.setTypeData(typeData);
 			searcher.getListBetweenClause().add(btw);
 		}
@@ -116,10 +116,10 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		for (BOBetweenClause cBT : searcher.getListBetweenClause()) {
 			Map<String, Object> serializeBT = new HashMap<String, Object>();
 
-			serializeBT.put(NAME_FIELD, cBT.get_nameField());
+			serializeBT.put(NAME_FIELD, cBT.getNameField());
 			serializeBT.put(TYPE_DATA, cBT.getTypeData());
-			serializeBT.put(VALUE_FROM, cBT.get_valueFrom());
-			serializeBT.put(VALUE_TO, cBT.get_valueTo());
+			serializeBT.put(VALUE_FROM, cBT.getValueFrom());
+			serializeBT.put(VALUE_TO, cBT.getValueTo());
 
 			result.getListbetween().add(serializeBT);
 		}

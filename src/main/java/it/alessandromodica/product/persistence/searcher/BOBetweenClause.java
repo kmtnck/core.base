@@ -15,17 +15,9 @@ public class BOBetweenClause extends BOBase {
 	private static final long serialVersionUID = -5369911267912281577L;
 
 	private Class<?> typeData;
-	private String _nameField;
-	private Object _valueFrom;
-	private Object _valueTo;
-
-	public String get_nameField() {
-		return _nameField;
-	}
-
-	public void set_nameField(String _nameField) {
-		this._nameField = _nameField;
-	}
+	private String nameField;
+	private Object valueFrom;
+	private Object valueTo;
 
 	public Class<?> getTypeData() {
 		return typeData;
@@ -35,20 +27,29 @@ public class BOBetweenClause extends BOBase {
 		this.typeData = typeData;
 	}
 
-	public Object get_valueFrom() {
-		return _valueFrom;
+	public String getNameField() {
+		return nameField;
 	}
 
-	public void set_valueFrom(Object _valueFrom) {
-		this._valueFrom = _valueFrom;
+	public void setNameField(String nameField) {
+		this.nameField = nameField;
 	}
 
-	public Object get_valueTo() {
-		return _valueTo;
+	public Object getValueFrom() {
+		return valueFrom;
 	}
 
-	public void set_valueTo(Object _valueTo) {
-		this._valueTo = _valueTo;
+	public void setValueFrom(Object valueFrom) {
+		this.valueFrom = valueFrom;
 	}
+
+	public Object getValueTo() {
+		return valueTo;
+	}
+
+	public void setValueTo(Object valueTo) {
+		this.valueTo = valueTo;
+	}
+
 
 }

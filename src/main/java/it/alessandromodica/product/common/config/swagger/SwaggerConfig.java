@@ -30,7 +30,7 @@ public class SwaggerConfig {
 
     @Bean
     public Docket api() {
-        return new Docket(DocumentationType.SWAGGER_2).select()
+        Docket d = new Docket(DocumentationType.SWAGGER_2).select()
             .apis(RequestHandlerSelectors.basePackage("it.alessandromodica.product"))
             .paths(PathSelectors.ant("/services/*"))
             .build()
@@ -43,6 +43,8 @@ public class SwaggerConfig {
                 new ResponseMessageBuilder().code(403)
                     .message("Forbidden!!!!!")
                     .build()));
+        
+        return d;
     }
 
     private ApiInfo apiInfo() {
