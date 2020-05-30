@@ -20,6 +20,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class BOSerializeCriteria implements Serializable  {
 
 	private Class classSearcher;
+
+	private List<String> listEntityGraph = new ArrayList<String>();
+	private List<BOJoinClause> listJoinClause = new ArrayList<BOJoinClause>();
+
 	
 	private Map<String, Object> listEquals = new HashMap<String, Object>();
 	private List<Map<String, Object>> listbetween = new ArrayList<Map<String, Object>>();
@@ -201,5 +205,21 @@ public class BOSerializeCriteria implements Serializable  {
 
 	public void setListValueBool(Map<String, Boolean> listValueBool) {
 		this.listValueBool = listValueBool;
+	}
+
+	public List<String> getListEntityGraph() {
+		return listEntityGraph;
+	}
+
+	public void setListEntityGraph(List<String> listEntityGraph) {
+		this.listEntityGraph = listEntityGraph;
+	}
+
+	public List<BOJoinClause> getListJoinClause() {
+		return listJoinClause;
+	}
+
+	public void setListJoinClause(List<BOJoinClause> listJoinClause) {
+		this.listJoinClause = listJoinClause;
 	}
 }

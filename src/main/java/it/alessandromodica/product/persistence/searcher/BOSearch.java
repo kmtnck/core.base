@@ -45,6 +45,10 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	public static final String VALUE_TO_DATE = "valueToDate";
 	public static final String VALUE_FROM_DATE = "valueFromDate";
 
+	private Map<String, Object> listEquals = new HashMap<String, Object>();
+
+	private List<BOJoinClause> listJoinClause = new ArrayList<BOJoinClause>();
+
 	private List<String> listFieldsProjection = new ArrayList<String>();
 	private List<String> listExcludeProjection = new ArrayList<String>();
 
@@ -55,7 +59,9 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	@Deprecated
 	private boolean descendent = false;
 	private Map<String,Boolean> mapDescendent = new HashMap<String,Boolean>();
-	
+
+	private List<String> listEntityGraph = new ArrayList<String>();
+
 	private List<String> listOrderBy = new ArrayList<String>();
 	private List<String> listIsNull = new ArrayList<String>();
 	private List<String> listIsNotNull = new ArrayList<String>();
@@ -112,6 +118,12 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		// uguaglianze
 		result.setListEquals(_serializeBusinessClause(searcher));
 
+		result.getListEquals().putAll(searcher.getListEquals());
+		
+		result.setListEntityGraph(searcher.getListEntityGraph());
+		
+		result.setListJoinClause(searcher.getListJoinClause());
+		
 		// between
 		for (BOBetweenClause cBT : searcher.getListBetweenClause()) {
 			Map<String, Object> serializeBT = new HashMap<String, Object>();
@@ -402,5 +414,29 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 	public void setListNotIn(Map<String, Object[]> listNotIn) {
 		this.listNotIn = listNotIn;
+	}
+
+	public Map<String, Object> getListEquals() {
+		return listEquals;
+	}
+
+	public void setListEquals(Map<String, Object> listEquals) {
+		this.listEquals = listEquals;
+	}
+
+	public List<String> getListEntityGraph() {
+		return listEntityGraph;
+	}
+
+	public void setListEntityGraph(List<String> listEntityGraph) {
+		this.listEntityGraph = listEntityGraph;
+	}
+
+	public List<BOJoinClause> getListJoinClause() {
+		return listJoinClause;
+	}
+
+	public void setListJoinClause(List<BOJoinClause> listJoinClause) {
+		this.listJoinClause = listJoinClause;
 	}
 }

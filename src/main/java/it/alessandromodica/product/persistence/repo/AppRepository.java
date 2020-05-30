@@ -22,12 +22,12 @@ import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
  * @param <T>
  */
 @Repository
-public class AppRepository<T> extends BaseRepository<T> implements IRepositoryQueries<T>, IRepositoryCommands<T> {
+public class AppRepository<T, JOIN> extends BaseRepository<T, JOIN> implements IRepositoryQueries<T, JOIN>, IRepositoryCommands<T, JOIN> {
 
 	private static final Logger log = Logger.getLogger(AppRepository.class);
 
 	@Override
-	public AppRepository<T> setEntity(Class<T> classEntity) {
+	public AppRepository<T, JOIN> setEntity(Class<T> classEntity) {
 		// TODO Auto-generated method stub
 		setClass(classEntity);
 		return this;

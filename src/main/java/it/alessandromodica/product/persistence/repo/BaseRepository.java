@@ -8,13 +8,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Order;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
@@ -25,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.interfaces.IBulkTransaction;
+import it.alessandromodica.product.persistence.searcher.BOJoinClause;
 import it.alessandromodica.product.persistence.searcher.BOOperatorClause.Operators;
 import it.alessandromodica.product.persistence.searcher.BOSearch;
 import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
@@ -42,7 +47,7 @@ import it.alessandromodica.product.persistence.uow.UnitOfWork;
  * @param <T>
  */
 @SuppressWarnings("unchecked")
-public abstract class BaseRepository<T> {
+public abstract class BaseRepository<T, JOIN> {
 
 	@PersistenceContext
 	EntityManager em;
@@ -195,6 +200,21 @@ public abstract class BaseRepository<T> {
 
 		List<Predicate> predicates = new ArrayList<Predicate>(0);
 
+		// aggiunge inner join per entity graph
+		for (String cEg : serializeCriteria.getListEntityGraph()) {
+			EntityGraph<T> eg = (EntityGraph<T>) em.getEntityGraph(cEg);
+	        eg.getAttributeNodes().stream().forEach(an -> {root.fetch(an.getAttributeName(), JoinType.INNER);});
+		}
+		
+		for (BOJoinClause<T, JOIN> cJoin : serializeCriteria.getListJoinClause()) {
+			
+			
+			Join<T, JOIN> righeJoin = root.join(cJoin.getEntityToJoin());
+			Expression<Object> exp = setFieldJoin(righeJoin, cJoin.getFieldToJoin());
+			
+			builder.equal(exp, cJoin.getValueToJoin());
+		}
+
 		Map<String, Object> resultEq = serializeCriteria.getListEquals();
 		for (Iterator iterEq = resultEq.entrySet().iterator(); iterEq.hasNext();) {
 			Entry cEntry = (Entry) iterEq.next();
@@ -208,12 +228,12 @@ public abstract class BaseRepository<T> {
 			} catch (Exception e) {
 				throw new RepositoryException(e);
 			}
-			predicates.add(builder.equal(root.get(fieldHB), resultEq.get(cKey)));
+			predicates.add(builder.equal(setFieldRoot(root, fieldHB), resultEq.get(cKey)));
 		}
 
 		for (String cBool : serializeCriteria.getListValueBool().keySet()) {
 
-			predicates.add(builder.equal(root.get(cBool), serializeCriteria.getListValueBool().get(cBool)));
+			predicates.add(builder.equal(setFieldRoot(root, cBool), serializeCriteria.getListValueBool().get(cBool)));
 		}
 
 		for (Map<String, Object> cLike : serializeCriteria.getListLike()) {
@@ -230,36 +250,13 @@ public abstract class BaseRepository<T> {
 			predicates.add(builder.like(builder.lower(rootField), value.toString().toLowerCase()));
 		}
 
-		/*
-		 * for (Map<String, Object> cBT : serializeCriteria.getListbetween()) {
-		 * 
-		 * Class<?> typeData = (Class) cBT.get(BOSearch.TYPE_DATA); String field =
-		 * cBT.get(BOSearch.NAME_FIELD).toString(); if (typeData != null &&
-		 * typeData.getName().contains("Date")) { Expression<Date> rootField =
-		 * root.get(field); Date dateTo = null; Date dateFrom = null; dateTo = (Date)
-		 * cBT.get(BOSearch.VALUE_TO); dateFrom = (Date) cBT.get(BOSearch.VALUE_FROM);
-		 * predicates.add(builder.between(rootField, dateFrom, dateTo)); } else if
-		 * (typeData != null && typeData.getName().contains("Integer")) {
-		 * Expression<Integer> rootField = root.get(field); Integer valueTo = null;
-		 * Integer valueFrom = null; valueTo = (Integer) cBT.get(BOSearch.VALUE_TO);
-		 * valueFrom = (Integer) cBT.get(BOSearch.VALUE_FROM);
-		 * predicates.add(builder.between(rootField, valueFrom, valueTo));
-		 * 
-		 * } else if (typeData != null && typeData.getName().contains("Double")) {
-		 * Expression<Double> rootField = root.get(field); Double valueTo = null; Double
-		 * valueFrom = null; valueTo = (Double) cBT.get(BOSearch.VALUE_TO); valueFrom =
-		 * (Double) cBT.get(BOSearch.VALUE_FROM);
-		 * predicates.add(builder.between(rootField, valueFrom, valueTo));
-		 * 
-		 * } }
-		 */
 		// Vincoli di controllo tra due valori, vale per il tipo integer, double e date
 		for (Map<String, Object> cBT : serializeCriteria.getListbetween()) {
 
 			Class<?> typeData = (Class) cBT.get(BOSearch.TYPE_DATA);
 			String field = cBT.get(BOSearch.NAME_FIELD).toString();
 
-			Expression rootField = root.get(field);
+			Expression rootField = setFieldRoot(root, field);
 			Object valueTo = null;
 			Object valueFrom = null;
 			if (cBT.get(BOSearch.VALUE_TO) != null)
@@ -270,53 +267,6 @@ public abstract class BaseRepository<T> {
 			predicates.add(createRangePredicate(builder, rootField, valueFrom, valueTo, typeData));
 
 		}
-
-		/*
-		 * for (Map<String, Object> cOper : serializeCriteria.getListOperator()) {
-		 * String field = cOper.get(BOSearch.NAME_FIELD).toString(); Class<?> typeData =
-		 * (Class) cOper.get(BOSearch.TYPE_DATA); String operatore =
-		 * cOper.get("_operatore").toString(); Predicate predicato = null;
-		 * 
-		 * if (typeData != null && typeData.getName().contains("Date")) {
-		 * Expression<Date> rootField = root.get(field); Date value = (Date)
-		 * cOper.get(BOSearch.VALUE_FIELD); if
-		 * (operatore.equals(BOOperatorClause.MINUSEQUALS)) { predicato =
-		 * builder.lessThanOrEqualTo(rootField, value); } else if
-		 * (operatore.equals(BOOperatorClause.MINUS)) { predicato =
-		 * builder.lessThan(rootField, value); } else if
-		 * (operatore.equals(BOOperatorClause.MAJOREQUALS)) { predicato =
-		 * builder.greaterThanOrEqualTo(rootField, value); } else if
-		 * (operatore.equals(BOOperatorClause.MAJOR)) { predicato =
-		 * builder.greaterThan(rootField, value); } else if
-		 * (operatore.equals(BOOperatorClause.DISEQUALS)) { predicato =
-		 * builder.notEqual(rootField, value); } } else if (typeData != null &&
-		 * typeData.getName().contains("Integer")) { Expression<Integer> rootField =
-		 * root.get(field); Integer value = (Integer) cOper.get(BOSearch.VALUE_FIELD);
-		 * if (operatore.equals(BOOperatorClause.MINUSEQUALS)) { predicato =
-		 * builder.lessThanOrEqualTo(rootField, value); } else if
-		 * (operatore.equals(BOOperatorClause.MINUS)) { predicato =
-		 * builder.lessThan(rootField, value); } else if
-		 * (operatore.equals(BOOperatorClause.MAJOREQUALS)) { predicato =
-		 * builder.greaterThanOrEqualTo(rootField, value); } else if
-		 * (operatore.equals(BOOperatorClause.MAJOR)) { predicato =
-		 * builder.greaterThan(rootField, value); } else if
-		 * (operatore.equals(BOOperatorClause.DISEQUALS)) { predicato =
-		 * builder.notEqual(rootField, value); } } else if (typeData != null &&
-		 * typeData.getName().contains("Double")) { Expression<Double> rootField =
-		 * root.get(field); Double value = (Double) cOper.get(BOSearch.VALUE_FIELD); if
-		 * (operatore.equals(BOOperatorClause.MINUSEQUALS)) { predicato =
-		 * builder.lessThanOrEqualTo(rootField, value); } else if
-		 * (operatore.equals(BOOperatorClause.MINUS)) { predicato =
-		 * builder.lessThan(rootField, value); } else if
-		 * (operatore.equals(BOOperatorClause.MAJOREQUALS)) { predicato =
-		 * builder.greaterThanOrEqualTo(rootField, value); } else if
-		 * (operatore.equals(BOOperatorClause.MAJOR)) { predicato =
-		 * builder.greaterThan(rootField, value); } else if
-		 * (operatore.equals(BOOperatorClause.DISEQUALS)) { predicato =
-		 * builder.notEqual(rootField, value); } }
-		 * 
-		 * predicates.add(predicato); }
-		 */
 
 		for (Map<String, Object> cOper : serializeCriteria.getListOperator()) {
 
@@ -345,32 +295,32 @@ public abstract class BaseRepository<T> {
 
 			Object[] listIn = serializeCriteria.getListIn().get(cIn);
 
-			predicates.add(root.get(cIn).in(listIn));
+			predicates.add(setFieldRoot(root, cIn).in(listIn));
 
 		}
 
 		for (String cNotIn : serializeCriteria.getListNotIn().keySet()) {
 
 			Object[] listNotIn = serializeCriteria.getListNotIn().get(cNotIn);
-			predicates.add(root.get(cNotIn).in(listNotIn).not());
+			predicates.add(setFieldRoot(root, cNotIn).in(listNotIn).not());
 		}
 
 		for (String cIsNull : serializeCriteria.getListIsNull()) {
-			predicates.add(builder.isNull(root.get(cIsNull)));
+			predicates.add(builder.isNull(setFieldRoot(root, cIsNull)));
 		}
 
 		for (String cIsNotNull : serializeCriteria.getListIsNotNull()) {
-			predicates.add(builder.isNotNull(root.get(cIsNotNull)));
+			predicates.add(builder.isNotNull(setFieldRoot(root, cIsNotNull)));
 		}
 
 		// XXX: la lista dei valori non vuoti converge con quelli non nulli.
 		// valutare se e' corretto il giro
 		for (String cIsNotWS : serializeCriteria.getListIsNotEmpty()) {
-			predicates.add(builder.isNotNull(root.get(cIsNotWS)));
+			predicates.add(builder.isNotNull(setFieldRoot(root, cIsNotWS)));
 		}
 
 		for (String cIsZero : serializeCriteria.getListIsZero()) {
-			predicates.add(builder.equal(root.get(cIsZero), 0));
+			predicates.add(builder.equal(setFieldRoot(root, cIsZero), 0));
 		}
 
 		List<Predicate> orPredicates = new ArrayList<Predicate>(0);
@@ -389,6 +339,33 @@ public abstract class BaseRepository<T> {
 		return predicates;
 
 	}
+
+	/**
+	 * @param root
+	 * @param fieldHB
+	 * @return
+	 */
+	private Path<Object> setFieldRoot(Root<T> root, String field) {
+		
+		String[] splitField = field.split("\\.");
+		if(splitField.length == 2)
+		{
+			return root.get(splitField[0]).get(splitField[1]);
+		}
+		else
+			return root.get(field);
+	}
+	
+	private Path<Object> setFieldJoin(Join<T, JOIN> join, String field) {
+		
+		String[] splitField = field.split("\\.");
+		if(splitField.length == 2)
+		{
+			return join.get(splitField[0]).get(splitField[1]);
+		}
+		else
+			return join.get(field);
+	}	
 
 	/**
 	 * Classe per la composizione del predicato operatore
@@ -772,7 +749,7 @@ public abstract class BaseRepository<T> {
 
 		CriteriaQuery<Integer> criteriaQuery = builder.createQuery(Integer.class);
 		Root<T> classRoot = criteriaQuery.from(classEntity);
-		criteriaQuery.select(builder.max(classRoot.get(nameField).as(Integer.class)));
+		criteriaQuery.select(builder.max(setFieldRoot(classRoot, nameField).as(Integer.class)));
 		Number result = em.createQuery(criteriaQuery).getSingleResult();
 		return result;
 	}
