@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import it.alessandromodica.product.callback.SettingCookie;
 import it.alessandromodica.product.common.AdapterGson;
+import it.alessandromodica.product.common.Constants;
 import it.alessandromodica.product.common.InputData;
 import it.alessandromodica.product.common.enumerative.AppContext;
 import it.alessandromodica.product.common.enumerative.RequestVariable;
@@ -14,6 +15,7 @@ import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.context.interfaces.ISecurity;
 import it.alessandromodica.product.model.bo.BOUtente;
+import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.uow.UnitOfWork;
 
 /**
@@ -41,11 +43,13 @@ import it.alessandromodica.product.persistence.uow.UnitOfWork;
 @Component
 @SuppressWarnings("rawtypes")
 public class MainApplication extends MainContext {
+
 	// XXX: classe principale e cardine di tutto il progetto
 	// deve essere visto come il cappello di riferimento per tutta la gerarchia
 	// del software
 
-	// ha iniettati tutti i servizi utilizzati dall'applicazione
+	@Autowired
+	protected IRepositoryCommands repocommands;
 
 	private static final Logger log = Logger.getLogger(MainApplication.class);
 
@@ -62,32 +66,19 @@ public class MainApplication extends MainContext {
 		return result;
 	}
 
-	@Deprecated
-	public static void InitApp(String appcontext) throws BusinessException {
-
-		try {
-			setUp(appcontext);
-		} catch (RepositoryException exsso) {
-			String msg = "Si è verificato un errore durante l'inizializzazione del " + TITOLO_APP;
-			log.error(msg, exsso);
-			throw new BusinessException(msg, exsso);
-		} catch (Exception ex) {
-			log.error(ex.getMessage(), ex);
-			throw new BusinessException(ex);
-		}
-	}
-
-	@Deprecated
-	private static void setUp(String appcontext) throws RepositoryException {
-		log.info("Caricamento ambiente " + TITOLO_APP + " in corso del contesto [" + appcontext + "]...");
-		UnitOfWork.initSessionFactory(appcontext);
-		log.info("Istanza Persistence Hibernate avviata.");
-
-		// lettura tipologiche e caricamento in variabili statiche next
-		log.info("Caricamento tipologiche " + TITOLO_APP + " completato.");
-		log.info("Ambiente " + appcontext + " caricato con successo!");
-	}
-
+	/**
+	 * Handler di accesso a tutte le richieste esterne online. Ciascuna richiesta
+	 * viene processata a partire da questo metodo
+	 * 
+	 * @param inputData
+	 * @param remoteAddrs
+	 * @param referer
+	 * @param useragent
+	 * @param rawUtente
+	 * @param appcontext
+	 * @return
+	 * @throws BusinessException
+	 */
 	public Object processAction(InputData inputData, String remoteAddrs, String referer, String useragent,
 			String rawUtente, AppContext appcontext) throws BusinessException {
 		try {
@@ -95,7 +86,7 @@ public class MainApplication extends MainContext {
 			BOUtente currentUtente = null;
 			Object hashscript = inputData.getMapRequestData().get(RequestVariable.hashscript);
 			Object datacookie = inputData.getMapRequestData().get(RequestVariable.datacookie);
-			currentUtente = getUtenteCorrente(remoteAddrs, referer, useragent, rawUtente,
+			currentUtente = getVisitatoreCorrente(remoteAddrs, referer, useragent, rawUtente,
 					hashscript != null ? hashscript.toString() : null,
 					datacookie != null ? datacookie.toString() : null);
 
@@ -108,10 +99,62 @@ public class MainApplication extends MainContext {
 		}
 	}
 
+	/**
+	 * Parser dell'header della richiesta esterna per analizzare il visitatore
+	 * corrente (umano o macchina che sia)
+	 * 
+	 * @param remoteAddrs
+	 * @param referer
+	 * @param useragent
+	 * @param rawUtente
+	 * @param hashscript
+	 * @param datacookie
+	 * @return
+	 * @throws BusinessException
+	 */
+	private BOUtente getVisitatoreCorrente(String remoteAddrs, String referer, String useragent, String rawUtente,
+			String hashscript, String datacookie) throws BusinessException {
+		BOUtente currentUtente = new BOUtente();
+		// XXX: si dovrà definire un parametro token per dare
+		// autorizzazione di accesso ad applicazioni terze
+		if (!AdapterGson.isJSONValid(rawUtente, BOUtente.class)) {
+			currentUtente = new BOUtente();
+			if (rawUtente == null) {
+				rawUtente = "Anonimo";
+			}
+			currentUtente.setNickname(rawUtente);
+
+		} else {
+			currentUtente = (BOUtente) getPojo(rawUtente, BOUtente.class);
+		}
+
+		if (currentUtente == null)
+			throw new BusinessException("L'utente non e' stato riconosciuto");
+		else {
+			currentUtente.setInforemote(remoteAddrs);
+			currentUtente.setReferer(referer);
+			currentUtente.setUseragent(useragent);
+			currentUtente.setHashscript(hashscript);
+			currentUtente.setCookies(datacookie);
+		}
+		return currentUtente;
+	}
+
+	/**
+	 * Handler standard per una canonica sign in out di un account google. La parte
+	 * di autenticazione e' a lato javascript in uno script opportunamente
+	 * autenticato dalla chiave dominio opportuna.
+	 * 
+	 * @param inputData
+	 * @param payloadOauth
+	 * @param appcontext
+	 * @return
+	 * @throws BusinessException
+	 */
 	public Object processSignInOutGoogle(InputData inputData, String payloadOauth, AppContext appcontext)
 			throws BusinessException {
 		cassaforte.setControllerSecurity(controllerSecurity);
-		log.info(">>> Si sta richiedendo la fase " + appcontext + " per accedere ai servizi " + TITOLO_APP
+		log.info(">>> Si sta richiedendo la fase " + appcontext + " per accedere ai servizi " + Constants.TITOLO_APP
 				+ " tramite google signin ...");
 
 		switch (appcontext) {
@@ -133,15 +176,29 @@ public class MainApplication extends MainContext {
 
 		Object dataToSendClient = cassaforte.getEsito(appcontext);
 
-		log.info("<<< Richiesta " + appcontext + " per accedere ai servizi " + TITOLO_APP
+		log.info("<<< Richiesta " + appcontext + " per accedere ai servizi " + Constants.TITOLO_APP
 				+ " tramite google signin terminata!!");
 
 		return dataToSendClient;
 	}
 
+	/**
+	 * Metodo di fattor comune delle capabilities supportate dall'applicazione. Per
+	 * capabilities si intende qualsiasi funzionalità che dia esperienza utente sia
+	 * in termini di produttività che di intrattenimento.
+	 * 
+	 * @param inputData
+	 * @param currentUtente
+	 * @param appcontext
+	 * @return
+	 * @throws BusinessException
+	 */
 	private Object accessCapabilities(InputData inputData, BOUtente currentUtente, AppContext appcontext)
 			throws BusinessException {
-		Object dataToSendClient;
+
+		log.info(">>> L'utente " + currentUtente.getNickname() + " chiede l'accesso al sistema " + Constants.TITOLO_APP
+				+ " per il contesto " + appcontext + " ... ");
+
 		// XXX: istanza del blocco di sicurezza. Serve a verificare la
 		// validita e integrita di ciascuna chiamata esterna
 		// L'istanza e' sempre valida con qualsiasi tipo di oggetto
@@ -150,21 +207,21 @@ public class MainApplication extends MainContext {
 		// XXX: primo controllo di sicurezza che verifica se l'utente e'
 		// gia riconosciuto come utente registrato, oppure utente
 		// bannato, ma anche un utente nuovo
-		log.info(">>> L'utente " + currentUtente.getNickname() + " chiede l'accesso al sistema " + TITOLO_APP
-				+ " per il contesto " + appcontext + " ... ");
-
-		cassaforte.setControllerSecurity(controllerSecurity);
+		
 		log.info("Definita la cassaforte di sicurezza per l'utente " + currentUtente.getNickname()
 				+ " per eseguire la fase " + appcontext.name());
-
-		dataToSendClient = null;
+		
+		Object dataToSendClient = null;
 
 		switch (appcontext) {
+		//contesto init di primo step di verifica accesso
 		case sendscraps:
 
 			dataToSendClient = controllerSecurity.generaScarabocchio();
 
 			break;
+		//invio hash valido per l'autenticazione e confidenzialita della richiesta (prima e seconda).
+		//se il metodo da esito positivo, viene validata la integrita del dato con gli opportuni cookie session (terza regola)
 		case checkintegrity:
 			try {
 
@@ -199,7 +256,7 @@ public class MainApplication extends MainContext {
 			if (controllerSecurity.checkAccessoUtente()) {
 				dataToSendClient = getResult(appcontext, inputData, currentUtente);
 			} else
-				dataToSendClient = "Accesso ai servizi " + TITOLO_APP + " negato!!";
+				dataToSendClient = "Accesso ai servizi " + Constants.TITOLO_APP + " negato!!";
 			break;
 		}
 		log.info("<<< Richiesta dell'utente per il contesto " + appcontext.name() + " " + currentUtente.getNickname()
@@ -208,31 +265,30 @@ public class MainApplication extends MainContext {
 		return dataToSendClient;
 	}
 
-	private BOUtente getUtenteCorrente(String remoteAddrs, String referer, String useragent, String rawUtente,
-			String hashscript, String datacookie) throws BusinessException {
-		BOUtente currentUtente = new BOUtente();
-		// XXX: si dovrà definire un parametro token per dare
-		// autorizzazione di accesso ad applicazioni terze
-		if (!AdapterGson.isJSONValid(rawUtente, BOUtente.class)) {
-			currentUtente = new BOUtente();
-			if (rawUtente == null) {
-				rawUtente = "Anonimo";
-			}
-			currentUtente.setNickname(rawUtente);
+	@Deprecated
+	public static void InitApp(String appcontext) throws BusinessException {
 
-		} else {
-			currentUtente = (BOUtente) getPojo(rawUtente, BOUtente.class);
+		try {
+			setUp(appcontext);
+		} catch (RepositoryException exsso) {
+			String msg = "Si è verificato un errore durante l'inizializzazione del " + Constants.TITOLO_APP;
+			log.error(msg, exsso);
+			throw new BusinessException(msg, exsso);
+		} catch (Exception ex) {
+			log.error(ex.getMessage(), ex);
+			throw new BusinessException(ex);
 		}
-
-		if (currentUtente == null)
-			throw new BusinessException("L'utente non e' stato riconosciuto");
-		else {
-			currentUtente.setInforemote(remoteAddrs);
-			currentUtente.setReferer(referer);
-			currentUtente.setUseragent(useragent);
-			currentUtente.setHashscript(hashscript);
-			currentUtente.setCookies(datacookie);
-		}
-		return currentUtente;
 	}
+
+	@Deprecated
+	private static void setUp(String appcontext) throws RepositoryException {
+		log.info("Caricamento ambiente " + Constants.TITOLO_APP + " in corso del contesto [" + appcontext + "]...");
+		UnitOfWork.initSessionFactory(appcontext);
+		log.info("Istanza Persistence Hibernate avviata.");
+
+		// lettura tipologiche e caricamento in variabili statiche next
+		log.info("Caricamento tipologiche " + Constants.TITOLO_APP + " completato.");
+		log.info("Ambiente " + appcontext + " caricato con successo!");
+	}
+
 }

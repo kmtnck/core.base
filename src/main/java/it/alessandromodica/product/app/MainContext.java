@@ -13,6 +13,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,7 @@ import it.alessandromodica.product.model.bo.BOCoordinate;
 import it.alessandromodica.product.model.bo.BODecoderAddress;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.po.GestioneUtenti;
+import it.alessandromodica.product.services.interfaces.IMainService;
 
 /**
  * La classe MainContext rappresenta il punto unico della gestione dei vari
@@ -54,8 +57,14 @@ import it.alessandromodica.product.model.po.GestioneUtenti;
  * @author Alessandro
  *
  */
-public abstract class MainContext extends GoToBusiness {
+@Resource
+public abstract class MainContext {
 
+	@Autowired
+	protected AuthContext authContext;
+
+	@Autowired
+	private IMainService mainService;
 
 	private static final Logger log = Logger.getLogger(MainContext.class);
 
@@ -74,45 +83,13 @@ public abstract class MainContext extends GoToBusiness {
 	@Autowired
 	protected IGis datagis;
 
-	protected BOUtente utenteCorrente;
+	//protected BOUtente utenteCorrente;
 
 	/**
 	 * Questo field è valorizzato dal componente incaricato ad evadere la
 	 * richiesta, di solito viene valorizzato anche l'utente corrente
 	 */
 	protected InputData inputData;
-
-	/**
-	 * Questo setter viene sempre inizializzato da tutti i componenti con il
-	 * metodo setInfo, in cui si inseriscono le informazioni utente ad ogni
-	 * chiamata
-	 */
-	public void setUtenteCorrente(BOUtente utente) {
-
-		if (utente != null) {
-
-			utenteCorrente = utente;
-			try {
-
-				String value = utente.getNickname() != null ? utente.getNickname() : null;
-				log.info("Utente corrente identificato :" + value);
-
-				GestioneUtenti data = mainService.getUtente(value);
-				if (data != null) {
-					utenteCorrente.setIdutente(data.getIdutente());
-					utenteCorrente.setPublickey(data.getPublickey());
-					utenteCorrente.setPrivatekey(data.getPrivatekey());
-					utenteCorrente.setScarabocchio(data.getScarabocchio());
-
-					log.debug("Configurate le impostazioni dell'utente corrente");
-				}
-
-			} catch (ServiceException e) {
-				// TODO Auto-generated catch block
-				log.warn("Non e' stato possibile recuperare le informazioni dell'utente " + utente.getNickname());
-			}
-		}
-	}
 
 	/**
 	 * Metodo che ritorna il risultato di una specifica richiesta. Lo switch è

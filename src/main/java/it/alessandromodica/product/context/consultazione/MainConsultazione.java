@@ -22,7 +22,7 @@ public class MainConsultazione extends MainContext implements IConsultazione {
 	private IAppService appService;
 
 	public void setInfo(BOUtente utente, InputData inputData) {
-		setUtenteCorrente(utente);
+		authContext.setUtenteCorrente(utente);
 		this.inputData = inputData;
 	}
 

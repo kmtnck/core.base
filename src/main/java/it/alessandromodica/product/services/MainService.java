@@ -4,15 +4,17 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.alessandromodica.product.app.GoToBusiness;
-import it.alessandromodica.product.app.MainContext;
+import it.alessandromodica.product.common.Constants;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.po.CommonLogaccesso;
 import it.alessandromodica.product.model.po.GestioneUtenti;
+import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
+import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
 import it.alessandromodica.product.persistence.searcher.BOSearchApp;
 import it.alessandromodica.product.services.interfaces.IMainService;
 
@@ -30,7 +32,13 @@ import it.alessandromodica.product.services.interfaces.IMainService;
  */
 @Service
 @SuppressWarnings("unchecked")
-public class MainService extends GoToBusiness implements IMainService {
+public class MainService implements IMainService {
+
+	@Autowired
+	protected IRepositoryQueries repoquery;
+
+	@Autowired
+	protected IRepositoryCommands repocommands;
 
 	private static final Logger log = Logger.getLogger(MainService.class);
 
@@ -86,7 +94,7 @@ public class MainService extends GoToBusiness implements IMainService {
 
 		} catch (RepositoryException e) {
 			String msg = "Si e' verificato un errore durante la registrazione di una operazione "
-					+ MainContext.TITOLO_APP + " [" + e.getMessage() + "]";
+					+ Constants.TITOLO_APP + " [" + e.getMessage() + "]";
 			log.warn(msg, e);
 			log.warn(
 					"L'eccezione non verra rilanciata, per permettere la prosecuzione dell'operazione e rendere inibito il failure dei log");

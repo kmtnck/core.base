@@ -16,7 +16,7 @@ import javax.ws.rs.core.UriInfo;
 import org.jboss.logging.Logger;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import it.alessandromodica.product.app.GoToBusiness;
+import it.alessandromodica.product.common.Constants;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
 
@@ -108,7 +108,7 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 		try {
 
 			ExtractURIValue values = new ExtractURIValue(info);
-			Class<?> classEntity = Class.forName(values.getValue(GoToBusiness.CLASSNAME));
+			Class<?> classEntity = Class.forName(values.getValue(Constants.CLASSNAME));
 			
 			List<Object> result = (List<Object>) AppRoot.reader.setEntity(classEntity).search(searcher);
 
@@ -130,7 +130,7 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 		try {
 
 			ExtractURIValue values = new ExtractURIValue(info);
-			Class<?> classEntity = Class.forName(values.getValue(GoToBusiness.CLASSNAME));
+			Class<?> classEntity = Class.forName(values.getValue(Constants.CLASSNAME));
 			Object result = (Object) AppRoot.reader.setEntity(classEntity).getById(id);
 
 			return result;
@@ -150,7 +150,7 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 		try {
 
 			ExtractURIValue values = new ExtractURIValue(info);
-			Class<?> classEntity = Class.forName(values.getValue(GoToBusiness.CLASSNAME));
+			Class<?> classEntity = Class.forName(values.getValue(Constants.CLASSNAME));
 			int result = AppRoot.reader.setEntity(classEntity).getCount(searcher);
 
 			return result;

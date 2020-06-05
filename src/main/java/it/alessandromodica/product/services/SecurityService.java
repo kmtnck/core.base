@@ -18,21 +18,21 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.alessandromodica.product.app.GoToBusiness;
+import it.alessandromodica.product.app.AuthContext;
 import it.alessandromodica.product.app.MainApplication;
-import it.alessandromodica.product.app.MainContext;
+import it.alessandromodica.product.common.Constants;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.model.bo.BOPayloadAuth;
+import it.alessandromodica.product.model.bo.BOPayloadAuth.GoogleUser;
+import it.alessandromodica.product.model.bo.BOPayloadAuth.GoogleUser.Token;
+import it.alessandromodica.product.model.bo.BOPayloadAuth.ProfiloUtente;
 import it.alessandromodica.product.model.bo.BOSecurity;
 import it.alessandromodica.product.model.bo.BOSignGoogle;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.bo.BOVerifica;
 import it.alessandromodica.product.model.bo.BOVerificaToken;
-import it.alessandromodica.product.model.bo.BOPayloadAuth.GoogleUser;
-import it.alessandromodica.product.model.bo.BOPayloadAuth.ProfiloUtente;
-import it.alessandromodica.product.model.bo.BOPayloadAuth.GoogleUser.Token;
 import it.alessandromodica.product.model.po.CommonBlacklist;
 import it.alessandromodica.product.model.po.GestioneApps;
 import it.alessandromodica.product.model.po.GestioneUtenti;
@@ -40,6 +40,8 @@ import it.alessandromodica.product.model.po.GestioneUtentiOauth;
 import it.alessandromodica.product.model.po.GestioneUtentiOauthSessioni;
 import it.alessandromodica.product.model.po.VGestioneUtenti;
 import it.alessandromodica.product.model.po.VGestioneUtentiOuth;
+import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
+import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
 import it.alessandromodica.product.persistence.searcher.BOSearchApp;
 import it.alessandromodica.product.services.interfaces.IMainService;
 import it.alessandromodica.product.services.interfaces.ISecurityService;
@@ -66,7 +68,13 @@ import it.alessandromodica.product.services.interfaces.ISecurityService;
  */
 @Service
 @SuppressWarnings("unchecked")
-public class SecurityService extends GoToBusiness implements ISecurityService {
+public class SecurityService extends AuthContext implements ISecurityService {
+
+	@Autowired
+	protected IRepositoryQueries repoquery;
+
+	@Autowired
+	protected IRepositoryCommands repocommands;
 
 	private static final Logger log = Logger.getLogger(SecurityService.class);
 
@@ -217,7 +225,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 
 						repocommands.setEntity(GestioneUtentiOauth.class).add(toAdd);
 
-						result.setEsito("Utente registrato con successo al " + MainContext.TITOLO_APP + ".");
+						result.setEsito("Utente registrato con successo al " + Constants.TITOLO_APP + ".");
 						result.setStato("SUCCESSLOGIN");
 
 					} else {
@@ -539,7 +547,7 @@ public class SecurityService extends GoToBusiness implements ISecurityService {
 
 				} else {
 
-					String esito = "Avversario di fazione! Fine dei giochi! :)";
+					String esito = "Utente non gradito. La sessione e' stata interrotta!";
 
 					result = addToBlacklist(esito);
 				}

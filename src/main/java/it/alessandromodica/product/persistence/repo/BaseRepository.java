@@ -132,18 +132,15 @@ public abstract class BaseRepository<T, JOIN> {
 				isDescendent = serializeCriteria.getMapDescendent().get(cOrderBy);
 			}
 
-			if (serializeCriteria.getDescendent() || isDescendent) {
-				cOrder = builder.desc(root.get(cOrderBy));
-			} else {
-				cOrder = builder.asc(root.get(cOrderBy));
-			}
-			listsOrder.add(cOrder);
-			/*
-			 * if (serializeCriteria.is_isDescendent()) { cOrder =
-			 * builder.desc(root.get(cOrderBy)); } else { cOrder =
-			 * builder.asc(root.get(cOrderBy)); } listsOrder.add(cOrder);
-			 */
+			cOrder = getOrderByRoot(builder, root, cOrderBy, serializeCriteria.getDescendent() || isDescendent);
 
+			/*
+			 * if (serializeCriteria.getDescendent() || isDescendent) { cOrder =
+			 * builder.desc(root.get(cOrderBy)); } else { cOrder =
+			 * builder.asc(root.get(cOrderBy)); }
+			 */
+			
+			listsOrder.add(cOrder);
 		}
 		query.orderBy(listsOrder);
 
@@ -156,15 +153,28 @@ public abstract class BaseRepository<T, JOIN> {
 		} else
 			resultQuery = em.createQuery(query);
 
-		/*
-		 * if (serializeCriteria.getMaxResult() > 0)
-		 * searchCriteria.setMaxResults(serializeCriteria.getMaxResult()); for (String
-		 * cOrderBy : serializeCriteria.getListOrderBy()) { if
-		 * (serializeCriteria.is_isDescendent()) {
-		 * searchCriteria.addOrder(Order.desc(cOrderBy)); } else {
-		 * searchCriteria.addOrder(Order.asc(cOrderBy)); } }
-		 */
 		return resultQuery;
+	}
+	
+	private Order getOrderByRoot(CriteriaBuilder builder, Root<T> root, String field, boolean descendent) {
+
+		Order cOrder = null;
+		String[] splitField = field.split("\\.");
+
+		if (descendent) {
+			if (splitField.length == 2)
+				cOrder = builder.desc(root.get(splitField[0]).get(splitField[1]));
+			else
+				cOrder = builder.desc(root.get(field));
+		} else {
+
+			if (splitField.length == 2)
+				cOrder = builder.asc(root.get(splitField[0]).get(splitField[1]));
+			else
+				cOrder = builder.asc(root.get(field));
+		}
+
+		return cOrder;
 	}
 
 	protected List<Predicate> buildPredicates(String alias, BOSerializeCriteria serializeCriteria, EntityManager em)
@@ -411,18 +421,6 @@ public abstract class BaseRepository<T, JOIN> {
 
 	}
 
-	@Autowired
-	private Create<T> createctx;
-
-	@Autowired
-	private Update<T> updatectx;
-
-	@Autowired
-	private Remove<T> removectx;
-
-	@Autowired
-	private Search<T> searchctx;
-
 	public List<T> getAll() throws RepositoryException {
 		try {
 			List<T> obj = em.createQuery("from " + nameClass).getResultList();
@@ -545,7 +543,7 @@ public abstract class BaseRepository<T, JOIN> {
 
 	private void remove(T obj, EntityManager em) throws RepositoryException {
 		try {
-			removectx.execute(obj, em);
+			em.remove(em.contains(obj) ? obj : em.merge(obj));
 		} catch (RuntimeException e) {
 			log.error("Errore durante la rimozione di una entita " + e.getMessage(), e);
 			throw new RepositoryException(e);
@@ -554,7 +552,7 @@ public abstract class BaseRepository<T, JOIN> {
 
 	private void create(T obj, EntityManager em) throws RepositoryException {
 		try {
-			createctx.execute(obj, em);
+			em.persist(obj);
 		} catch (RuntimeException e) {
 			log.error("Errore durante l'aggiunta di una entita " + e.getMessage(), e);
 			throw new RepositoryException(e);
@@ -563,7 +561,7 @@ public abstract class BaseRepository<T, JOIN> {
 
 	private void merge(T obj, EntityManager em) throws RepositoryException {
 		try {
-			updatectx.execute(obj, em);
+			em.merge(obj);
 		} catch (RuntimeException e) {
 			log.error("Errore durante una operazione di merge hibernate su una entita " + e.getMessage(), e);
 			throw new RepositoryException(e);
@@ -609,7 +607,7 @@ public abstract class BaseRepository<T, JOIN> {
 	public List<T> search(Query query) throws RepositoryException {
 		List<T> result = null;
 		try {
-			result = searchctx.search(query);
+			result = query.getResultList();
 			return result;
 		} catch (RuntimeException e) {
 			log.error("Errore durante la ricerca di entita " + e.getMessage(), e);
@@ -666,7 +664,7 @@ public abstract class BaseRepository<T, JOIN> {
 
 		T obj = null;
 
-		List<T> result = searchctx.search(query);
+		List<T> result = query.getResultList();
 
 		boolean checkStrategy = false;
 		boolean isSingle = false;

@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import it.alessandromodica.product.app.MainContext;
+import it.alessandromodica.product.app.AuthContext;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.context.interfaces.ISecurity;
@@ -21,7 +21,7 @@ import it.alessandromodica.product.services.interfaces.ISecurityService;
  *
  */
 @Controller
-public class MainSecurity extends MainContext implements ISecurity {
+public class MainSecurity extends AuthContext implements ISecurity {
 
 	private static final Logger log = Logger.getLogger(MainSecurity.class);
 
@@ -104,10 +104,6 @@ public class MainSecurity extends MainContext implements ISecurity {
 			log.error(e.getMessage(), e);
 			throw new BusinessException(e);
 		}
-	}
-
-	public BOUtente getUtenteCorrente() {
-		return utenteCorrente;
 	}
 
 }

@@ -4,15 +4,17 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import it.alessandromodica.product.app.AuthContext;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.po.GestioneUtentiInfoautenticazione;
 import it.alessandromodica.product.persistence.interfaces.IBulkTransaction;
+import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
+import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
 import it.alessandromodica.product.persistence.searcher.BOSearchApp;
 
 /**
@@ -24,6 +26,15 @@ import it.alessandromodica.product.persistence.searcher.BOSearchApp;
 @Component
 public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 
+	@Autowired
+	AuthContext authContext;
+
+	@Autowired
+	protected IRepositoryCommands repocommands;
+	
+	@Autowired
+	protected IRepositoryQueries repoquery;
+
 	private static final Logger log = Logger.getLogger(SettingCookie.class);
 
 	private String[] cookies;
@@ -31,7 +42,7 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void persist() throws RepositoryException {
-		if (cookies != null && utenteCorrente.getIdutente() != 0)
+		if (cookies != null && authContext.getUtenteCorrente().getIdutente() != 0)
 			for (String cCookie : cookies) {
 				String[] splitCookie = (cCookie.toString()).split("=", 2);
 				if (splitCookie.length != 2)
@@ -42,7 +53,7 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 
 				if ("csrftoken".equals(nomeparametro)) {
 					BOSearchApp criteria = new BOSearchApp();
-					criteria.setIdutente(utenteCorrente.getIdutente());
+					criteria.setIdutente(authContext.getUtenteCorrente().getIdutente());
 					criteria.setNomeparametro("csrftoken");
 					log.info("Cookie da aggiungere: " + cCookie);
 					try {
@@ -66,7 +77,7 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 							GestioneUtentiInfoautenticazione pObj = new GestioneUtentiInfoautenticazione();
 							pObj.setContesto("cookie");
 							// pObj.setIdinfo(idobj);
-							pObj.setIdutente(utenteCorrente.getIdutente());
+							pObj.setIdutente(authContext.getUtenteCorrente().getIdutente());
 							pObj.setNomeparametro(nomeparametro);
 							pObj.setValueparametro(valoreparametro);
 							pObj.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
@@ -93,7 +104,7 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 	@Override
 	public void setEntities(List obj, BOUtente utente) {
 		// TODO Auto-generated method stub
-		setUtenteCorrente(utente);
+		authContext.setUtenteCorrente(utente);
 		if (utente.getCookies() != null)
 			this.cookies = utente.getCookies().split(";");
 	}
