@@ -45,6 +45,8 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	public static final String VALUE_TO_DATE = "valueToDate";
 	public static final String VALUE_FROM_DATE = "valueFromDate";
 
+	private Class<?> classEntity;
+	
 	private Map<String, Object> listEquals = new HashMap<String, Object>();
 
 	private List<BOJoinClause> listJoinClause = new ArrayList<BOJoinClause>();
@@ -114,7 +116,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 		BOSerializeCriteria result = new BOSerializeCriteria();
 
-		result.setClassSearcher(searcher.getClass());
+		result.setClassEntity(searcher.getClassEntity());
 		// uguaglianze
 		result.setListEquals(_serializeBusinessClause(searcher));
 
@@ -438,5 +440,13 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 	public void setListJoinClause(List<BOJoinClause> listJoinClause) {
 		this.listJoinClause = listJoinClause;
+	}
+
+	public Class<?> getClassEntity() {
+		return classEntity;
+	}
+
+	public void setClassEntity(Class<?> classEntity) {
+		this.classEntity = classEntity;
 	}
 }

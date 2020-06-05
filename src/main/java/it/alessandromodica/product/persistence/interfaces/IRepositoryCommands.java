@@ -1,11 +1,10 @@
 package it.alessandromodica.product.persistence.interfaces;
 
 import it.alessandromodica.product.common.exceptions.RepositoryException;
-import it.alessandromodica.product.persistence.repo.AppRepository;
 
 public interface IRepositoryCommands<T, JOIN> {
 
-	public AppRepository<T, JOIN> setEntity(Class<T> classEntity);
+	//public AppRepository<T, JOIN> setEntity(Class<T> classEntity);
 	
 	public void add(T obj) throws RepositoryException;
 

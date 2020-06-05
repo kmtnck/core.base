@@ -252,7 +252,7 @@ public class TestProcessActions extends TestCase {
 			toAdd.setIpaddress("questo e un test");
 			toAdd.setDescrizione(msg);
 			toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
-			repocommand.setEntity(CommonLogaccesso.class).add(toAdd);
+			repocommand.add(toAdd);
 
 			BOSearchApp testsearch = new BOSearchApp();
 			testsearch.setDescrizione("Adesso facciamo un altro test!!");
@@ -267,7 +267,7 @@ public class TestProcessActions extends TestCase {
 
 					for (CommonLogaccesso obj : resulttest) {
 
-						repocommand.setEntity(CommonLogaccesso.class).delete(obj);
+						repocommand.delete(obj);
 					}
 					Assert.assertTrue(repoquery.search(testsearch.getSerialized()).size() == 0);
 				} else if (resulttest.size() == 1) {

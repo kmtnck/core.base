@@ -73,8 +73,7 @@ public abstract class BaseRepository<T, JOIN> {
 		uow.submit(bulkoperation);
 	}
 
-	protected Query buildCriteriaQuery(BOSerializeCriteria serializeCriteria)
-			throws RepositoryException {
+	protected Query buildCriteriaQuery(BOSerializeCriteria serializeCriteria) throws RepositoryException {
 		return buildCriteriaQuery(null, serializeCriteria);
 	}
 
@@ -102,8 +101,10 @@ public abstract class BaseRepository<T, JOIN> {
 	}
 
 	@SuppressWarnings("rawtypes")
-	protected Query buildCriteriaQuery(String alias, BOSerializeCriteria serializeCriteria)
-			throws RepositoryException {
+	protected Query buildCriteriaQuery(String alias, BOSerializeCriteria serializeCriteria) throws RepositoryException {
+
+		setClass(serializeCriteria.getClassEntity());
+
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<T> query = builder.createQuery(classEntity);
 
@@ -139,7 +140,7 @@ public abstract class BaseRepository<T, JOIN> {
 			 * builder.desc(root.get(cOrderBy)); } else { cOrder =
 			 * builder.asc(root.get(cOrderBy)); }
 			 */
-			
+
 			listsOrder.add(cOrder);
 		}
 		query.orderBy(listsOrder);
@@ -155,7 +156,7 @@ public abstract class BaseRepository<T, JOIN> {
 
 		return resultQuery;
 	}
-	
+
 	private Order getOrderByRoot(CriteriaBuilder builder, Root<T> root, String field, boolean descendent) {
 
 		Order cOrder = null;
@@ -213,15 +214,16 @@ public abstract class BaseRepository<T, JOIN> {
 		// aggiunge inner join per entity graph
 		for (String cEg : serializeCriteria.getListEntityGraph()) {
 			EntityGraph<T> eg = (EntityGraph<T>) em.getEntityGraph(cEg);
-	        eg.getAttributeNodes().stream().forEach(an -> {root.fetch(an.getAttributeName(), JoinType.INNER);});
+			eg.getAttributeNodes().stream().forEach(an -> {
+				root.fetch(an.getAttributeName(), JoinType.INNER);
+			});
 		}
-		
+
 		for (BOJoinClause<T, JOIN> cJoin : serializeCriteria.getListJoinClause()) {
-			
-			
+
 			Join<T, JOIN> righeJoin = root.join(cJoin.getEntityToJoin());
 			Expression<Object> exp = setFieldJoin(righeJoin, cJoin.getFieldToJoin());
-			
+
 			builder.equal(exp, cJoin.getValueToJoin());
 		}
 
@@ -231,13 +233,12 @@ public abstract class BaseRepository<T, JOIN> {
 			String cKey = cEntry.getKey().toString();
 
 			String fieldHB = cKey;
-			try {
-				BOSearch instance = (BOSearch) serializeCriteria.getClassSearcher().newInstance();
-				if (instance.checkCompositeId(cKey))
-					fieldHB = "id." + cKey;
-			} catch (Exception e) {
-				throw new RepositoryException(e);
-			}
+			/*
+			 * try { BOSearch instance = (BOSearch)
+			 * serializeCriteria.getClassSearcher().newInstance(); if
+			 * (instance.checkCompositeId(cKey)) fieldHB = "id." + cKey; } catch (Exception
+			 * e) { throw new RepositoryException(e); }
+			 */
 			predicates.add(builder.equal(setFieldRoot(root, fieldHB), resultEq.get(cKey)));
 		}
 
@@ -356,26 +357,22 @@ public abstract class BaseRepository<T, JOIN> {
 	 * @return
 	 */
 	private Path<Object> setFieldRoot(Root<T> root, String field) {
-		
+
 		String[] splitField = field.split("\\.");
-		if(splitField.length == 2)
-		{
+		if (splitField.length == 2) {
 			return root.get(splitField[0]).get(splitField[1]);
-		}
-		else
+		} else
 			return root.get(field);
 	}
-	
+
 	private Path<Object> setFieldJoin(Join<T, JOIN> join, String field) {
-		
+
 		String[] splitField = field.split("\\.");
-		if(splitField.length == 2)
-		{
+		if (splitField.length == 2) {
 			return join.get(splitField[0]).get(splitField[1]);
-		}
-		else
+		} else
 			return join.get(field);
-	}	
+	}
 
 	/**
 	 * Classe per la composizione del predicato operatore
@@ -477,7 +474,6 @@ public abstract class BaseRepository<T, JOIN> {
 
 	public T getByCompositeId(T objId) throws RepositoryException {
 
-		
 		try {
 
 			Serializable id = (Serializable) objId;
@@ -487,11 +483,13 @@ public abstract class BaseRepository<T, JOIN> {
 			log.error(e.getMessage(), e);
 			throw new RepositoryException(e);
 
-		} 
+		}
 	}
 
 	@Transactional
 	public void add(T obj) throws RepositoryException {
+
+		setClass((Class<T>) obj.getClass());
 
 		try {
 			create(obj, em);
@@ -502,16 +500,21 @@ public abstract class BaseRepository<T, JOIN> {
 
 	@Transactional
 	public void update(T obj) throws RepositoryException {
+
+		setClass((Class<T>) obj.getClass());
+
 		try {
 			merge(obj, em);
-			
+
 		} catch (RepositoryException ex) {
 			throw ex;
-		} 
+		}
 	}
 
 	@Transactional
 	public void delete(T obj) throws RepositoryException {
+
+		setClass((Class<T>) obj.getClass());
 
 		try {
 			remove(obj, em);
@@ -527,7 +530,7 @@ public abstract class BaseRepository<T, JOIN> {
 		try {
 
 			em.createQuery("DELETE FROM " + nameClass + " WHERE " + nameField + "=" + id).executeUpdate();
-		
+
 		} catch (Exception ex) {
 			throw new RepositoryException(ex);
 		}
@@ -568,18 +571,16 @@ public abstract class BaseRepository<T, JOIN> {
 		}
 	}
 
-	public T getById(int objId) throws RepositoryException {
-		
+	public T getById(Object objId, Class<T> classEntity) throws RepositoryException {
+
+		setClass(classEntity);
+
 		return retrieveById(objId, em);
 
-	}
-
-	public T getById(String objId) throws RepositoryException {
-		
-		return retrieveById(objId, em);
 	}
 
 	private T retrieveById(Object objId, EntityManager em) throws RepositoryException {
+
 		T obj = null;
 		try {
 			obj = (T) em.find(classEntity, objId);
@@ -600,7 +601,7 @@ public abstract class BaseRepository<T, JOIN> {
 	}
 
 	public List<T> search(BOSerializeCriteria serializeCriteria) throws RepositoryException {
-		
+
 		return search(buildCriteriaQuery(serializeCriteria));
 	}
 
@@ -613,7 +614,7 @@ public abstract class BaseRepository<T, JOIN> {
 			log.error("Errore durante la ricerca di entita " + e.getMessage(), e);
 			throw new RepositoryException(e);
 
-		} 
+		}
 	}
 
 	public T getSingle(CriteriaQuery<T> criteria) throws RepositoryException {
@@ -720,7 +721,7 @@ public abstract class BaseRepository<T, JOIN> {
 			log.error("Errore durante il count di entita " + e.getMessage(), e);
 			throw new RepositoryException(e);
 
-		} 
+		}
 	}
 
 	public Number getMax(String nameField) throws RepositoryException {
@@ -732,7 +733,7 @@ public abstract class BaseRepository<T, JOIN> {
 			log.error("Errore durante il recupero del max di entita " + e.getMessage(), e);
 			throw new RepositoryException(e);
 
-		} 
+		}
 	}
 
 	public Number getMax(String nameField, EntityManager em) throws RepositoryException {

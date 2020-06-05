@@ -88,7 +88,7 @@ public class MainService implements IMainService {
 			toAdd.setIpaddress(utentecorrente.getInforemote());
 			toAdd.setDescrizione(messaggio);
 			toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
-			repocommands.setEntity(CommonLogaccesso.class).add(toAdd);
+			repocommands.add(toAdd);
 
 			log.info("---> " + messaggio);
 

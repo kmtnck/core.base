@@ -120,7 +120,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 				String scarabocchio = RandomScraps.generaFrase();
 				result.setScarabocchio(scarabocchio);
 				data.setScarabocchio(scarabocchio);
-				repocommands.setEntity(GestioneUtenti.class).update(data);
+				repocommands.update(data);
 
 			} catch (ServiceException | RepositoryException e) {
 				log.warn("Non e' stato possibile recuperare i dati dell'utente", e);
@@ -146,9 +146,9 @@ public class SecurityService extends AuthContext implements ISecurityService {
 					.setEntity(GestioneUtentiOauth.class).getSingleOrDefault(criteria.getSerialized());
 
 			if (data != null) {
-				repocommands.setEntity(GestioneUtentiOauthSessioni.class).deleteFromId(data.getIdouth(),
+				repocommands.deleteFromId(data.getIdouth(),
 						"idouth");
-				repocommands.setEntity(GestioneUtentiOauth.class).delete(data);
+				repocommands.delete(data);
 				result.setEsito("Utente " + email + " rimosso con successo!");
 			}
 
@@ -223,7 +223,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 						toAdd.setEmail(email);
 						toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
 
-						repocommands.setEntity(GestioneUtentiOauth.class).add(toAdd);
+						repocommands.add(toAdd);
 
 						result.setEsito("Utente registrato con successo al " + Constants.TITOLO_APP + ".");
 						result.setStato("SUCCESSLOGIN");
@@ -268,7 +268,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 						toAdd.setValidita(tokenInfo.getExpires_in().intValue());
 						toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
 						// toAdd.setDataemissione(tokenInfo.getFirst_issued_at());
-						repocommands.setEntity(GestioneUtentiOauthSessioni.class).add(toAdd);
+						repocommands.add(toAdd);
 					}
 
 					criteria = new BOSearchApp();
@@ -514,7 +514,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 								info.setScarabocchio(scarabocchio);
 								info.setCookie(utenteCorrente.getCookies());
 
-								repocommands.setEntity(CommonBlacklist.class).update(info);
+								repocommands.update(info);
 
 							} else {
 
@@ -526,7 +526,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 								info.setScarabocchio(scarabocchio);
 								info.setCookie(utenteCorrente.getCookies());
 								info.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
-								repocommands.setEntity(CommonBlacklist.class).add(info);
+								repocommands.add(info);
 
 							}
 
@@ -641,13 +641,13 @@ public class SecurityService extends AuthContext implements ISecurityService {
 							newUser.setNickname(utenteCorrente.getNickname());
 							newUser.setPublickey(keys[0]);
 							newUser.setPrivatekey(keys[1]);
-							repocommands.setEntity(GestioneUtenti.class).add(newUser);
+							repocommands.add(newUser);
 
 							BOSearchApp searcher = new BOSearchApp();
 							searcher.setNickname(utenteCorrente.getNickname());
 							CommonBlacklist removeBlackListed = (CommonBlacklist) repoquery
 									.setEntity(CommonBlacklist.class).getSingle(searcher.getSerialized());
-							repocommands.setEntity(CommonBlacklist.class).delete(removeBlackListed);
+							repocommands.delete(removeBlackListed);
 
 							esito = "Registrazione avvenuta con successo! Benvenuto " + utenteCorrente.getNickname()
 									+ "!! " + avvertenza;
@@ -756,7 +756,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 		toAdd.setIpaddress(utenteCorrente.getInforemote());
 		toAdd.setDescrizione(esito);
 		toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
-		repocommands.setEntity(CommonBlacklist.class).add(toAdd);
+		repocommands.add(toAdd);
 
 		result.setUsername(utenteCorrente.getNickname());
 		result.setEsito(esito);

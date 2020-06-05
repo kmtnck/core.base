@@ -26,6 +26,7 @@ public class AppRepository<T, JOIN> extends BaseRepository<T, JOIN> implements I
 
 	private static final Logger log = Logger.getLogger(AppRepository.class);
 
+	@Deprecated
 	@Override
 	public AppRepository<T, JOIN> setEntity(Class<T> classEntity) {
 		// TODO Auto-generated method stub

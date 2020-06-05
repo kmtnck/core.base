@@ -19,7 +19,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BOSerializeCriteria implements Serializable  {
 
-	private Class classSearcher;
+	private Class classEntity;
+	
 
 	private List<String> listEntityGraph = new ArrayList<String>();
 	private List<BOJoinClause> listJoinClause = new ArrayList<BOJoinClause>();
@@ -127,14 +128,6 @@ public class BOSerializeCriteria implements Serializable  {
 		this.listOrClause = listOrClause;
 	}
 
-	public void setClassSearcher(Class classSearcher) {
-		this.classSearcher = classSearcher;
-	}
-
-	public Class getClassSearcher() {
-		return classSearcher;
-	}
-
 	public int getMaxResult() {
 		return maxResult;
 	}
@@ -221,5 +214,13 @@ public class BOSerializeCriteria implements Serializable  {
 
 	public void setListJoinClause(List<BOJoinClause> listJoinClause) {
 		this.listJoinClause = listJoinClause;
+	}
+
+	public Class getClassEntity() {
+		return classEntity;
+	}
+
+	public void setClassEntity(Class classEntity) {
+		this.classEntity = classEntity;
 	}
 }

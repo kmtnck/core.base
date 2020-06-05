@@ -131,7 +131,7 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 
 			ExtractURIValue values = new ExtractURIValue(info);
 			Class<?> classEntity = Class.forName(values.getValue(Constants.CLASSNAME));
-			Object result = (Object) AppRoot.reader.setEntity(classEntity).getById(id);
+			Object result = (Object) AppRoot.reader.getById(id, classEntity);
 
 			return result;
 

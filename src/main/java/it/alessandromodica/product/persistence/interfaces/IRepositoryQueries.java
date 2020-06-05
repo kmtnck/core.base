@@ -10,11 +10,17 @@ import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
 
 public interface IRepositoryQueries<T, JOIN> {
 
+	/**
+	 * E' possibile definire la classe entita di ricerca tramite il searcher e per
+	 * il getById lo si fornisce in input
+	 * 
+	 * @param classEntity
+	 * @return
+	 */
+	@Deprecated
 	public AppRepository<T, JOIN> setEntity(Class<T> classEntity);
 	
-	public T getById(int objId) throws RepositoryException;
-	
-	public T getById(String objId) throws RepositoryException;
+	public T getById(Object objId, Class<T> classEntity) throws RepositoryException;
 	
 	public List<T> search(CriteriaQuery<T> criteria) throws RepositoryException;
 

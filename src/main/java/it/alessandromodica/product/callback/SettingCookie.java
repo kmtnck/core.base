@@ -66,7 +66,7 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 							if (!obj.getValueparametro().equals(valoreparametro)) {
 								obj.setValueparametro(valoreparametro);
 
-								repocommands.setEntity(GestioneUtentiInfoautenticazione.class).update(obj);
+								repocommands.update(obj);
 
 								log.info("<<<S Il Cookie e' stato aggiornato: da [" + obj.getValueparametro() + "] a ["
 										+ valoreparametro + "]");
