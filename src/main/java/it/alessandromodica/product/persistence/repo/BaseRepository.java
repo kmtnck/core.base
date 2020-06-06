@@ -54,7 +54,7 @@ public abstract class BaseRepository<T, JOIN> {
 
 	protected Class<T> classEntity;
 
-	private void setClass(Class<T> classEntity) {
+	protected void setClass(Class<T> classEntity) {
 
 		if (classEntity != null) {
 			this.nameClass = classEntity.getName();

@@ -26,14 +26,14 @@ public class AppRepository<T, JOIN> extends BaseRepository<T, JOIN> implements I
 
 	private static final Logger log = Logger.getLogger(AppRepository.class);
 
-	/*@Deprecated
+	@Deprecated
 	@Override
 	public AppRepository<T, JOIN> setEntity(Class<T> classEntity) {
 		// TODO Auto-generated method stub
 		setClass(classEntity);
 		return this;
 
-	}*/
+	}
 
 	public List<BOUtentiConnessi> callUtentiLoggati(int periodo, String nickname) throws RepositoryException {
 		try {
