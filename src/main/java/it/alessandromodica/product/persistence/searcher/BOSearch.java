@@ -14,10 +14,13 @@ import org.apache.commons.lang.StringUtils;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 
 /**
- * Classe astratta che rappresenta il criterio di ricerca definito in input in una generica richiesta di ricerca sul datastorage.
- * Estende la classe BOBase per poter serializzare in una mappatura i valori.
- * Sono presenti valori statici di tipo stringa utilizzati dal metodo _buildItemClause e dal chiamante BaseRepository.
- * Il metodo _buildItemClause ritorna l'oggetto BOSerializeCritera il quale e' l'unico oggetto riconosciuto dal BaseRepository
+ * Classe astratta che rappresenta il criterio di ricerca definito in input in
+ * una generica richiesta di ricerca sul datastorage. Estende la classe BOBase
+ * per poter serializzare in una mappatura i valori. Sono presenti valori
+ * statici di tipo stringa utilizzati dal metodo _buildItemClause e dal
+ * chiamante BaseRepository. Il metodo _buildItemClause ritorna l'oggetto
+ * BOSerializeCritera il quale e' l'unico oggetto riconosciuto dal
+ * BaseRepository
  * 
  * @author Alessandro
  *
@@ -46,7 +49,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	public static final String VALUE_FROM_DATE = "valueFromDate";
 
 	private Class<?> classEntity;
-	
+
 	private Map<String, Object> listEquals = new HashMap<String, Object>();
 
 	private List<BOJoinClause> listJoinClause = new ArrayList<BOJoinClause>();
@@ -60,7 +63,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 	@Deprecated
 	private boolean descendent = false;
-	private Map<String,Boolean> mapDescendent = new HashMap<String,Boolean>();
+	private Map<String, Boolean> mapDescendent = new HashMap<String, Boolean>();
 
 	private List<String> listEntityGraph = new ArrayList<String>();
 
@@ -77,11 +80,15 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	private int maxResult;
 	private int firstResult;
 
-	public BOSearch(Class<?> classEntity)
-	{
+	@Deprecated
+	public BOSearch() {
+
+	}
+
+	public BOSearch(Class<?> classEntity) {
 		this.classEntity = classEntity;
 	}
-	
+
 	public static void setClauseInList(String nameField, Object[] data, BOSearch searcher) {
 		if (data != null && data.length > 0)
 			searcher.getListIn().put(nameField, data);
@@ -112,7 +119,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			searcher.getListBetweenClause().add(btw);
 		}
 	}
-	
+
 	public BOSerializeCriteria getSerialized() throws RepositoryException {
 		return _buildItemClause(this);
 	}
@@ -126,11 +133,11 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		result.setListEquals(_serializeBusinessClause(searcher));
 
 		result.getListEquals().putAll(searcher.getListEquals());
-		
+
 		result.setListEntityGraph(searcher.getListEntityGraph());
-		
+
 		result.setListJoinClause(searcher.getListJoinClause());
-		
+
 		// between
 		for (BOBetweenClause cBT : searcher.getListBetweenClause()) {
 			Map<String, Object> serializeBT = new HashMap<String, Object>();
@@ -152,9 +159,10 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 		for (BOOperatorClause cOper : searcher.getListOperatorClause()) {
 			Map<String, Object> serOper = _serializeBusinessClause(cOper);
-			/*if (cOper.get_valueDouble() == 0 && cOper.get_valueInt() == 0) {
-				serOper.put(VALUE_INT, 0);
-			}*/
+			/*
+			 * if (cOper.get_valueDouble() == 0 && cOper.get_valueInt() == 0) {
+			 * serOper.put(VALUE_INT, 0); }
+			 */
 
 			result.getListOperator().add(serOper);
 		}
@@ -182,9 +190,9 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		for (Map.Entry<String, Boolean> cValueDesc : searcher.getMapDescendent().entrySet()) {
 			result.getMapDescendent().put(cValueDesc.getKey(), cValueDesc.getValue());
 		}
-		
+
 		for (String cValueBool : searcher.getListValueBool().keySet()) {
-			result.getListValueBool().put(cValueBool,searcher.getListValueBool().get(cValueBool));
+			result.getListValueBool().put(cValueBool, searcher.getListValueBool().get(cValueBool));
 		}
 
 		for (String cIn : searcher.getListIn().keySet()) {
@@ -221,17 +229,16 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			Field[] fieldsclass = classEntity.getDeclaredFields();
 			Field[] fieldsuperclass = classEntity.getSuperclass().getDeclaredFields();
 
-	        int aLen = fieldsclass.length;
-	        int bLen = fieldsuperclass.length;
-	        Field[] fields = new Field[aLen + bLen];
+			int aLen = fieldsclass.length;
+			int bLen = fieldsuperclass.length;
+			Field[] fields = new Field[aLen + bLen];
 
-	        System.arraycopy(fieldsclass, 0, fields, 0, aLen);
-	        System.arraycopy(fieldsuperclass, 0, fields, aLen, bLen);
-	        
-			
+			System.arraycopy(fieldsclass, 0, fields, 0, aLen);
+			System.arraycopy(fieldsuperclass, 0, fields, aLen, bLen);
+
 			for (Object cobj : fields) {
-				Field cfield = (Field)cobj;
-				
+				Field cfield = (Field) cobj;
+
 				boolean isStaticField = java.lang.reflect.Modifier.isStatic(cfield.getModifiers())
 						&& java.lang.reflect.Modifier.isFinal(cfield.getModifiers());
 				if (isStaticField)
