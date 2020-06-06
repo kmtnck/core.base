@@ -24,6 +24,7 @@ import it.alessandromodica.product.persistence.interfaces.IUnitOfWork;
  * @author Alessandro
  *
  */
+@Deprecated
 @Component
 public class UnitOfWork implements IUnitOfWork {
 

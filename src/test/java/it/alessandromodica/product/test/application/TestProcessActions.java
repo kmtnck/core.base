@@ -142,10 +142,10 @@ public class TestProcessActions extends TestCase {
 			BOLikeClause testSearch = new BOLikeClause();
 			testSearch.setNameField("email");
 			testSearch.setValue("alessandro.modica@gmail.com");
-			BOSearchApp criteria = new BOSearchApp();
+			BOSearchApp criteria = new BOSearchApp(GestioneUtenti.class);
 			criteria.getListLikeClause().add(testSearch);
 
-			List<GestioneUtenti> fromDb = repoquery.setEntity(GestioneUtenti.class)
+			List<GestioneUtenti> fromDb = repoquery
 					.search(criteria.getSerialized());
 
 			if (fromDb.isEmpty())
@@ -168,10 +168,10 @@ public class TestProcessActions extends TestCase {
 	public void testSearch() throws ServiceException {
 
 		try {
-			BOSearchApp criteria = new BOSearchApp();
+			BOSearchApp criteria = new BOSearchApp(GestioneUtenti.class);
 			criteria.setNickname("Gunny13");
 
-			List<GestioneUtenti> fromDb = repoquery.setEntity(GestioneUtenti.class)
+			List<GestioneUtenti> fromDb = repoquery
 					.search(criteria.getSerialized());
 
 			if (fromDb.isEmpty())
@@ -220,7 +220,7 @@ public class TestProcessActions extends TestCase {
 	public void testElencoUtenti() throws BusinessException {
 		// TODO Auto-generated method stub
 		String searcher = "min";
-		BOSearchApp criteria = new BOSearchApp();
+		BOSearchApp criteria = new BOSearchApp(GestioneUtenti.class);
 		BOLikeClause likeClause = new BOLikeClause();
 		likeClause.setInsensitive(true);
 		likeClause.setNameField("nickname");
@@ -230,7 +230,7 @@ public class TestProcessActions extends TestCase {
 		try {
 			OutputData dataResult = new OutputData();
 
-			List<GestioneUtenti> result = repoquery.setEntity(GestioneUtenti.class)
+			List<GestioneUtenti> result = repoquery
 					.search(criteria.getSerialized());
 			dataResult.setPayload(result);
 
@@ -254,9 +254,9 @@ public class TestProcessActions extends TestCase {
 			toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
 			repocommand.add(toAdd);
 
-			BOSearchApp testsearch = new BOSearchApp();
+			BOSearchApp testsearch = new BOSearchApp(CommonLogaccesso.class);
 			testsearch.setDescrizione("Adesso facciamo un altro test!!");
-			List<CommonLogaccesso> resulttest = repoquery.setEntity(CommonLogaccesso.class)
+			List<CommonLogaccesso> resulttest = repoquery
 					.search(testsearch.getSerialized());
 
 			if (resulttest == null)
@@ -292,15 +292,15 @@ public class TestProcessActions extends TestCase {
 			 * .getFirstOrDefault(Restrictions.eq("coordinate", "44.836,11.5989"));
 			 */
 			BOSearchApp criteria;
-			criteria = new BOSearchApp();
+			criteria = new BOSearchApp(CommonBlacklist.class);
 			criteria.setDescrizione("test");
 			criteria.getListIsNull().add("keyaccess");
 
-			List<CommonBlacklist> result = repoquery.setEntity(CommonBlacklist.class)
+			List<CommonBlacklist> result = repoquery
 					.search(criteria.getSerialized());
 
 			Assert.assertTrue(result != null);
-			int value = repoquery.setEntity(CommonBlacklist.class).getCount(criteria.getSerialized());
+			int value = repoquery.getCount(criteria.getSerialized());
 
 			Assert.assertTrue(value == 0);
 

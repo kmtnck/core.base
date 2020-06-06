@@ -77,6 +77,11 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	private int maxResult;
 	private int firstResult;
 
+	public BOSearch(Class<?> classEntity)
+	{
+		this.classEntity = classEntity;
+	}
+	
 	public static void setClauseInList(String nameField, Object[] data, BOSearch searcher) {
 		if (data != null && data.length > 0)
 			searcher.getListIn().put(nameField, data);

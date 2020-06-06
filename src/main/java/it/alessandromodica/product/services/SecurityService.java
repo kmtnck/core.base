@@ -140,26 +140,23 @@ public class SecurityService extends AuthContext implements ISecurityService {
 
 		try {
 
-			BOSearchApp criteria = new BOSearchApp();
+			BOSearchApp criteria = new BOSearchApp(GestioneUtentiOauth.class);
 			criteria.setEmail(email);
-			GestioneUtentiOauth data = (GestioneUtentiOauth) repoquery
-					.setEntity(GestioneUtentiOauth.class).getSingleOrDefault(criteria.getSerialized());
+			GestioneUtentiOauth data = (GestioneUtentiOauth) repoquery.getSingleOrDefault(criteria.getSerialized());
 
 			if (data != null) {
-				repocommands.deleteFromId(data.getIdouth(),
-						"idouth");
+				repocommands.deleteFromId(data.getIdouth(), "idouth");
 				repocommands.delete(data);
 				result.setEsito("Utente " + email + " rimosso con successo!");
 			}
 
-			criteria = new BOSearchApp();
+			criteria = new BOSearchApp(VGestioneUtentiOuth.class);
 			criteria.setNickname(nickname);
 
 			// XXX: applicare la propria logica di individuazione utente con la
 			// propria infrastruttura
 
-			VGestioneUtentiOuth statoapp = (VGestioneUtentiOuth) repoquery.setEntity(VGestioneUtentiOuth.class)
-					.getSingleOrDefault(criteria.getSerialized());
+			VGestioneUtentiOuth statoapp = (VGestioneUtentiOuth) repoquery.getSingleOrDefault(criteria.getSerialized());
 
 			if (statoapp != null)
 				result.setStatoutente(statoapp.getStato());
@@ -209,11 +206,10 @@ public class SecurityService extends AuthContext implements ISecurityService {
 			if (validToken) {
 				try {
 
-					BOSearchApp criteria = new BOSearchApp();
+					BOSearchApp criteria = new BOSearchApp(GestioneUtentiOauth.class);
 					criteria.setEmail(email);
 
-					int checkauth = repoquery.setEntity(GestioneUtentiOauth.class)
-							.getCount(criteria.getSerialized());
+					int checkauth = repoquery.getCount(criteria.getSerialized());
 
 					if (checkauth == 0) {
 						GestioneUtentiOauth toAdd = new GestioneUtentiOauth();
@@ -230,11 +226,10 @@ public class SecurityService extends AuthContext implements ISecurityService {
 
 					} else {
 
-						criteria = new BOSearchApp();
+						criteria = new BOSearchApp(GestioneUtentiOauthSessioni.class);
 						criteria.setIdtoken(idtoken);
 
-						int checksessione = repoquery.setEntity(GestioneUtentiOauthSessioni.class)
-								.getCount(criteria.getSerialized());
+						int checksessione = repoquery.getCount(criteria.getSerialized());
 
 						if (checksessione == 0) {
 							result.setEsito("Utente " + email
@@ -248,11 +243,11 @@ public class SecurityService extends AuthContext implements ISecurityService {
 					}
 
 					if (canAddSession) {
-						criteria = new BOSearchApp();
+						criteria = new BOSearchApp(GestioneUtentiOauth.class);
 						criteria.setEmail(email);
 
 						GestioneUtentiOauth poauth = ((GestioneUtentiOauth) repoquery
-								.setEntity(GestioneUtentiOauth.class)
+
 								.getFirstOrDefault(criteria.getSerialized()));
 
 						GestioneUtentiOauthSessioni toAdd = new GestioneUtentiOauthSessioni();
@@ -271,13 +266,13 @@ public class SecurityService extends AuthContext implements ISecurityService {
 						repocommands.add(toAdd);
 					}
 
-					criteria = new BOSearchApp();
+					criteria = new BOSearchApp(VGestioneUtentiOuth.class);
 					criteria.setNickname(payload.getNickname());
 
 					// XXX: applicare la propria logica di individuazione utente
 					// con la propria infrastruttura
 
-					VGestioneUtentiOuth dataoauth = (VGestioneUtentiOuth) repoquery.setEntity(VGestioneUtentiOuth.class)
+					VGestioneUtentiOuth dataoauth = (VGestioneUtentiOuth) repoquery
 							.getSingleOrDefault(criteria.getSerialized());
 
 					if (dataoauth != null)
@@ -398,11 +393,11 @@ public class SecurityService extends AuthContext implements ISecurityService {
 			BOSearchApp criteria;
 			try {
 
-				criteria = new BOSearchApp();
+				criteria = new BOSearchApp(GestioneUtenti.class);
 
 				criteria.getListIsNull().add("keyaccess");
 
-				check = repoquery.setEntity(CommonBlacklist.class).getCount(criteria.getSerialized());
+				check = repoquery.getCount(criteria.getSerialized());
 
 				// XXX: l'utente non è in blacklist.
 				// si verifica che tipo di utente e'
@@ -421,10 +416,10 @@ public class SecurityService extends AuthContext implements ISecurityService {
 						String checkcookie = getSecureCookie(cookies, "csrftoken");
 
 						// XXX:utente gia' registrato
-						criteria = new BOSearchApp();
+						criteria = new BOSearchApp(VGestioneUtenti.class);
 						criteria.setNickname(utenteCorrente.getNickname());
 						VGestioneUtenti inforegistrazione = (VGestioneUtenti) repoquery
-								.setEntity(GestioneUtenti.class).getSingleOrDefault(criteria.getSerialized());
+								.getSingleOrDefault(criteria.getSerialized());
 
 						// se l'autenticazione è andata a buon fine decidi
 						// tu che cosa vuoi farli fare a questo utente (e
@@ -492,11 +487,10 @@ public class SecurityService extends AuthContext implements ISecurityService {
 						String esito = "In attesa di approvazione all'accesso al sistema.";
 
 						// XXX: fase di registrazione di un nuovo utente
-						criteria = new BOSearchApp();
+						criteria = new BOSearchApp(CommonBlacklist.class);
 						// criteria.setPlayer(utenteCorrente.getNickname());
 						criteria.getListIsNotNull().add("keyaccess");
-						List<CommonBlacklist> list = repoquery.setEntity(CommonBlacklist.class)
-								.search(criteria.getSerialized());
+						List<CommonBlacklist> list = repoquery.search(criteria.getSerialized());
 
 						String registerpasscode = null;
 						try {
@@ -587,14 +581,14 @@ public class SecurityService extends AuthContext implements ISecurityService {
 
 		try {
 
-			BOSearchApp criteria = new BOSearchApp();
+			BOSearchApp criteria = new BOSearchApp(GestioneUtenti.class);
 			criteria.setNickname(utenteCorrente.getNickname());
-			GestioneUtenti utenteregistrato = (GestioneUtenti) repoquery
-					.setEntity(GestioneUtenti.class).getSingleOrDefault(criteria.getSerialized());
+			GestioneUtenti utenteregistrato = (GestioneUtenti) repoquery.getSingleOrDefault(criteria.getSerialized());
 
 			if (utenteregistrato != null) {
+				criteria.setClassEntity(GestioneUtentiOauth.class);
 				GestioneUtentiOauth dataoauth = (GestioneUtentiOauth) repoquery
-						.setEntity(GestioneUtentiOauth.class).getSingleOrDefault(criteria.getSerialized());
+						.getSingleOrDefault(criteria.getSerialized());
 
 				if (utenteCorrente != null) {
 					if (dataoauth != null) {
@@ -607,11 +601,10 @@ public class SecurityService extends AuthContext implements ISecurityService {
 
 			} else {
 
-				criteria = new BOSearchApp();
+				criteria = new BOSearchApp(CommonBlacklist.class);
 				criteria.setNickname(utenteCorrente.getNickname());
 				criteria.getListIsNotNull().add("keyaccess");
-				CommonBlacklist info = (CommonBlacklist) repoquery.setEntity(CommonBlacklist.class)
-						.getSingleOrDefault(criteria.getSerialized());
+				CommonBlacklist info = (CommonBlacklist) repoquery.getSingleOrDefault(criteria.getSerialized());
 
 				if (info != null) {
 					String keyaccess = info.getKeyaccess();
@@ -619,10 +612,10 @@ public class SecurityService extends AuthContext implements ISecurityService {
 
 					String cipher = md5(keyaccess + scarabocchio);
 
-					criteria = new BOSearchApp();
+					criteria = new BOSearchApp(GestioneUtentiOauth.class);
 					criteria.setNickname(utenteCorrente.getNickname());
 					GestioneUtentiOauth dataoauth = (GestioneUtentiOauth) repoquery
-							.setEntity(GestioneUtentiOauth.class).getSingleOrDefault(criteria.getSerialized());
+							.getSingleOrDefault(criteria.getSerialized());
 
 					if (dataoauth != null) {
 
@@ -643,10 +636,10 @@ public class SecurityService extends AuthContext implements ISecurityService {
 							newUser.setPrivatekey(keys[1]);
 							repocommands.add(newUser);
 
-							BOSearchApp searcher = new BOSearchApp();
+							BOSearchApp searcher = new BOSearchApp(CommonBlacklist.class);
 							searcher.setNickname(utenteCorrente.getNickname());
 							CommonBlacklist removeBlackListed = (CommonBlacklist) repoquery
-									.setEntity(CommonBlacklist.class).getSingle(searcher.getSerialized());
+									.getSingle(searcher.getSerialized());
 							repocommands.delete(removeBlackListed);
 
 							esito = "Registrazione avvenuta con successo! Benvenuto " + utenteCorrente.getNickname()
@@ -665,11 +658,10 @@ public class SecurityService extends AuthContext implements ISecurityService {
 
 			}
 
-			criteria = new BOSearchApp();
+			criteria = new BOSearchApp(VGestioneUtentiOuth.class);
 			criteria.setNickname(utenteCorrente.getNickname());
 
-			VGestioneUtentiOuth soauth = (VGestioneUtentiOuth) repoquery.setEntity(VGestioneUtentiOuth.class)
-					.getSingleOrDefault(criteria.getSerialized());
+			VGestioneUtentiOuth soauth = (VGestioneUtentiOuth) repoquery.getSingleOrDefault(criteria.getSerialized());
 			String statoutente = "Non definito";
 			if (soauth != null) {
 				statoutente = soauth.getStato();
@@ -698,10 +690,10 @@ public class SecurityService extends AuthContext implements ISecurityService {
 			if (utenteCorrente.getTokenapp().equals("bot")) {
 				esito = true;
 			} else {
-				BOSearchApp criteria = new BOSearchApp();
+				BOSearchApp criteria = new BOSearchApp(GestioneApps.class);
 				criteria.setTokenapp(utenteCorrente.getTokenapp());
 				try {
-					repoquery.setEntity(GestioneApps.class).getSingle(criteria.getSerialized());
+					repoquery.getSingle(criteria.getSerialized());
 					esito = true;
 
 				} catch (Exception e) {

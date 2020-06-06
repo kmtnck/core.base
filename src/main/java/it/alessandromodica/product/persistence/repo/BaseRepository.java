@@ -24,7 +24,6 @@ import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Selection;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import it.alessandromodica.product.common.exceptions.RepositoryException;
@@ -33,7 +32,6 @@ import it.alessandromodica.product.persistence.searcher.BOJoinClause;
 import it.alessandromodica.product.persistence.searcher.BOOperatorClause.Operators;
 import it.alessandromodica.product.persistence.searcher.BOSearch;
 import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
-import it.alessandromodica.product.persistence.uow.UnitOfWork;
 
 /**
  * Classe astratta in cui sono raccolte le implementazioni standard per
@@ -56,7 +54,7 @@ public abstract class BaseRepository<T, JOIN> {
 
 	protected Class<T> classEntity;
 
-	protected void setClass(Class<T> classEntity) {
+	private void setClass(Class<T> classEntity) {
 
 		if (classEntity != null) {
 			this.nameClass = classEntity.getName();
@@ -66,11 +64,16 @@ public abstract class BaseRepository<T, JOIN> {
 
 	protected String nameClass;
 
-	@Autowired
-	protected UnitOfWork uow;
-
 	public void executeTransaction(IBulkTransaction bulkoperation) throws RepositoryException {
-		uow.submit(bulkoperation);
+		try {
+
+			bulkoperation.persist();
+
+			log.info("Istruzioni in transazione eseguite correttamente!");
+		} catch (Exception ex) {
+			log.error("Si e' verificato un errore durante una transazione db", ex);
+			throw new RepositoryException(ex.getMessage(), ex);
+		}
 	}
 
 	protected Query buildCriteriaQuery(BOSerializeCriteria serializeCriteria) throws RepositoryException {

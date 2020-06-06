@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaQuery;
 
 import it.alessandromodica.product.common.exceptions.RepositoryException;
-import it.alessandromodica.product.persistence.repo.AppRepository;
 import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
 
 public interface IRepositoryQueries<T, JOIN> {
@@ -17,8 +16,8 @@ public interface IRepositoryQueries<T, JOIN> {
 	 * @param classEntity
 	 * @return
 	 */
-	@Deprecated
-	public AppRepository<T, JOIN> setEntity(Class<T> classEntity);
+	//@Deprecated
+	//public AppRepository<T, JOIN> setEntity(Class<T> classEntity);
 	
 	public T getById(Object objId, Class<T> classEntity) throws RepositoryException;
 	

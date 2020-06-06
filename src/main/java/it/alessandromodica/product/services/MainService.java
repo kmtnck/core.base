@@ -54,13 +54,13 @@ public class MainService implements IMainService {
 	 * Recupera le informazioni dell'utente corrente
 	 */
 	public GestioneUtenti getUtente(String nickname) throws ServiceException {
-		BOSearchApp search = new BOSearchApp();
+		BOSearchApp search = new BOSearchApp(GestioneUtenti.class);
 		search.setNickname(nickname);
 		try {
 
 			GestioneUtenti result;
 			try {
-				result = (GestioneUtenti) repoquery.setEntity(GestioneUtenti.class)
+				result = (GestioneUtenti) repoquery//.setEntity(GestioneUtenti.class)
 						.getSingleOrDefault(search.getSerialized());
 				return result;
 

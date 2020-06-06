@@ -46,8 +46,8 @@ public class ConsultazioneService extends AuthContext implements IAppService {
 	}
 
 	private List<VUtentiLoggatiDettaglio> recoverUtenti() throws RepositoryException {
-		List<VUtentiLoggatiDettaglio> result = repoquery.setEntity(VUtentiLoggatiDettaglio.class)
-				.search(new BOSearchApp().getSerialized());
+		List<VUtentiLoggatiDettaglio> result = repoquery//.setEntity(VUtentiLoggatiDettaglio.class)
+				.search(new BOSearchApp(VUtentiLoggatiDettaglio.class).getSerialized());
 
 		return result;
 	}

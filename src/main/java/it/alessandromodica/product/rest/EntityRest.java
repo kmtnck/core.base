@@ -109,8 +109,8 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 
 			ExtractURIValue values = new ExtractURIValue(info);
 			Class<?> classEntity = Class.forName(values.getValue(Constants.CLASSNAME));
-			
-			List<Object> result = (List<Object>) AppRoot.reader.setEntity(classEntity).search(searcher);
+			searcher.setClassEntity(classEntity);
+			List<Object> result = (List<Object>) AppRoot.reader.search(searcher);
 
 			return result;
 
@@ -151,7 +151,8 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 
 			ExtractURIValue values = new ExtractURIValue(info);
 			Class<?> classEntity = Class.forName(values.getValue(Constants.CLASSNAME));
-			int result = AppRoot.reader.setEntity(classEntity).getCount(searcher);
+			searcher.setClassEntity(classEntity);
+			int result = AppRoot.reader.getCount(searcher);
 
 			return result;
 

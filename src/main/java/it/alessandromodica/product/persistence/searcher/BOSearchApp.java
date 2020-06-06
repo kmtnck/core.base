@@ -13,6 +13,10 @@ import java.util.Date;
  */
 public class BOSearchApp extends BOSearch {
 
+	public BOSearchApp(Class<?> classEntity) {
+		super(classEntity);
+	}
+
 	/**
 	 * 
 	 */
