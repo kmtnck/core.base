@@ -195,7 +195,7 @@ public class TestProcessActions extends TestCase {
 
 		BOUtente testUtente = (BOUtente) MainApplication.getPojo(rawUtente, BOUtente.class);
 
-		security.setInfo(testUtente);
+		security.setUtenteCorrente(testUtente);
 
 		security.generaScarabocchio();
 

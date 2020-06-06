@@ -33,7 +33,6 @@ import it.alessandromodica.product.context.security.Cassaforte;
 import it.alessandromodica.product.model.bo.BOCoordinate;
 import it.alessandromodica.product.model.bo.BODecoderAddress;
 import it.alessandromodica.product.model.bo.BOUtente;
-import it.alessandromodica.product.model.po.GestioneUtenti;
 import it.alessandromodica.product.services.interfaces.IMainService;
 
 /**

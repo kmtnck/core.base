@@ -9,7 +9,7 @@ import it.alessandromodica.product.model.bo.BOVerifica;
 
 public interface ISecurity {
 
-	public void setInfo(BOUtente utente);
+	
 	
 	public boolean checkAccessoUtente() throws BusinessException;
 
@@ -24,5 +24,7 @@ public interface ISecurity {
 	public BOSignGoogle outhsignout(String email, String nickname) throws BusinessException;
 	
 	public BOUtente getUtenteCorrente();
+	
+	public void setUtenteCorrente(BOUtente utente);
 	
 }
