@@ -68,7 +68,10 @@ import it.alessandromodica.product.services.interfaces.ISecurityService;
  */
 @Service
 @SuppressWarnings("unchecked")
-public class SecurityService extends AuthContext implements ISecurityService {
+public class SecurityService implements ISecurityService {
+
+	@Autowired
+	protected AuthContext authContext;
 
 	@Autowired
 	protected IRepositoryQueries repoquery;
@@ -96,7 +99,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 			// questo controllo e' eseguito ad ogni richiesta . E' il metodo che
 			// funge da gestore permessi di accesso
 			if (!esito) {
-				esito = esitoCipher(utenteCorrente);
+				esito = esitoCipher(authContext.getUtenteCorrente());
 			}
 
 			return esito;
@@ -111,12 +114,12 @@ public class SecurityService extends AuthContext implements ISecurityService {
 
 		BOSecurity result = new BOSecurity();
 
-		if (utenteCorrente.getPrivatekey() != null) {
-			result.setPublickey(utenteCorrente.getPublickey());
-			result.setPasscode(utenteCorrente.getPublickey() + utenteCorrente.getPrivatekey());
+		if (authContext.getUtenteCorrente().getPrivatekey() != null) {
+			result.setPublickey(authContext.getUtenteCorrente().getPublickey());
+			result.setPasscode(authContext.getUtenteCorrente().getPublickey() + authContext.getUtenteCorrente().getPrivatekey());
 			try {
 
-				GestioneUtenti data = _mainService.getUtente(utenteCorrente.getNickname());
+				GestioneUtenti data = _mainService.getUtente(authContext.getUtenteCorrente().getNickname());
 				String scarabocchio = RandomScraps.generaFrase();
 				result.setScarabocchio(scarabocchio);
 				data.setScarabocchio(scarabocchio);
@@ -324,7 +327,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 		BOSecurity result = new BOSecurity();
 		result.setStatus(true);
 		result.setStatoutente("Abile e arruolato");
-		result.setUsername(utenteCorrente.getNickname());
+		result.setUsername(authContext.getUtenteCorrente().getNickname());
 
 		return result;
 	}
@@ -338,8 +341,8 @@ public class SecurityService extends AuthContext implements ISecurityService {
 
 		BOVerifica result = new BOVerifica();
 
-		result.setUsername(utenteCorrente.getNickname());
-		result.setTeam(utenteCorrente.getTeam());
+		result.setUsername(authContext.getUtenteCorrente().getNickname());
+		result.setTeam(authContext.getUtenteCorrente().getTeam());
 		result.setEsito("Tutto ok");
 		result.setStato(true);
 		result.setStatoutente("VERIFICATO");
@@ -387,7 +390,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 
 		try {
 
-			_mainService.logAccesso("Avvio sessione di qualsiasi cosa tu abbia in mente " + versione, utenteCorrente);
+			_mainService.logAccesso("Avvio sessione di qualsiasi cosa tu abbia in mente " + versione, authContext.getUtenteCorrente());
 
 			int check;
 			BOSearchApp criteria;
@@ -410,14 +413,14 @@ public class SecurityService extends AuthContext implements ISecurityService {
 					 */
 
 					// verifica se e' un nuovo utente
-					if (utenteCorrente.getPrivatekey() != null) {
+					if (authContext.getUtenteCorrente().getPrivatekey() != null) {
 
-						String[] cookies = utenteCorrente.getCookies().split(";");
+						String[] cookies = authContext.getUtenteCorrente().getCookies().split(";");
 						String checkcookie = getSecureCookie(cookies, "csrftoken");
 
 						// XXX:utente gia' registrato
 						criteria = new BOSearchApp(VGestioneUtenti.class);
-						criteria.setNickname(utenteCorrente.getNickname());
+						criteria.setNickname(authContext.getUtenteCorrente().getNickname());
 						VGestioneUtenti inforegistrazione = (VGestioneUtenti) repoquery
 								.getSingleOrDefault(criteria.getSerialized());
 
@@ -439,11 +442,11 @@ public class SecurityService extends AuthContext implements ISecurityService {
 
 								result.setEsito(
 										"Scrivi quel che ti pare come bentornato, insomma da questo momento in poi il tizio è riconosciuto dalla tua app "
-												+ "Bentornato " + utenteCorrente.getNickname()
+												+ "Bentornato " + authContext.getUtenteCorrente().getNickname()
 												+ "!! Cosa vuoi fare oggi?");
 								String stato = inforegistrazione.getStato();
 								result.setStatoutente(stato + " " + "\nCodice identificativo sessione: "
-										+ utenteCorrente.getHashscript());
+										+ authContext.getUtenteCorrente().getHashscript());
 
 								// Logica di individuazione della versione
 								// da aggiornare
@@ -467,13 +470,13 @@ public class SecurityService extends AuthContext implements ISecurityService {
 								}
 
 								result.setStatus(true);
-								result.setUsername(utenteCorrente.getNickname());
+								result.setUsername(authContext.getUtenteCorrente().getNickname());
 
 							} else {
 
 								result.setStatoutente("Ci sono problemi di accesso al sistema");
 								_mainService.logAccesso("Ci sono problemi di accesso al sistema per l'utente :"
-										+ utenteCorrente.getNickname(), utenteCorrente);
+										+ authContext.getUtenteCorrente().getNickname(), authContext.getUtenteCorrente());
 							}
 
 						} else {
@@ -504,21 +507,21 @@ public class SecurityService extends AuthContext implements ISecurityService {
 								info = list.get(0);
 								info.setKeyaccess(registerpasscode);
 								info.setDescrizione(esito);
-								info.setIpaddress(utenteCorrente.getInforemote());
+								info.setIpaddress(authContext.getUtenteCorrente().getInforemote());
 								info.setScarabocchio(scarabocchio);
-								info.setCookie(utenteCorrente.getCookies());
+								info.setCookie(authContext.getUtenteCorrente().getCookies());
 
 								repocommands.update(info);
 
 							} else {
 
 								info = new CommonBlacklist();
-								info.setUtente(utenteCorrente.getNickname());
+								info.setUtente(authContext.getUtenteCorrente().getNickname());
 								info.setKeyaccess(registerpasscode);
 								info.setDescrizione(esito);
-								info.setIpaddress(utenteCorrente.getInforemote());
+								info.setIpaddress(authContext.getUtenteCorrente().getInforemote());
 								info.setScarabocchio(scarabocchio);
-								info.setCookie(utenteCorrente.getCookies());
+								info.setCookie(authContext.getUtenteCorrente().getCookies());
 								info.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
 								repocommands.add(info);
 
@@ -528,7 +531,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 
 							result.setPasscode(registerpasscode);
 							result.setPublickey(getKeys(registerpasscode)[0]);
-							result.setUsername(utenteCorrente.getNickname());
+							result.setUsername(authContext.getUtenteCorrente().getNickname());
 							result.setEsito(esito);
 							result.setScarabocchio(scarabocchio);
 							result.setMustupdate(versionToUpdate);
@@ -582,7 +585,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 		try {
 
 			BOSearchApp criteria = new BOSearchApp(GestioneUtenti.class);
-			criteria.setNickname(utenteCorrente.getNickname());
+			criteria.setNickname(authContext.getUtenteCorrente().getNickname());
 			GestioneUtenti utenteregistrato = (GestioneUtenti) repoquery.getSingleOrDefault(criteria.getSerialized());
 
 			if (utenteregistrato != null) {
@@ -590,7 +593,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 				GestioneUtentiOauth dataoauth = (GestioneUtentiOauth) repoquery
 						.getSingleOrDefault(criteria.getSerialized());
 
-				if (utenteCorrente != null) {
+				if (authContext.getUtenteCorrente() != null) {
 					if (dataoauth != null) {
 						stato = true;
 						esito = "Validazione avvenuta con successo!! L'utenza dell'APP e' ora associata al tuo account Google. Risulti verificato e certificato. Buon proseguimento !!";
@@ -602,7 +605,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 			} else {
 
 				criteria = new BOSearchApp(CommonBlacklist.class);
-				criteria.setNickname(utenteCorrente.getNickname());
+				criteria.setNickname(authContext.getUtenteCorrente().getNickname());
 				criteria.getListIsNotNull().add("keyaccess");
 				CommonBlacklist info = (CommonBlacklist) repoquery.getSingleOrDefault(criteria.getSerialized());
 
@@ -613,13 +616,13 @@ public class SecurityService extends AuthContext implements ISecurityService {
 					String cipher = md5(keyaccess + scarabocchio);
 
 					criteria = new BOSearchApp(GestioneUtentiOauth.class);
-					criteria.setNickname(utenteCorrente.getNickname());
+					criteria.setNickname(authContext.getUtenteCorrente().getNickname());
 					GestioneUtentiOauth dataoauth = (GestioneUtentiOauth) repoquery
 							.getSingleOrDefault(criteria.getSerialized());
 
 					if (dataoauth != null) {
 
-						if (cipher.equals(utenteCorrente.getHashscript())) {
+						if (cipher.equals(authContext.getUtenteCorrente().getHashscript())) {
 
 							String email = dataoauth.getEmail();
 							String[] keys = getKeys(keyaccess);
@@ -631,18 +634,18 @@ public class SecurityService extends AuthContext implements ISecurityService {
 							newUser.setEmail(email);
 							newUser.setIdgruppo(2);
 							newUser.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
-							newUser.setNickname(utenteCorrente.getNickname());
+							newUser.setNickname(authContext.getUtenteCorrente().getNickname());
 							newUser.setPublickey(keys[0]);
 							newUser.setPrivatekey(keys[1]);
 							repocommands.add(newUser);
 
 							BOSearchApp searcher = new BOSearchApp(CommonBlacklist.class);
-							searcher.setNickname(utenteCorrente.getNickname());
+							searcher.setNickname(authContext.getUtenteCorrente().getNickname());
 							CommonBlacklist removeBlackListed = (CommonBlacklist) repoquery
 									.getSingle(searcher.getSerialized());
 							repocommands.delete(removeBlackListed);
 
-							esito = "Registrazione avvenuta con successo! Benvenuto " + utenteCorrente.getNickname()
+							esito = "Registrazione avvenuta con successo! Benvenuto " + authContext.getUtenteCorrente().getNickname()
 									+ "!! " + avvertenza;
 
 							esitoVerifica.setEmailaccount(email);
@@ -659,7 +662,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 			}
 
 			criteria = new BOSearchApp(VGestioneUtentiOuth.class);
-			criteria.setNickname(utenteCorrente.getNickname());
+			criteria.setNickname(authContext.getUtenteCorrente().getNickname());
 
 			VGestioneUtentiOuth soauth = (VGestioneUtentiOuth) repoquery.getSingleOrDefault(criteria.getSerialized());
 			String statoutente = "Non definito";
@@ -667,8 +670,8 @@ public class SecurityService extends AuthContext implements ISecurityService {
 				statoutente = soauth.getStato();
 			}
 
-			esitoVerifica.setUsername(utenteCorrente.getNickname());
-			esitoVerifica.setTeam(utenteCorrente.getTeam());
+			esitoVerifica.setUsername(authContext.getUtenteCorrente().getNickname());
+			esitoVerifica.setTeam(authContext.getUtenteCorrente().getTeam());
 			esitoVerifica.setEsito(esito);
 			esitoVerifica.setStato(stato);
 			esitoVerifica.setStatoutente(statoutente);
@@ -685,13 +688,13 @@ public class SecurityService extends AuthContext implements ISecurityService {
 	private boolean isRequestBot() throws BusinessException {
 		boolean esito = false;
 
-		if (utenteCorrente.getTokenapp() != null) {
+		if (authContext.getUtenteCorrente().getTokenapp() != null) {
 
-			if (utenteCorrente.getTokenapp().equals("bot")) {
+			if (authContext.getUtenteCorrente().getTokenapp().equals("bot")) {
 				esito = true;
 			} else {
 				BOSearchApp criteria = new BOSearchApp(GestioneApps.class);
-				criteria.setTokenapp(utenteCorrente.getTokenapp());
+				criteria.setTokenapp(authContext.getUtenteCorrente().getTokenapp());
 				try {
 					repoquery.getSingle(criteria.getSerialized());
 					esito = true;
@@ -704,7 +707,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 			}
 
 			if (esito)
-				utenteCorrente.setIsbot(true);
+				authContext.getUtenteCorrente().setIsbot(true);
 		}
 
 		return esito;
@@ -745,12 +748,12 @@ public class SecurityService extends AuthContext implements ISecurityService {
 		BOSecurity result = new BOSecurity();
 
 		CommonBlacklist toAdd = new CommonBlacklist();
-		toAdd.setIpaddress(utenteCorrente.getInforemote());
+		toAdd.setIpaddress(authContext.getUtenteCorrente().getInforemote());
 		toAdd.setDescrizione(esito);
 		toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
 		repocommands.add(toAdd);
 
-		result.setUsername(utenteCorrente.getNickname());
+		result.setUsername(authContext.getUtenteCorrente().getNickname());
 		result.setEsito(esito);
 
 		return result;
@@ -762,7 +765,7 @@ public class SecurityService extends AuthContext implements ISecurityService {
 		try {
 
 			try {
-				GestioneUtenti utente = _mainService.getUtente(utenteCorrente.getNickname());
+				GestioneUtenti utente = _mainService.getUtente(authContext.getUtenteCorrente().getNickname());
 
 				if (utente == null)
 					return false;
@@ -772,8 +775,8 @@ public class SecurityService extends AuthContext implements ISecurityService {
 
 				String cipher = md5(keyAccess + scarabocchio);
 
-				esito = cipher.equals(utenteCorrente.getHashscript()) ? true : false;
-				log.info("Hash fornito dall'utente     : " + utenteCorrente.getHashscript());
+				esito = cipher.equals(authContext.getUtenteCorrente().getHashscript()) ? true : false;
+				log.info("Hash fornito dall'utente     : " + authContext.getUtenteCorrente().getHashscript());
 				log.info("Hash che si aspetta il server: " + cipher);
 
 				return esito;
@@ -855,7 +858,6 @@ public class SecurityService extends AuthContext implements ISecurityService {
 	}
 
 	public BOUtente getUtenteCorrente() {
-		return utenteCorrente;
+		return authContext.getUtenteCorrente();
 	}
-
 }

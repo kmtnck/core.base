@@ -21,9 +21,12 @@ import it.alessandromodica.product.services.interfaces.ISecurityService;
  *
  */
 @Controller
-public class MainSecurity extends AuthContext implements ISecurity {
+public class MainSecurity implements ISecurity {
 
 	private static final Logger log = Logger.getLogger(MainSecurity.class);
+
+	@Autowired
+	protected AuthContext authContext;
 
 	@Autowired
 	ISecurityService _securityService;
@@ -35,9 +38,8 @@ public class MainSecurity extends AuthContext implements ISecurity {
 
 	}
 
-	public void setInfo(BOUtente utente) {
-		setUtenteCorrente(utente);
-		_securityService.setUtenteCorrente(utenteCorrente);
+	public void setUtenteCorrente(BOUtente utente) {
+		authContext.setUtenteCorrente(utente);
 	}
 
 	@Override
@@ -104,6 +106,12 @@ public class MainSecurity extends AuthContext implements ISecurity {
 			log.error(e.getMessage(), e);
 			throw new BusinessException(e);
 		}
+	}
+
+	@Override
+	public BOUtente getUtenteCorrente() {
+		// TODO Auto-generated method stub
+		return authContext.getUtenteCorrente();
 	}
 
 }

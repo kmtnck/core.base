@@ -203,7 +203,7 @@ public class MainApplication extends MainContext {
 		// validita e integrita di ciascuna chiamata esterna
 		// L'istanza e' sempre valida con qualsiasi tipo di oggetto
 		// utente passato in input. Anche adulterato
-		controllerSecurity.setInfo(currentUtente);
+		controllerSecurity.setUtenteCorrente(currentUtente);
 		// XXX: primo controllo di sicurezza che verifica se l'utente e'
 		// gia riconosciuto come utente registrato, oppure utente
 		// bannato, ma anche un utente nuovo
