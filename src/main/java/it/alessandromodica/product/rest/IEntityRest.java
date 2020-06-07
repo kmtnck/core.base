@@ -31,9 +31,9 @@ public interface IEntityRest<T> {
 
 	@ApiOperation(value = "Recupera un oggetto da database", response = List.class)
 	@ApiParam(value = "Token di ricerca")
-	public List<Object> ricerca(BOSerializeCriteria searcher, UriInfo info) throws RepositoryException;
+	public List<Object> ricerca(BOSerializeCriteria searcher) throws RepositoryException;
 
-	public int count(BOSerializeCriteria searcher, UriInfo info) throws RepositoryException;
+	public int count(BOSerializeCriteria searcher) throws RepositoryException;
 
 	public void save(T toSave) throws RepositoryException;
 

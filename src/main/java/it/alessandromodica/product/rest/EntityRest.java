@@ -40,12 +40,6 @@ public class EntityRest implements IEntityRest {
 
 	protected static final Logger logger = Logger.getLogger(EntityRest.class);
 
-	/*
-	 * //@Autowired private IRepositoryQueries reader;
-	 * 
-	 * //@Autowired private IRepositoryCommands writer;
-	 */
-
 	@Override
 	@GET
 	@Path(value = "/test/{id}")
@@ -102,19 +96,16 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 	@Path(value = "/search")
 	@Consumes(value = MediaType.APPLICATION_JSON)
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public List<Object> ricerca(@RequestBody BOSerializeCriteria searcher, @Context UriInfo info)
+	public List<Object> ricerca(@RequestBody BOSerializeCriteria searcher)
 			throws RepositoryException {
 
 		try {
 
-			ExtractURIValue values = new ExtractURIValue(info);
-			Class<?> classEntity = Class.forName(values.getValue(Constants.CLASSNAME));
-			searcher.setClassEntity(classEntity);
-			List<Object> result = (List<Object>) AppRoot.reader.search(searcher);
+			List<Object> result = (List<Object>) AppRoot.mainservice.search(searcher);
 
 			return result;
 
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			throw new RepositoryException(e);
 		}
 
@@ -131,7 +122,7 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 
 			ExtractURIValue values = new ExtractURIValue(info);
 			Class<?> classEntity = Class.forName(values.getValue(Constants.CLASSNAME));
-			Object result = (Object) AppRoot.reader.getById(id, classEntity);
+			Object result = (Object) AppRoot.mainservice.getById(id, classEntity);
 
 			return result;
 
@@ -145,18 +136,15 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 	@Path(value = "/count/")
 	@Consumes(value = MediaType.APPLICATION_JSON)
 	@Produces(value = MediaType.TEXT_PLAIN)
-	public int count(@RequestBody BOSerializeCriteria searcher, @Context UriInfo info) throws RepositoryException {
+	public int count(@RequestBody BOSerializeCriteria searcher) throws RepositoryException {
 
 		try {
 
-			ExtractURIValue values = new ExtractURIValue(info);
-			Class<?> classEntity = Class.forName(values.getValue(Constants.CLASSNAME));
-			searcher.setClassEntity(classEntity);
-			int result = AppRoot.reader.getCount(searcher);
+			int result = AppRoot.mainservice.count(searcher);
 
 			return result;
 
-		} catch (ClassNotFoundException e) {
+		} catch (Exception e) {
 			throw new RepositoryException(e);
 		}
 	}
@@ -168,7 +156,7 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 	@RolesAllowed("authenticated")
 	public void save(@RequestBody Object toSave) throws RepositoryException {
 
-		AppRoot.writer.add(toSave);
+		AppRoot.mainservice.add(toSave);
 	}
 
 }

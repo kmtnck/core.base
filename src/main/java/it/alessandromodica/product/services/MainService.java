@@ -2,6 +2,7 @@ package it.alessandromodica.product.services;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import it.alessandromodica.product.model.po.GestioneUtenti;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
 import it.alessandromodica.product.persistence.searcher.BOSearchApp;
+import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
 import it.alessandromodica.product.services.interfaces.IMainService;
 
 /**
@@ -32,7 +34,7 @@ import it.alessandromodica.product.services.interfaces.IMainService;
  */
 @Service
 @SuppressWarnings("unchecked")
-public class MainService implements IMainService {
+public class MainService<T> implements IMainService<T> {
 
 	@Autowired
 	protected IRepositoryQueries repoquery;
@@ -100,6 +102,30 @@ public class MainService implements IMainService {
 					"L'eccezione non verra rilanciata, per permettere la prosecuzione dell'operazione e rendere inibito il failure dei log");
 		}
 
+	}
+
+	@Override
+	public List<T> search(BOSerializeCriteria searcher) throws RepositoryException {
+		// TODO Auto-generated method stub
+		return repoquery.search(searcher);
+	}
+
+	@Override
+	public int count(BOSerializeCriteria searcher) throws RepositoryException{
+		// TODO Auto-generated method stub
+		return repoquery.getCount(searcher);
+	}
+
+	@Override
+	public T getById(Object objId, Class<T> classEntity) throws RepositoryException {
+		// TODO Auto-generated method stub
+		return (T) repoquery.getById(objId, classEntity);
+	}
+
+	@Override
+	public void add(T obj) throws RepositoryException {
+		// TODO Auto-generated method stub
+		repocommands.add(obj);
 	}
 
 }
