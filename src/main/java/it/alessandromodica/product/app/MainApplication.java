@@ -229,7 +229,8 @@ public class MainApplication extends MainContext {
 		case checkintegrity:
 			try {
 
-				settingcookie.setEntities(null, currentUtente);
+				authContext.setUtenteCorrente(currentUtente);
+				
 				repocommands.executeTransaction(settingcookie);
 
 				cassaforte.setVersione(inputData.getMapRequestData().get(RequestVariable.versione) != null

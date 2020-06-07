@@ -2,7 +2,6 @@ package it.alessandromodica.product.callback;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import it.alessandromodica.product.app.AuthContext;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
-import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.po.GestioneUtentiInfoautenticazione;
 import it.alessandromodica.product.persistence.interfaces.IBulkTransaction;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
@@ -38,11 +36,12 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 
 	private static final Logger log = Logger.getLogger(SettingCookie.class);
 
-	private String[] cookies;
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public void persist() throws RepositoryException {
+		
+		String[] cookies = authContext.getUtenteCorrente().getCookies().split(";");
+		
 		if (cookies != null && authContext.getUtenteCorrente().getIdutente() != 0)
 			for (String cCookie : cookies) {
 				String[] splitCookie = (cCookie.toString()).split("=", 2);
@@ -99,13 +98,5 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 		else
 			log.warn("Non sono stati settati cookie requisiti per accedere al sistema");
 
-	}
-
-	@Override
-	public void setEntities(List obj, BOUtente utente) {
-		// TODO Auto-generated method stub
-		authContext.setUtenteCorrente(utente);
-		if (utente.getCookies() != null)
-			this.cookies = utente.getCookies().split(";");
 	}
 }
