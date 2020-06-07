@@ -26,7 +26,7 @@ import it.alessandromodica.product.services.interfaces.IAppService;
  *
  */
 @Service
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","rawtypes"})
 public class ConsultazioneService extends AuthContext implements IAppService {
 
 	@Autowired

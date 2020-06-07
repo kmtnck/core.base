@@ -10,7 +10,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import it.alessandromodica.product.app.MainApplication;
 import it.alessandromodica.product.common.OutputData;
 import it.alessandromodica.product.common.config.AppConfig;
-import it.alessandromodica.product.common.config.AppSpringInitializer;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;

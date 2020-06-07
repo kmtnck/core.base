@@ -67,7 +67,7 @@ import it.alessandromodica.product.services.interfaces.ISecurityService;
  *
  */
 @Service
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","rawtypes"})
 public class SecurityService implements ISecurityService {
 
 	@Autowired

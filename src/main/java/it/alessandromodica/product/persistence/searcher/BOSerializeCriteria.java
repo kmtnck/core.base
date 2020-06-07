@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  * @author Alessandro
  *
  */
+@SuppressWarnings("rawtypes")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BOSerializeCriteria implements Serializable  {
 

@@ -194,6 +194,7 @@ public abstract class BaseRepository<T, JOIN> {
 		return predicates;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private Selection[] getProjections(List<String> fieldsprojection, Root<?> root) {
 		List<Selection> projections = new ArrayList<Selection>();
 		for (String cField : fieldsprojection) {

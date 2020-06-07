@@ -9,6 +9,7 @@ import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.po.GestioneUtenti;
 import it.alessandromodica.product.services.interfaces.IMainService;
 
+@SuppressWarnings("rawtypes")
 @Component
 public class AuthContext {
 

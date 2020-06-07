@@ -6,6 +6,7 @@ import javax.ws.rs.core.Application;
 import it.alessandromodica.product.services.interfaces.IMainService;
 import it.alessandromodica.product.views.AppViewListener;
 
+@SuppressWarnings("rawtypes")
 @ApplicationPath("/services")
 public class AppRoot extends Application {
 

@@ -56,6 +56,7 @@ import it.alessandromodica.product.services.interfaces.IMainService;
  * @author Alessandro
  *
  */
+@SuppressWarnings("rawtypes")
 @Resource
 public abstract class MainContext {
 
@@ -212,13 +213,11 @@ public abstract class MainContext {
 		return dataOraStr;
 	}
 
-	@SuppressWarnings("rawtypes")
 	public static Object getData(List containerObj, int indexcontext, String fieldkey) throws BusinessException {
 
 		return getData(containerObj, indexcontext, -1, fieldkey);
 	}
 
-	@SuppressWarnings("rawtypes")
 	public static Object getData(List containerObj, int indexcontext, int indexsubcontext, String fieldkey)
 			throws BusinessException {
 		try {
@@ -249,7 +248,6 @@ public abstract class MainContext {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	public static BODecoderAddress getIndirizzo(BOCoordinate coordinate, String indirizzoAttuale)
 			throws ServiceException {
 		try {

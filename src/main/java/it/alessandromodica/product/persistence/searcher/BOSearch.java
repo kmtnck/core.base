@@ -25,6 +25,7 @@ import it.alessandromodica.product.common.exceptions.RepositoryException;
  * @author Alessandro
  *
  */
+@SuppressWarnings("rawtypes")
 public abstract class BOSearch extends BOBase implements Serializable {
 
 	/**
@@ -269,7 +270,6 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		return result;
 	}
 
-	@SuppressWarnings("rawtypes")
 	private static Map<String, Object> _serializeBusinessClause(Object searcher) throws RepositoryException {
 		Map<String, Object> effective = new HashMap<String, Object>(0);
 

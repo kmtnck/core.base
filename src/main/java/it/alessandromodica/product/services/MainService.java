@@ -33,7 +33,7 @@ import it.alessandromodica.product.services.interfaces.IMainService;
  *
  */
 @Service
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked","rawtypes"})
 public class MainService<T> implements IMainService<T> {
 
 	@Autowired

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import it.alessandromodica.product.common.exceptions.ServiceException;
 
+@SuppressWarnings("rawtypes")
 public class StaticUtils {
 
 	private static final Logger log = Logger.getLogger(StaticUtils.class);

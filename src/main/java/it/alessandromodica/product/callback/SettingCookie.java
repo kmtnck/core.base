@@ -23,6 +23,7 @@ import it.alessandromodica.product.persistence.searcher.BOSearchApp;
  * @author Alessandro
  *
  */
+@SuppressWarnings("rawtypes")
 @Component
 public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 
@@ -100,7 +101,6 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void setEntities(List obj, BOUtente utente) {
 		// TODO Auto-generated method stub
