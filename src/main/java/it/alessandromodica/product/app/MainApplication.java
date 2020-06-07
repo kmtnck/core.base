@@ -42,10 +42,14 @@ import it.alessandromodica.product.persistence.uow.UnitOfWork;
  * @author Alessandro
  *
  */
+//@SpringBootApplication
 @Component
 @SuppressWarnings("rawtypes")
 public class MainApplication extends MainContext {
 
+    /*public static void main(String[] args) {
+        SpringApplication.run(MainApplication.class, args);
+    }*/
 	// XXX: classe principale e cardine di tutto il progetto
 	// deve essere visto come il cappello di riferimento per tutta la gerarchia
 	// del software
