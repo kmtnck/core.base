@@ -707,6 +707,9 @@ public abstract class BaseRepository<T, JOIN> {
 
 	public int getCount(BOSerializeCriteria serializeCriteria) throws RepositoryException {
 		try {
+			
+			setClass(serializeCriteria.getClassEntity());
+			
 			CriteriaBuilder builder = em.getCriteriaBuilder();
 
 			String alias = nameClass.replace(".", "");
