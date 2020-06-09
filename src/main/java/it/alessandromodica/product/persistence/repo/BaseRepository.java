@@ -181,7 +181,7 @@ public abstract class BaseRepository<T, JOIN> {
 		return cOrder;
 	}
 
-	protected List<Predicate> buildPredicates(String alias, BOSerializeCriteria serializeCriteria, EntityManager em)
+	protected List<Predicate> buildPredicates(String alias, BOSerializeCriteria serializeCriteria)
 			throws RepositoryException {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<T> query = builder.createQuery(classEntity);
@@ -713,7 +713,7 @@ public abstract class BaseRepository<T, JOIN> {
 			CriteriaBuilder builder = em.getCriteriaBuilder();
 
 			String alias = nameClass.replace(".", "");
-			List<Predicate> predicates = buildPredicates(alias, serializeCriteria, em);
+			List<Predicate> predicates = buildPredicates(alias, serializeCriteria);
 
 			CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
 			Root<T> entity_ = countQuery.from(classEntity);
