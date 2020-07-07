@@ -1,6 +1,6 @@
 package it.alessandromodica.product.persistence.searcher;
 
-public class BOJoinClause<T, Q> {
+public class BOJoinClause<Q> {
 
 	
 	Object valueToJoin;

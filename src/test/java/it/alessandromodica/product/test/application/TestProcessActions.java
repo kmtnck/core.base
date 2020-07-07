@@ -181,7 +181,14 @@ public class TestProcessActions extends TestCase {
 					log.info(pluginCommonLogaccesso.getNickname());
 				}
 				Assert.assertTrue(true);
+
+				criteria.setNot(true);
+				int notClause = repoquery.
+						getCount(criteria.getSerialized());
+				Assert.assertTrue(notClause == 0);
 			}
+			
+			
 
 		} catch (Exception ex) {
 			log.error(ex.getMessage(), ex);

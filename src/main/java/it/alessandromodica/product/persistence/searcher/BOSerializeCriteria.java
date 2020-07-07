@@ -44,6 +44,8 @@ public class BOSerializeCriteria implements Serializable  {
 
 	private int maxResult;
 	private int firstResult;
+	private boolean not;
+	
 	private List<String> listFieldsProjection = new ArrayList<String>();
 	private Map<String, Object[]> listIn = new HashMap<String, Object[]>();
 	private Map<String, Object[]> listNotIn = new HashMap<String, Object[]>();
@@ -223,5 +225,13 @@ public class BOSerializeCriteria implements Serializable  {
 
 	public void setClassEntity(Class classEntity) {
 		this.classEntity = classEntity;
+	}
+
+	public boolean isNot() {
+		return not;
+	}
+
+	public void setNot(boolean not) {
+		this.not = not;
 	}
 }

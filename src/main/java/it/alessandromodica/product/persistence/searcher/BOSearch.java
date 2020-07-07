@@ -80,6 +80,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 	private int maxResult;
 	private int firstResult;
+	private boolean not;
 
 	@Deprecated
 	public BOSearch() {
@@ -129,6 +130,8 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 		BOSerializeCriteria result = new BOSerializeCriteria();
 
+		result.setNot(searcher.isNot());
+		
 		result.setClassEntity(searcher.getClassEntity());
 		// uguaglianze
 		result.setListEquals(_serializeBusinessClause(searcher));
@@ -460,5 +463,13 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 	public void setClassEntity(Class<?> classEntity) {
 		this.classEntity = classEntity;
+	}
+
+	public boolean isNot() {
+		return not;
+	}
+
+	public void setNot(boolean not) {
+		this.not = not;
 	}
 }

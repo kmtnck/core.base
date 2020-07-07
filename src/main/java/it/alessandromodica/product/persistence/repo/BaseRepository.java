@@ -223,7 +223,7 @@ public abstract class BaseRepository<T, JOIN> {
 			});
 		}
 
-		for (BOJoinClause<T, JOIN> cJoin : serializeCriteria.getListJoinClause()) {
+		for (BOJoinClause<JOIN> cJoin : serializeCriteria.getListJoinClause()) {
 
 			Join<T, JOIN> righeJoin = root.join(cJoin.getEntityToJoin());
 			Expression<Object> exp = setFieldJoin(righeJoin, cJoin.getFieldToJoin());
@@ -237,12 +237,6 @@ public abstract class BaseRepository<T, JOIN> {
 			String cKey = cEntry.getKey().toString();
 
 			String fieldHB = cKey;
-			/*
-			 * try { BOSearch instance = (BOSearch)
-			 * serializeCriteria.getClassSearcher().newInstance(); if
-			 * (instance.checkCompositeId(cKey)) fieldHB = "id." + cKey; } catch (Exception
-			 * e) { throw new RepositoryException(e); }
-			 */
 			predicates.add(builder.equal(setFieldRoot(root, fieldHB), resultEq.get(cKey)));
 		}
 
@@ -351,7 +345,19 @@ public abstract class BaseRepository<T, JOIN> {
 			predicates.add(orPredicate);
 		}
 
-		return predicates;
+		if (serializeCriteria.isNot()) {
+			List<Predicate> notpred = new ArrayList<Predicate>(0);
+			if (predicates.size() > 0) {
+				Predicate concatPredicate = null;
+				for (Predicate predicate : orPredicates) {
+					concatPredicate = builder.and(predicate);
+				}
+				Predicate not = builder.not(concatPredicate);
+				notpred.add(not);
+			}
+			return notpred;
+		} else
+			return predicates;
 
 	}
 
