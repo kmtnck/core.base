@@ -104,7 +104,8 @@ public abstract class BaseRepository<T, JOIN> {
 	}
 
 	@SuppressWarnings("rawtypes")
-	protected Query buildCriteriaQuery(String alias, YAFilterSerializeCriteria serializeCriteria) throws RepositoryException {
+	protected Query buildCriteriaQuery(String alias, YAFilterSerializeCriteria serializeCriteria)
+			throws RepositoryException {
 
 		setClass(serializeCriteria.getClassEntity());
 
@@ -116,7 +117,7 @@ public abstract class BaseRepository<T, JOIN> {
 			root.alias(alias);
 
 		if (serializeCriteria.getListFieldsProjection().size() > 0) {
-			Selection[] projections = getProjections(serializeCriteria.getListFieldsProjection(), root);
+			Selection[] projections = getProjections(serializeCriteria.getListFieldsProjection(), root, query);
 			if (projections.length > 0)
 				query.multiselect(projections).distinct(true);
 		} else
@@ -195,11 +196,12 @@ public abstract class BaseRepository<T, JOIN> {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private Selection[] getProjections(List<String> fieldsprojection, Root<?> root) {
+	private Selection[] getProjections(List<String> fieldsprojection, Root<?> root, CriteriaQuery<T> query) {
 		List<Selection> projections = new ArrayList<Selection>();
 		for (String cField : fieldsprojection) {
 			try {
 				projections.add(root.get(cField));
+				query.groupBy(root.get(cField));
 			} catch (Exception e) {
 				continue;
 			}
@@ -210,8 +212,8 @@ public abstract class BaseRepository<T, JOIN> {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private List<Predicate> composeQuery(CriteriaBuilder builder, Root<T> root, YAFilterSerializeCriteria serializeCriteria)
-			throws RepositoryException {
+	private List<Predicate> composeQuery(CriteriaBuilder builder, Root<T> root,
+			YAFilterSerializeCriteria serializeCriteria) throws RepositoryException {
 
 		List<Predicate> predicates = new ArrayList<Predicate>(0);
 
@@ -713,9 +715,9 @@ public abstract class BaseRepository<T, JOIN> {
 
 	public int getCount(YAFilterSerializeCriteria serializeCriteria) throws RepositoryException {
 		try {
-			
+
 			setClass(serializeCriteria.getClassEntity());
-			
+
 			CriteriaBuilder builder = em.getCriteriaBuilder();
 
 			String alias = nameClass.replace(".", "");
