@@ -13,7 +13,7 @@ import it.alessandromodica.product.model.po.GestioneUtentiInfoautenticazione;
 import it.alessandromodica.product.persistence.interfaces.IBulkTransaction;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
-import it.alessandromodica.product.persistence.searcher.BOSearchApp;
+import it.alessandromodica.product.persistence.searcher.YAFilterSearchApp;
 
 /**
  * Callback in cui viene gestita la sessione dei cookie utente
@@ -52,7 +52,7 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 				String valoreparametro = splitCookie[1].trim();
 
 				if ("csrftoken".equals(nomeparametro)) {
-					BOSearchApp criteria = new BOSearchApp(GestioneUtentiInfoautenticazione.class);
+					YAFilterSearchApp criteria = new YAFilterSearchApp(GestioneUtentiInfoautenticazione.class);
 					criteria.setIdutente(authContext.getUtenteCorrente().getIdutente());
 					criteria.setNomeparametro("csrftoken");
 					log.info("Cookie da aggiungere: " + cCookie);

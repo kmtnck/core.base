@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import it.alessandromodica.product.common.Constants;
 import it.alessandromodica.product.common.exceptions.RepositoryException;
-import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
+import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteria;
 
 /***
  * Classe che rappresenta le chiamate rest per accedere al modulo dei carichi
@@ -96,7 +96,7 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 	@Path(value = "/search")
 	@Consumes(value = MediaType.APPLICATION_JSON)
 	@Produces(value = MediaType.APPLICATION_JSON)
-	public List<Object> ricerca(@RequestBody BOSerializeCriteria searcher)
+	public List<Object> ricerca(@RequestBody YAFilterSerializeCriteria searcher)
 			throws RepositoryException {
 
 		try {
@@ -136,7 +136,7 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
 	@Path(value = "/count/")
 	@Consumes(value = MediaType.APPLICATION_JSON)
 	@Produces(value = MediaType.TEXT_PLAIN)
-	public int count(@RequestBody BOSerializeCriteria searcher) throws RepositoryException {
+	public int count(@RequestBody YAFilterSerializeCriteria searcher) throws RepositoryException {
 
 		try {
 

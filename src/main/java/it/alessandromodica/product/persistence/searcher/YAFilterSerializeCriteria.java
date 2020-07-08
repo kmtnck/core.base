@@ -18,13 +18,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
  */
 @SuppressWarnings("rawtypes")
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class BOSerializeCriteria implements Serializable  {
+public class YAFilterSerializeCriteria implements Serializable  {
 
 	private Class classEntity;
 	
 
 	private List<String> listEntityGraph = new ArrayList<String>();
-	private List<BOJoinClause> listJoinClause = new ArrayList<BOJoinClause>();
+	private List<YAFilterJoinClause> listJoinClause = new ArrayList<YAFilterJoinClause>();
 
 	
 	private Map<String, Object> listEquals = new HashMap<String, Object>();
@@ -38,7 +38,7 @@ public class BOSerializeCriteria implements Serializable  {
 	private List<String> listIsZero = new ArrayList<String>();
 	private List<String> listIsNotEmpty = new ArrayList<String>();
 	private Map<String, Boolean> listValueBool = new HashMap<String, Boolean>();
-	private List<BOSerializeCriteria> listOrClause = new ArrayList<BOSerializeCriteria>();
+	private List<YAFilterSerializeCriteria> listOrClause = new ArrayList<YAFilterSerializeCriteria>();
 	private Boolean descendent = false;
 	private Map<String,Boolean> mapDescendent = new HashMap<String,Boolean>();
 
@@ -123,11 +123,11 @@ public class BOSerializeCriteria implements Serializable  {
 		this.listIsZero = listIsZero;
 	}
 
-	public List<BOSerializeCriteria> getListOrClause() {
+	public List<YAFilterSerializeCriteria> getListOrClause() {
 		return listOrClause;
 	}
 
-	public void setListOrClause(List<BOSerializeCriteria> listOrClause) {
+	public void setListOrClause(List<YAFilterSerializeCriteria> listOrClause) {
 		this.listOrClause = listOrClause;
 	}
 
@@ -211,11 +211,11 @@ public class BOSerializeCriteria implements Serializable  {
 		this.listEntityGraph = listEntityGraph;
 	}
 
-	public List<BOJoinClause> getListJoinClause() {
+	public List<YAFilterJoinClause> getListJoinClause() {
 		return listJoinClause;
 	}
 
-	public void setListJoinClause(List<BOJoinClause> listJoinClause) {
+	public void setListJoinClause(List<YAFilterJoinClause> listJoinClause) {
 		this.listJoinClause = listJoinClause;
 	}
 

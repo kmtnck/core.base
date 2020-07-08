@@ -11,14 +11,14 @@ import java.util.Date;
  * @author Alessandro
  *
  */
-public class BOSearchApp extends BOSearch {
+public class YAFilterSearchApp extends YAFilterSearch {
 
 	@Deprecated
-	public BOSearchApp() {
+	public YAFilterSearchApp() {
 		super();
 	}
 
-	public BOSearchApp(Class<?> classEntity) {
+	public YAFilterSearchApp(Class<?> classEntity) {
 		super(classEntity);
 	}
 

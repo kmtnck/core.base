@@ -16,8 +16,8 @@ import it.alessandromodica.product.model.po.CommonLogaccesso;
 import it.alessandromodica.product.model.po.GestioneUtenti;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
-import it.alessandromodica.product.persistence.searcher.BOSearchApp;
-import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
+import it.alessandromodica.product.persistence.searcher.YAFilterSearchApp;
+import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteria;
 import it.alessandromodica.product.services.interfaces.IMainService;
 
 /**
@@ -56,7 +56,7 @@ public class MainService<T> implements IMainService<T> {
 	 * Recupera le informazioni dell'utente corrente
 	 */
 	public GestioneUtenti getUtente(String nickname) throws ServiceException {
-		BOSearchApp search = new BOSearchApp(GestioneUtenti.class);
+		YAFilterSearchApp search = new YAFilterSearchApp(GestioneUtenti.class);
 		search.setNickname(nickname);
 		try {
 
@@ -105,13 +105,13 @@ public class MainService<T> implements IMainService<T> {
 	}
 
 	@Override
-	public List<T> search(BOSerializeCriteria searcher) throws RepositoryException {
+	public List<T> search(YAFilterSerializeCriteria searcher) throws RepositoryException {
 		// TODO Auto-generated method stub
 		return repoquery.search(searcher);
 	}
 
 	@Override
-	public int count(BOSerializeCriteria searcher) throws RepositoryException{
+	public int count(YAFilterSerializeCriteria searcher) throws RepositoryException{
 		// TODO Auto-generated method stub
 		return repoquery.getCount(searcher);
 	}

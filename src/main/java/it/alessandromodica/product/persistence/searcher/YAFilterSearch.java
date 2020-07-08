@@ -26,7 +26,7 @@ import it.alessandromodica.product.common.exceptions.RepositoryException;
  *
  */
 @SuppressWarnings("rawtypes")
-public abstract class BOSearch extends BOBase implements Serializable {
+public abstract class YAFilterSearch extends YAFilterBase implements Serializable {
 
 	/**
 	 * 
@@ -53,14 +53,14 @@ public abstract class BOSearch extends BOBase implements Serializable {
 
 	private Map<String, Object> listEquals = new HashMap<String, Object>();
 
-	private List<BOJoinClause> listJoinClause = new ArrayList<BOJoinClause>();
+	private List<YAFilterJoinClause> listJoinClause = new ArrayList<YAFilterJoinClause>();
 
 	private List<String> listFieldsProjection = new ArrayList<String>();
 	private List<String> listExcludeProjection = new ArrayList<String>();
 
-	private List<BOBetweenClause> listBetweenClause = new ArrayList<BOBetweenClause>();
-	private List<BOLikeClause> listLikeClause = new ArrayList<BOLikeClause>();
-	private List<BOOperatorClause> listOperatorClause = new ArrayList<BOOperatorClause>();
+	private List<YAFilterBetweenClause> listBetweenClause = new ArrayList<YAFilterBetweenClause>();
+	private List<YAFilterLikeClause> listLikeClause = new ArrayList<YAFilterLikeClause>();
+	private List<YAFilterOperatorClause> listOperatorClause = new ArrayList<YAFilterOperatorClause>();
 
 	@Deprecated
 	private boolean descendent = false;
@@ -73,7 +73,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	private List<String> listIsNotNull = new ArrayList<String>();
 	private List<String> listIsNotEmpty = new ArrayList<String>();
 	private List<String> listIsZero = new ArrayList<String>();
-	private List<BOSearch> listOrClause = new ArrayList<BOSearch>();
+	private List<YAFilterSearch> listOrClause = new ArrayList<YAFilterSearch>();
 	private Map<String, Boolean> listValueBool = new HashMap<String, Boolean>();
 	private Map<String, Object[]> listIn = new HashMap<String, Object[]>();
 	private Map<String, Object[]> listNotIn = new HashMap<String, Object[]>();
@@ -83,37 +83,37 @@ public abstract class BOSearch extends BOBase implements Serializable {
 	private boolean not;
 
 	@Deprecated
-	public BOSearch() {
+	public YAFilterSearch() {
 
 	}
 
-	public BOSearch(Class<?> classEntity) {
+	public YAFilterSearch(Class<?> classEntity) {
 		this.classEntity = classEntity;
 	}
 
-	public static void setClauseInList(String nameField, Object[] data, BOSearch searcher) {
+	public static void setClauseInList(String nameField, Object[] data, YAFilterSearch searcher) {
 		if (data != null && data.length > 0)
 			searcher.getListIn().put(nameField, data);
 	}
 
-	public static void setClauseNotInList(String nameField, Object[] data, BOSearch searcher) {
+	public static void setClauseNotInList(String nameField, Object[] data, YAFilterSearch searcher) {
 		if (data != null && data.length > 0)
 			searcher.getListNotIn().put(nameField, data);
 	}
 
-	public static void setLikeClause(String value, String nameField, BOSearch searcher) {
+	public static void setLikeClause(String value, String nameField, YAFilterSearch searcher) {
 		if (StringUtils.isNotBlank(value)) {
-			BOLikeClause likeCl = new BOLikeClause();
+			YAFilterLikeClause likeCl = new YAFilterLikeClause();
 			likeCl.setNameField(nameField);
 			likeCl.setValue("%" + value + "%");
 			searcher.getListLikeClause().add(likeCl);
 		}
 	}
 
-	public static void setBetweenClause(Object valueFrom, Object valueTo, String nameField, BOSearch searcher,
+	public static void setBetweenClause(Object valueFrom, Object valueTo, String nameField, YAFilterSearch searcher,
 			Class<?> typeData) {
 		if (valueFrom != null) {
-			BOBetweenClause btw = new BOBetweenClause();
+			YAFilterBetweenClause btw = new YAFilterBetweenClause();
 			btw.setNameField(nameField);
 			btw.setValueFrom(valueFrom);
 			btw.setValueTo(valueTo);
@@ -122,13 +122,13 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		}
 	}
 
-	public BOSerializeCriteria getSerialized() throws RepositoryException {
+	public YAFilterSerializeCriteria getSerialized() throws RepositoryException {
 		return _buildItemClause(this);
 	}
 
-	private static BOSerializeCriteria _buildItemClause(BOSearch searcher) throws RepositoryException {
+	private static YAFilterSerializeCriteria _buildItemClause(YAFilterSearch searcher) throws RepositoryException {
 
-		BOSerializeCriteria result = new BOSerializeCriteria();
+		YAFilterSerializeCriteria result = new YAFilterSerializeCriteria();
 
 		result.setNot(searcher.isNot());
 		
@@ -143,7 +143,7 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		result.setListJoinClause(searcher.getListJoinClause());
 
 		// between
-		for (BOBetweenClause cBT : searcher.getListBetweenClause()) {
+		for (YAFilterBetweenClause cBT : searcher.getListBetweenClause()) {
 			Map<String, Object> serializeBT = new HashMap<String, Object>();
 
 			serializeBT.put(NAME_FIELD, cBT.getNameField());
@@ -154,14 +154,14 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			result.getListbetween().add(serializeBT);
 		}
 
-		for (BOLikeClause cLike : searcher.getListLikeClause()) {
+		for (YAFilterLikeClause cLike : searcher.getListLikeClause()) {
 			if (cLike.isInsensitive())
 				result.getListLikeInsensitive().add(_serializeBusinessClause(cLike));
 			else
 				result.getListLike().add(_serializeBusinessClause(cLike));
 		}
 
-		for (BOOperatorClause cOper : searcher.getListOperatorClause()) {
+		for (YAFilterOperatorClause cOper : searcher.getListOperatorClause()) {
 			Map<String, Object> serOper = _serializeBusinessClause(cOper);
 			/*
 			 * if (cOper.get_valueDouble() == 0 && cOper.get_valueInt() == 0) {
@@ -211,12 +211,12 @@ public abstract class BOSearch extends BOBase implements Serializable {
 			result.setDescendent(searcher.isDescendent());
 		}
 
-		for (BOSearch cOr : searcher.getListOrClause()) {
+		for (YAFilterSearch cOr : searcher.getListOrClause()) {
 			if (cOr.getListOrderBy().size() > 0)
 				throw new RepositoryException(
 						"Non e' permesso impostare criteri di ordinamento in una clausola OR. Utilizzare l'istanza BOSearch principale per impostare l'oggetto ListOrderBy");
 
-			BOSerializeCriteria orSerialized = _buildItemClause(cOr);
+			YAFilterSerializeCriteria orSerialized = _buildItemClause(cOr);
 			result.getListOrClause().add(orSerialized);
 		}
 
@@ -337,27 +337,27 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		this.listExcludeProjection = listExcludeProjection;
 	}
 
-	public List<BOBetweenClause> getListBetweenClause() {
+	public List<YAFilterBetweenClause> getListBetweenClause() {
 		return listBetweenClause;
 	}
 
-	public void setListBetweenClause(List<BOBetweenClause> listBetweenClause) {
+	public void setListBetweenClause(List<YAFilterBetweenClause> listBetweenClause) {
 		this.listBetweenClause = listBetweenClause;
 	}
 
-	public List<BOLikeClause> getListLikeClause() {
+	public List<YAFilterLikeClause> getListLikeClause() {
 		return listLikeClause;
 	}
 
-	public void setListLikeClause(List<BOLikeClause> listLikeClause) {
+	public void setListLikeClause(List<YAFilterLikeClause> listLikeClause) {
 		this.listLikeClause = listLikeClause;
 	}
 
-	public List<BOOperatorClause> getListOperatorClause() {
+	public List<YAFilterOperatorClause> getListOperatorClause() {
 		return listOperatorClause;
 	}
 
-	public void setListOperatorClause(List<BOOperatorClause> listOperatorClause) {
+	public void setListOperatorClause(List<YAFilterOperatorClause> listOperatorClause) {
 		this.listOperatorClause = listOperatorClause;
 	}
 
@@ -401,11 +401,11 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		this.listIsZero = listIsZero;
 	}
 
-	public List<BOSearch> getListOrClause() {
+	public List<YAFilterSearch> getListOrClause() {
 		return listOrClause;
 	}
 
-	public void setListOrClause(List<BOSearch> listOrClause) {
+	public void setListOrClause(List<YAFilterSearch> listOrClause) {
 		this.listOrClause = listOrClause;
 	}
 
@@ -449,11 +449,11 @@ public abstract class BOSearch extends BOBase implements Serializable {
 		this.listEntityGraph = listEntityGraph;
 	}
 
-	public List<BOJoinClause> getListJoinClause() {
+	public List<YAFilterJoinClause> getListJoinClause() {
 		return listJoinClause;
 	}
 
-	public void setListJoinClause(List<BOJoinClause> listJoinClause) {
+	public void setListJoinClause(List<YAFilterJoinClause> listJoinClause) {
 		this.listJoinClause = listJoinClause;
 	}
 

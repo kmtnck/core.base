@@ -42,7 +42,7 @@ import it.alessandromodica.product.model.po.VGestioneUtenti;
 import it.alessandromodica.product.model.po.VGestioneUtentiOuth;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
-import it.alessandromodica.product.persistence.searcher.BOSearchApp;
+import it.alessandromodica.product.persistence.searcher.YAFilterSearchApp;
 import it.alessandromodica.product.services.interfaces.IMainService;
 import it.alessandromodica.product.services.interfaces.ISecurityService;
 
@@ -143,7 +143,7 @@ public class SecurityService implements ISecurityService {
 
 		try {
 
-			BOSearchApp criteria = new BOSearchApp(GestioneUtentiOauth.class);
+			YAFilterSearchApp criteria = new YAFilterSearchApp(GestioneUtentiOauth.class);
 			criteria.setEmail(email);
 			GestioneUtentiOauth data = (GestioneUtentiOauth) repoquery.getSingleOrDefault(criteria.getSerialized());
 
@@ -153,7 +153,7 @@ public class SecurityService implements ISecurityService {
 				result.setEsito("Utente " + email + " rimosso con successo!");
 			}
 
-			criteria = new BOSearchApp(VGestioneUtentiOuth.class);
+			criteria = new YAFilterSearchApp(VGestioneUtentiOuth.class);
 			criteria.setNickname(nickname);
 
 			// XXX: applicare la propria logica di individuazione utente con la
@@ -209,7 +209,7 @@ public class SecurityService implements ISecurityService {
 			if (validToken) {
 				try {
 
-					BOSearchApp criteria = new BOSearchApp(GestioneUtentiOauth.class);
+					YAFilterSearchApp criteria = new YAFilterSearchApp(GestioneUtentiOauth.class);
 					criteria.setEmail(email);
 
 					int checkauth = repoquery.getCount(criteria.getSerialized());
@@ -229,7 +229,7 @@ public class SecurityService implements ISecurityService {
 
 					} else {
 
-						criteria = new BOSearchApp(GestioneUtentiOauthSessioni.class);
+						criteria = new YAFilterSearchApp(GestioneUtentiOauthSessioni.class);
 						criteria.setIdtoken(idtoken);
 
 						int checksessione = repoquery.getCount(criteria.getSerialized());
@@ -246,7 +246,7 @@ public class SecurityService implements ISecurityService {
 					}
 
 					if (canAddSession) {
-						criteria = new BOSearchApp(GestioneUtentiOauth.class);
+						criteria = new YAFilterSearchApp(GestioneUtentiOauth.class);
 						criteria.setEmail(email);
 
 						GestioneUtentiOauth poauth = ((GestioneUtentiOauth) repoquery
@@ -269,7 +269,7 @@ public class SecurityService implements ISecurityService {
 						repocommands.add(toAdd);
 					}
 
-					criteria = new BOSearchApp(VGestioneUtentiOuth.class);
+					criteria = new YAFilterSearchApp(VGestioneUtentiOuth.class);
 					criteria.setNickname(payload.getNickname());
 
 					// XXX: applicare la propria logica di individuazione utente
@@ -393,10 +393,10 @@ public class SecurityService implements ISecurityService {
 			_mainService.logAccesso("Avvio sessione di qualsiasi cosa tu abbia in mente " + versione, authContext.getUtenteCorrente());
 
 			int check;
-			BOSearchApp criteria;
+			YAFilterSearchApp criteria;
 			try {
 
-				criteria = new BOSearchApp(GestioneUtenti.class);
+				criteria = new YAFilterSearchApp(GestioneUtenti.class);
 
 				criteria.getListIsNull().add("keyaccess");
 
@@ -419,7 +419,7 @@ public class SecurityService implements ISecurityService {
 						String checkcookie = getSecureCookie(cookies, "csrftoken");
 
 						// XXX:utente gia' registrato
-						criteria = new BOSearchApp(VGestioneUtenti.class);
+						criteria = new YAFilterSearchApp(VGestioneUtenti.class);
 						criteria.setNickname(authContext.getUtenteCorrente().getNickname());
 						VGestioneUtenti inforegistrazione = (VGestioneUtenti) repoquery
 								.getSingleOrDefault(criteria.getSerialized());
@@ -490,7 +490,7 @@ public class SecurityService implements ISecurityService {
 						String esito = "In attesa di approvazione all'accesso al sistema.";
 
 						// XXX: fase di registrazione di un nuovo utente
-						criteria = new BOSearchApp(CommonBlacklist.class);
+						criteria = new YAFilterSearchApp(CommonBlacklist.class);
 						// criteria.setPlayer(utenteCorrente.getNickname());
 						criteria.getListIsNotNull().add("keyaccess");
 						List<CommonBlacklist> list = repoquery.search(criteria.getSerialized());
@@ -584,7 +584,7 @@ public class SecurityService implements ISecurityService {
 
 		try {
 
-			BOSearchApp criteria = new BOSearchApp(GestioneUtenti.class);
+			YAFilterSearchApp criteria = new YAFilterSearchApp(GestioneUtenti.class);
 			criteria.setNickname(authContext.getUtenteCorrente().getNickname());
 			GestioneUtenti utenteregistrato = (GestioneUtenti) repoquery.getSingleOrDefault(criteria.getSerialized());
 
@@ -604,7 +604,7 @@ public class SecurityService implements ISecurityService {
 
 			} else {
 
-				criteria = new BOSearchApp(CommonBlacklist.class);
+				criteria = new YAFilterSearchApp(CommonBlacklist.class);
 				criteria.setNickname(authContext.getUtenteCorrente().getNickname());
 				criteria.getListIsNotNull().add("keyaccess");
 				CommonBlacklist info = (CommonBlacklist) repoquery.getSingleOrDefault(criteria.getSerialized());
@@ -615,7 +615,7 @@ public class SecurityService implements ISecurityService {
 
 					String cipher = md5(keyaccess + scarabocchio);
 
-					criteria = new BOSearchApp(GestioneUtentiOauth.class);
+					criteria = new YAFilterSearchApp(GestioneUtentiOauth.class);
 					criteria.setNickname(authContext.getUtenteCorrente().getNickname());
 					GestioneUtentiOauth dataoauth = (GestioneUtentiOauth) repoquery
 							.getSingleOrDefault(criteria.getSerialized());
@@ -639,7 +639,7 @@ public class SecurityService implements ISecurityService {
 							newUser.setPrivatekey(keys[1]);
 							repocommands.add(newUser);
 
-							BOSearchApp searcher = new BOSearchApp(CommonBlacklist.class);
+							YAFilterSearchApp searcher = new YAFilterSearchApp(CommonBlacklist.class);
 							searcher.setNickname(authContext.getUtenteCorrente().getNickname());
 							CommonBlacklist removeBlackListed = (CommonBlacklist) repoquery
 									.getSingle(searcher.getSerialized());
@@ -661,7 +661,7 @@ public class SecurityService implements ISecurityService {
 
 			}
 
-			criteria = new BOSearchApp(VGestioneUtentiOuth.class);
+			criteria = new YAFilterSearchApp(VGestioneUtentiOuth.class);
 			criteria.setNickname(authContext.getUtenteCorrente().getNickname());
 
 			VGestioneUtentiOuth soauth = (VGestioneUtentiOuth) repoquery.getSingleOrDefault(criteria.getSerialized());
@@ -693,7 +693,7 @@ public class SecurityService implements ISecurityService {
 			if (authContext.getUtenteCorrente().getTokenapp().equals("bot")) {
 				esito = true;
 			} else {
-				BOSearchApp criteria = new BOSearchApp(GestioneApps.class);
+				YAFilterSearchApp criteria = new YAFilterSearchApp(GestioneApps.class);
 				criteria.setTokenapp(authContext.getUtenteCorrente().getTokenapp());
 				try {
 					repoquery.getSingle(criteria.getSerialized());

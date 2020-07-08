@@ -21,8 +21,8 @@ import it.alessandromodica.product.model.po.GestioneUtenti;
 import it.alessandromodica.product.model.po.VUtentiLoggatiDettaglio;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
-import it.alessandromodica.product.persistence.searcher.BOLikeClause;
-import it.alessandromodica.product.persistence.searcher.BOSearchApp;
+import it.alessandromodica.product.persistence.searcher.YAFilterLikeClause;
+import it.alessandromodica.product.persistence.searcher.YAFilterSearchApp;
 import it.alessandromodica.product.services.interfaces.IAppService;
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -138,10 +138,10 @@ public class TestProcessActions extends TestCase {
 	public void testHibernate() throws ServiceException {
 
 		try {
-			BOLikeClause testSearch = new BOLikeClause();
+			YAFilterLikeClause testSearch = new YAFilterLikeClause();
 			testSearch.setNameField("email");
 			testSearch.setValue("alessandro.modica@gmail.com");
-			BOSearchApp criteria = new BOSearchApp(GestioneUtenti.class);
+			YAFilterSearchApp criteria = new YAFilterSearchApp(GestioneUtenti.class);
 			criteria.getListLikeClause().add(testSearch);
 
 			List<GestioneUtenti> fromDb = repoquery
@@ -167,7 +167,7 @@ public class TestProcessActions extends TestCase {
 	public void testSearch() throws ServiceException {
 
 		try {
-			BOSearchApp criteria = new BOSearchApp(GestioneUtenti.class);
+			YAFilterSearchApp criteria = new YAFilterSearchApp(GestioneUtenti.class);
 			criteria.setNickname("Gunny13");
 
 			List<GestioneUtenti> fromDb = repoquery
@@ -226,8 +226,8 @@ public class TestProcessActions extends TestCase {
 	public void testElencoUtenti() throws BusinessException {
 		// TODO Auto-generated method stub
 		String searcher = "min";
-		BOSearchApp criteria = new BOSearchApp(GestioneUtenti.class);
-		BOLikeClause likeClause = new BOLikeClause();
+		YAFilterSearchApp criteria = new YAFilterSearchApp(GestioneUtenti.class);
+		YAFilterLikeClause likeClause = new YAFilterLikeClause();
 		likeClause.setInsensitive(true);
 		likeClause.setNameField("nickname");
 		likeClause.setValue("%" + searcher + "%");
@@ -260,7 +260,7 @@ public class TestProcessActions extends TestCase {
 			toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
 			repocommand.add(toAdd);
 
-			BOSearchApp testsearch = new BOSearchApp(CommonLogaccesso.class);
+			YAFilterSearchApp testsearch = new YAFilterSearchApp(CommonLogaccesso.class);
 			testsearch.setDescrizione("Adesso facciamo un altro test!!");
 			List<CommonLogaccesso> resulttest = repoquery
 					.search(testsearch.getSerialized());
@@ -297,8 +297,8 @@ public class TestProcessActions extends TestCase {
 			 * SakRepository .GetRepoQueries(PluginLoggerchatInfoportali.class)
 			 * .getFirstOrDefault(Restrictions.eq("coordinate", "44.836,11.5989"));
 			 */
-			BOSearchApp criteria;
-			criteria = new BOSearchApp(CommonBlacklist.class);
+			YAFilterSearchApp criteria;
+			criteria = new YAFilterSearchApp(CommonBlacklist.class);
 			criteria.setDescrizione("test");
 			criteria.getListIsNull().add("keyaccess");
 

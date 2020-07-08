@@ -8,7 +8,7 @@ package it.alessandromodica.product.persistence.searcher;
  * @author Alessandro
  *
  */
-public class BOLikeClause extends BOBase {
+public class YAFilterLikeClause extends YAFilterBase {
 
 	/**
 	 * 

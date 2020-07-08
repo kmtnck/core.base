@@ -7,7 +7,7 @@ package it.alessandromodica.product.persistence.searcher;
  * @author Alessandro
  *
  */
-public class BOOperatorClause extends BOBase {
+public class YAFilterOperatorClause extends YAFilterBase {
 
 	/**
 	 * 

@@ -7,7 +7,7 @@ package it.alessandromodica.product.persistence.searcher;
  * @author Alessandro
  *
  */
-public class BOBetweenClause extends BOBase {
+public class YAFilterBetweenClause extends YAFilterBase {
 
 	/**
 	* 

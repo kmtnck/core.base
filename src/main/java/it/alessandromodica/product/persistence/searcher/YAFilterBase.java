@@ -18,7 +18,7 @@ import it.alessandromodica.product.common.exceptions.RepositoryException;
  * @author Alessandro
  *
  */
-public class BOBase implements Serializable {
+public class YAFilterBase implements Serializable {
 
 	/**
 	 * 

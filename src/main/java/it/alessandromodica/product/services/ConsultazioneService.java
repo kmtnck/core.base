@@ -10,7 +10,7 @@ import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.model.po.VUtentiLoggatiDettaglio;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
-import it.alessandromodica.product.persistence.searcher.BOSearchApp;
+import it.alessandromodica.product.persistence.searcher.YAFilterSearchApp;
 import it.alessandromodica.product.services.interfaces.IAppService;
 
 /**
@@ -46,7 +46,7 @@ public class ConsultazioneService implements IAppService {
 
 	private List<VUtentiLoggatiDettaglio> recoverUtenti() throws RepositoryException {
 		List<VUtentiLoggatiDettaglio> result = repoquery//.setEntity(VUtentiLoggatiDettaglio.class)
-				.search(new BOSearchApp(VUtentiLoggatiDettaglio.class).getSerialized());
+				.search(new YAFilterSearchApp(VUtentiLoggatiDettaglio.class).getSerialized());
 
 		return result;
 	}

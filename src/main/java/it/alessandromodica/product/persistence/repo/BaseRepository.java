@@ -28,10 +28,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.interfaces.IBulkTransaction;
-import it.alessandromodica.product.persistence.searcher.BOJoinClause;
-import it.alessandromodica.product.persistence.searcher.BOOperatorClause.Operators;
-import it.alessandromodica.product.persistence.searcher.BOSearch;
-import it.alessandromodica.product.persistence.searcher.BOSerializeCriteria;
+import it.alessandromodica.product.persistence.searcher.YAFilterJoinClause;
+import it.alessandromodica.product.persistence.searcher.YAFilterOperatorClause.Operators;
+import it.alessandromodica.product.persistence.searcher.YAFilterSearch;
+import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteria;
 
 /**
  * Classe astratta in cui sono raccolte le implementazioni standard per
@@ -76,7 +76,7 @@ public abstract class BaseRepository<T, JOIN> {
 		}
 	}
 
-	protected Query buildCriteriaQuery(BOSerializeCriteria serializeCriteria) throws RepositoryException {
+	protected Query buildCriteriaQuery(YAFilterSerializeCriteria serializeCriteria) throws RepositoryException {
 		return buildCriteriaQuery(null, serializeCriteria);
 	}
 
@@ -104,7 +104,7 @@ public abstract class BaseRepository<T, JOIN> {
 	}
 
 	@SuppressWarnings("rawtypes")
-	protected Query buildCriteriaQuery(String alias, BOSerializeCriteria serializeCriteria) throws RepositoryException {
+	protected Query buildCriteriaQuery(String alias, YAFilterSerializeCriteria serializeCriteria) throws RepositoryException {
 
 		setClass(serializeCriteria.getClassEntity());
 
@@ -181,7 +181,7 @@ public abstract class BaseRepository<T, JOIN> {
 		return cOrder;
 	}
 
-	protected List<Predicate> buildPredicates(String alias, BOSerializeCriteria serializeCriteria)
+	protected List<Predicate> buildPredicates(String alias, YAFilterSerializeCriteria serializeCriteria)
 			throws RepositoryException {
 		CriteriaBuilder builder = em.getCriteriaBuilder();
 		CriteriaQuery<T> query = builder.createQuery(classEntity);
@@ -210,7 +210,7 @@ public abstract class BaseRepository<T, JOIN> {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private List<Predicate> composeQuery(CriteriaBuilder builder, Root<T> root, BOSerializeCriteria serializeCriteria)
+	private List<Predicate> composeQuery(CriteriaBuilder builder, Root<T> root, YAFilterSerializeCriteria serializeCriteria)
 			throws RepositoryException {
 
 		List<Predicate> predicates = new ArrayList<Predicate>(0);
@@ -223,7 +223,7 @@ public abstract class BaseRepository<T, JOIN> {
 			});
 		}
 
-		for (BOJoinClause<JOIN> cJoin : serializeCriteria.getListJoinClause()) {
+		for (YAFilterJoinClause<JOIN> cJoin : serializeCriteria.getListJoinClause()) {
 
 			Join<T, JOIN> righeJoin = root.join(cJoin.getEntityToJoin());
 			Expression<Object> exp = setFieldJoin(righeJoin, cJoin.getFieldToJoin());
@@ -246,15 +246,15 @@ public abstract class BaseRepository<T, JOIN> {
 		}
 
 		for (Map<String, Object> cLike : serializeCriteria.getListLike()) {
-			String field = cLike.get(BOSearch.NAME_FIELD).toString();
-			Object value = cLike.get(BOSearch.VALUE_FIELD);
+			String field = cLike.get(YAFilterSearch.NAME_FIELD).toString();
+			Object value = cLike.get(YAFilterSearch.VALUE_FIELD);
 			Expression<String> rootField = root.get(field);
 			predicates.add(builder.like(rootField, value.toString()));
 		}
 
 		for (Map<String, Object> cInsLike : serializeCriteria.getListLikeInsensitive()) {
-			String field = cInsLike.get(BOSearch.NAME_FIELD).toString();
-			Object value = cInsLike.get(BOSearch.VALUE_FIELD);
+			String field = cInsLike.get(YAFilterSearch.NAME_FIELD).toString();
+			Object value = cInsLike.get(YAFilterSearch.VALUE_FIELD);
 			Expression<String> rootField = root.get(field);
 			predicates.add(builder.like(builder.lower(rootField), value.toString().toLowerCase()));
 		}
@@ -262,16 +262,16 @@ public abstract class BaseRepository<T, JOIN> {
 		// Vincoli di controllo tra due valori, vale per il tipo integer, double e date
 		for (Map<String, Object> cBT : serializeCriteria.getListbetween()) {
 
-			Class<?> typeData = (Class) cBT.get(BOSearch.TYPE_DATA);
-			String field = cBT.get(BOSearch.NAME_FIELD).toString();
+			Class<?> typeData = (Class) cBT.get(YAFilterSearch.TYPE_DATA);
+			String field = cBT.get(YAFilterSearch.NAME_FIELD).toString();
 
 			Expression rootField = setFieldRoot(root, field);
 			Object valueTo = null;
 			Object valueFrom = null;
-			if (cBT.get(BOSearch.VALUE_TO) != null)
-				valueTo = cBT.get(BOSearch.VALUE_TO);
-			if (cBT.get(BOSearch.VALUE_FROM) != null)
-				valueFrom = cBT.get(BOSearch.VALUE_FROM);
+			if (cBT.get(YAFilterSearch.VALUE_TO) != null)
+				valueTo = cBT.get(YAFilterSearch.VALUE_TO);
+			if (cBT.get(YAFilterSearch.VALUE_FROM) != null)
+				valueFrom = cBT.get(YAFilterSearch.VALUE_FROM);
 
 			predicates.add(createRangePredicate(builder, rootField, valueFrom, valueTo, typeData));
 
@@ -279,7 +279,7 @@ public abstract class BaseRepository<T, JOIN> {
 
 		for (Map<String, Object> cOper : serializeCriteria.getListOperator()) {
 
-			Class<?> typeData = (Class) cOper.get(BOSearch.TYPE_DATA);
+			Class<?> typeData = (Class) cOper.get(YAFilterSearch.TYPE_DATA);
 			Predicate predicato = null;
 			if (typeData != null) {
 				OperatorClause buildPredicato = null;
@@ -333,7 +333,7 @@ public abstract class BaseRepository<T, JOIN> {
 		}
 
 		List<Predicate> orPredicates = new ArrayList<Predicate>(0);
-		for (BOSerializeCriteria cOr : serializeCriteria.getListOrClause()) {
+		for (YAFilterSerializeCriteria cOr : serializeCriteria.getListOrClause()) {
 
 			List<Predicate> orPred = composeQuery(builder, root, cOr);
 			Predicate orPredicate = builder.or(orPred.toArray(new Predicate[orPred.size()]));
@@ -397,11 +397,11 @@ public abstract class BaseRepository<T, JOIN> {
 
 			Predicate predicato = null;
 
-			String field = cOper.get(BOSearch.NAME_FIELD).toString();
+			String field = cOper.get(YAFilterSearch.NAME_FIELD).toString();
 			Operators operatore = Enum.valueOf(Operators.class, cOper.get("_operatore").toString());
 
 			Expression<K> rootField = root.get(field);
-			K value = (K) cOper.get(BOSearch.VALUE_FIELD);
+			K value = (K) cOper.get(YAFilterSearch.VALUE_FIELD);
 
 			switch (operatore) {
 			case minusequals:
@@ -610,7 +610,7 @@ public abstract class BaseRepository<T, JOIN> {
 		return search(em.createQuery(criteria));
 	}
 
-	public List<T> search(BOSerializeCriteria serializeCriteria) throws RepositoryException {
+	public List<T> search(YAFilterSerializeCriteria serializeCriteria) throws RepositoryException {
 
 		return search(buildCriteriaQuery(serializeCriteria));
 	}
@@ -631,7 +631,7 @@ public abstract class BaseRepository<T, JOIN> {
 		return getRetrieve(em.createQuery(criteria), UniqueStrategy.single);
 	}
 
-	public T getSingle(BOSerializeCriteria serializeCriteria) throws RepositoryException {
+	public T getSingle(YAFilterSerializeCriteria serializeCriteria) throws RepositoryException {
 		return (T) getRetrieve(buildCriteriaQuery(serializeCriteria), UniqueStrategy.single);
 	}
 
@@ -639,7 +639,7 @@ public abstract class BaseRepository<T, JOIN> {
 		return getRetrieve(em.createQuery(criteria), UniqueStrategy.singledefault);
 	}
 
-	public T getSingleOrDefault(BOSerializeCriteria serializeCriteria) throws RepositoryException {
+	public T getSingleOrDefault(YAFilterSerializeCriteria serializeCriteria) throws RepositoryException {
 		return (T) getRetrieve(buildCriteriaQuery(serializeCriteria), UniqueStrategy.singledefault);
 	}
 
@@ -647,7 +647,7 @@ public abstract class BaseRepository<T, JOIN> {
 		return getRetrieve(em.createQuery(criteria), UniqueStrategy.first);
 	}
 
-	public T getFirst(BOSerializeCriteria serializeCriteria) throws RepositoryException {
+	public T getFirst(YAFilterSerializeCriteria serializeCriteria) throws RepositoryException {
 		return (T) getRetrieve(buildCriteriaQuery(serializeCriteria), UniqueStrategy.first);
 	}
 
@@ -655,7 +655,7 @@ public abstract class BaseRepository<T, JOIN> {
 		return getRetrieve(em.createQuery(criteria), UniqueStrategy.firstdefault);
 	}
 
-	public T getFirstOrDefault(BOSerializeCriteria serializeCriteria) throws RepositoryException {
+	public T getFirstOrDefault(YAFilterSerializeCriteria serializeCriteria) throws RepositoryException {
 		return (T) getRetrieve(buildCriteriaQuery(serializeCriteria), UniqueStrategy.firstdefault);
 	}
 
@@ -711,7 +711,7 @@ public abstract class BaseRepository<T, JOIN> {
 		return obj;
 	}
 
-	public int getCount(BOSerializeCriteria serializeCriteria) throws RepositoryException {
+	public int getCount(YAFilterSerializeCriteria serializeCriteria) throws RepositoryException {
 		try {
 			
 			setClass(serializeCriteria.getClassEntity());
