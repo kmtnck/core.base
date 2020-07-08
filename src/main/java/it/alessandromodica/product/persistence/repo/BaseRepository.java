@@ -123,7 +123,7 @@ public abstract class BaseRepository<T, JOIN> {
 		} else
 			query = query.select(root).distinct(true);
 
-		query = query.select(root);
+		//query = query.select(root);
 
 		List<Predicate> predicates = composeQuery(builder, root, serializeCriteria);
 		query.where(predicates.toArray(new Predicate[predicates.size()]));
