@@ -58,10 +58,8 @@ Per deployare il comando e' il seguente
 	gradle cargoRedeployRemote
  
 ## b) Parametri di logging con logback.xml
-La configurazione log4j e' la piu semplice e versatile possibile: è definito allo stesso package common nello scope resource.
- Si ha una predisposizione per essere inizializzato da un yaml
- Può essere automaticamente riconosciuto in qualsiasi classpath del package common, in modo da rendere granulare il suo uso in fase di testing o altri casi specifici. Qui di seguito la locazione presente in questo progetto.
-
+La configurazione log4j e' la piu semplice e versatile possibile.
+ 
 	./src/main/resources/logback.xml
 
 
