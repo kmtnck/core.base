@@ -3,7 +3,6 @@ package it.alessandromodica.product.persistence.repo;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Repository;
 
 import it.alessandromodica.product.model.bo.query.BOUtentiConnessi;
 import it.alessandromodica.product.persistence.exceptions.RepositoryException;
@@ -19,7 +18,6 @@ import it.alessandromodica.product.persistence.exceptions.RepositoryException;
  *
  * @param <T>
  */
-@Repository
 public class AppRepository<T, JOIN> extends BaseRepository<T, JOIN>  {
 
 	private static final Logger log = Logger.getLogger(AppRepository.class);
