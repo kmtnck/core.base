@@ -277,7 +277,7 @@ Programmatori che hanno la necessita di comporre query arbitrariamente complesse
 
 
 
-### A cosa serve il FilterSearcher
+### A cosa serve il YaFilterSearcher
 
 A usare i criteria hibernate usando un semplice insieme di pojo java.
 
