@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.alessandromodica.product.common.Constants;
-import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.po.CommonLogaccesso;
 import it.alessandromodica.product.model.po.GestioneUtenti;
+import it.alessandromodica.product.persistence.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
 import it.alessandromodica.product.persistence.searcher.YAFilterSearchApp;

@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import it.alessandromodica.product.app.AuthContext;
-import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.model.po.GestioneUtentiInfoautenticazione;
+import it.alessandromodica.product.persistence.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.interfaces.IBulkTransaction;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;

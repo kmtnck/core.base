@@ -7,7 +7,7 @@ import javax.ws.rs.core.UriInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import it.alessandromodica.product.common.exceptions.RepositoryException;
+import it.alessandromodica.product.persistence.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteria;
 
 /**

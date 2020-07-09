@@ -1,19 +1,19 @@
 # goToBusiness nome in codice: core.base
  Un modulo che prende cose e ne fa altre per soddisfare la felicita' .
  
- Una più ampia documentazione in stile javadoc e rigorosamente autogenerata la trovate qui https://alessandromodica.com/javadoc/gotobusiness/
-
+ Una piu' ampia documentazione in stile javadoc e rigorosamente autogenerata la trovate qui https://alessandromodica.com/javadoc/gotobusiness/
+(non e' sempre aggiornata, ma si puo autogenerare)
  
-# Parametri inossidabili
-Si considerano inossidabli quelle configurazioni standard presenti in una canonica applicazione e che subiscono pochissime modifiche nel tempo.
+# Parametri standard
+Si considerano standard quelle configurazioni presenti in una canonica applicazione e che subiscono pochissime modifiche nel tempo.
 
-In questo progetto le configurazioni sono su xml o annotation, a seconda le specifiche esigenze.
+In questo progetto le configurazioni sono su xml o annotation, a seconda le specifiche esigenze. 
 
 In elenco sono:
 
 a) parametri di compilazione e deploy tramite gli strumenti maven e gradle
 
-b) parametri di logging come può essere log4j o simili
+b) parametri di logging come puo' essere log4j o simili
 
 c) configurazione di accesso ad un datastorage : dominio, username/schema, credenziale.
 
@@ -21,6 +21,7 @@ d) Stringhe magiche e parametri definiti a codice.
 
 
 ## a) Parametri di compilazione e deploy 
+
  Ci sono alcuni parametri strutturali che definiscono l'uri dell'application server (es Tomcat) per il deploy e il nome dell'artefatto finale.
  
 Tra le properties presenti sul pom.xml ce ne sono due che definiscono:
@@ -28,13 +29,13 @@ Tra le properties presenti sul pom.xml ce ne sono due che definiscono:
  b) l'uri dell'indirizzo manager di tomcat
  	
  	<webappname>appdeployata</webappname>
- 		
 	<uri.deploytomcat>http://%DOMAIN%:8080/manager/text</uri.deploytomcat>
  
- Per deployare il comando da eseguire è il seguente
+ Per deployare il comando da eseguire e' il seguente
  
  	mvn tomcat7:redeploy
  
+Solo per gradle:
 Con gradle si considerano i parametri del tag di configurazione di cargo, il plugin incaricato al deploy remoto su container
  
 	 cargo {
@@ -52,7 +53,7 @@ Con gradle si considerano i parametri del tag di configurazione di cargo, il plu
 	    }
 	}
 
-Per deployare il comando è il seguente
+Per deployare il comando e' il seguente
 
 	gradle cargoRedeployRemote
  
@@ -66,8 +67,12 @@ La configurazione log4j è la piu semplice e versatile possibile: è definito al
 
 ## c) Configurazione della persistence unit tramite persistence.xml
  In java ci sono molteplici approcci per configurare un datastorage, e ancor di piu con l'introduzione delle configurazioni dinamiche yaml kubernets oriented.
- Questa applicazione si basa sulle annotation JPA e Hibernate. La modalità delle transazione è il classico RESOURCE_LOCAL.
-La modalità JTA richiede un minimo di adattamento dei repository, ma necessita di un application server JTA compliance. Attualmente l'application server supportato è tomcat ma potrebbe essere incapsulato in un container cordova in un contesto nodejs.
+ 
+ Questa applicazione si basa sulle annotation JPA e Hibernate. La modalita'� delle transazione e' il classico RESOURCE_LOCAL, ma sostanzialmente si puo configurare l'accesso al datasource (o piu datasource) nelle modalita piu congeniali.
+ 
+Tuttavia la modalita' JTA richiede un minimo di adattamento dei repository che in questa release e' in una libreria separata e supporta le annotation springboot. Una libreria ad hoc yarepository con supporto delle jta implementation permettera di avviarlo anche in un contesto EE.
+
+A titolo di esempio si e' scelto come application server il "semplice" Tomcat, ma la scelta dell'AP e' ininfluente ai fini di questo progetto.
  
 I parametri fondamentali da immettere rimangono comunque i seguenti:
 
@@ -75,26 +80,22 @@ I parametri fondamentali da immettere rimangono comunque i seguenti:
 	%USERNAME% username/nomeistanza
 	%PASSWORD% la password di accesso
 
-L'applicazione è configurata di default per accedere ad un database su file hdbsql di nome storageapp. Il database mappato sul persistence.xml ed è creato a runtime. La base dati iniziale è già usufruibile per fare junit. Si ha libertà di modificare le coordinate di accesso al databse che si preferisce tramite il persistence.xml.
+Questi parametri potrebbero risiedere in un file yaml o recuperati dinamicamente a fronte di opportune chiamate, in questo progetto i parametri sono raccolti nel file datasource.properties e sono letti dalla classe di configurazione AppConfig.
+
+L'applicazione e' configurata di default per accedere ad un database su file hdbsql di nome storageapp.
+Il database mappato sul persistence.xml ed e' creato a runtime. La base dati iniziale e' gia'� usufruibile per fare junit.
 
 ### Autogenerazione con Hibernate Tools
 
 E' possibile tramite Hibernate Tools, autogenerare i bean a partire dalle tabelle applicando le configurazioni basi consigliate da hibernate tools, utilizzando come file di supporto i .properties e il .cfg di hibernate definito all'uopo.
+Consultare le guide sul best practise riguardo il file reveng.xml, per una autogenerazione il piu' possibile aderente alla base dati su cui si deve lavorare.
 Successivamente integrare i PO generati sul sorgente dell'applicazione definendoli sul persistence.xml. I PO possono essere customizzati a seconda le esigenze.
+La autogenerazione e' da intendersi come un supporto allo sviluppatore impedendoli di scrivere "boiled" code comunque necessario, e modificare le personalizzazioni che servono.
 
-Il repository riconoscerà la nuova entità una volta che è stata correttamente caricata dalla unità di persistenza definita, nell'esempio la persistence unit si chiama "appjpa"
+Di fatto il yarepository di cui fa uso l'applicazione dimostrativa goToBusiness riconosce un qualsiasi insieme di entita hibernate valide indicate nel packageToScan property.
+
 
 ## d) Vari parametri in static String
-
-Nella classe 
-	
-	it.alessandromodica.product.app.GoToBusiness
-	
-è stata definita una variabile statica in cui è valorizzato il nome dell'app sui log. 
-
-	public static final String TITOLO_APP = "goToBusiness";
-
-Non è fondamentale ai fini dell'applicazione, ma è utile se si vuole dare una personalizzazione ai log.
 
 La classe
 
@@ -104,34 +105,37 @@ definisce tutte le costanti stringhe significative utilizzate dall'applicazione.
 
 # Annotation e policy
 
-In questo progetto si è voluto unire il colpo d'occhio dei package con la definizione di annotation su opportuni bean, in modo tale da unire in un contesto specifico le varie definizioni in annotation, e quindi all'interno del codice sorgente e che necessitano di un nuovo deploy in ogni sua modifica.
+In questo progetto si e' voluto unire il colpo d'occhio dei package con la definizione di annotation su opportuni bean, in modo tale da unire in un contesto specifico le varie definizioni in annotation, e quindi all'interno del codice sorgente e che necessitano di un nuovo deploy in ogni sua modifica.
 L'uso delle annotation si limita pertanto nei seguenti casi:
 
 Al package
 
-	it.alessandromodica.product.model.bo.query
+	it.alessandromodica.product.model.po
 
-Sono raccolti tutti i bean che vengono ritornati da una chiamata sql legacy pura o qualsiasi sia supportata dalle namequery
+Sono raccolti tutti i bean scannerizzati da Spring in fase di avvio
+
+
+Esempio di dichiarazione di una storeprocedure, in generale si utilizzano le annotation hibernate per "decorare" il repository con opportuni oggetti dba ad esempio store procedure o sequence id
 
 	@Entity
 	@NamedNativeQuery(name = "utentiLoggati", query = "{ call utentiLoggati(:periodo,:nickname)}", resultClass = BOUtentiConnessi.class)
 
 La classe
 
-	it.alessandromodica.product.common.config.ConfigApp
+	it.alessandromodica.product.common.config.AppConfig
 
-è annotata come 
+e' annotata come 
 
 	@Configurator
 	
 istruendo Spring a gestirla come classe di configurazione. 
-Per ora è definito il 
+Lo scanning delle classi puo' avvenire anche con la seguente annotazione
 
 	@ComponentScan(basePackages="it.alessandromodica.product")
 
-che istruisce il package di ricerca delle annotation IOC (@Component, @Autowired ...)
+ma per questo progetto si e' scelta la strada di personalizzare il package da file di configurazione.
 
-La classe GoToBusiness definisce in Autowired i repository per l'accesso ai dati, usati dall'infrastruttura per le varie funzionalità
+Per ottenere a scope applicativo i repository di lettura e scrittura e' sufficiente dichiararli come oggetto iniettato (con Spring Autowired)
 
 	@Autowired
 	protected IRepositoryQueries repoquery;
@@ -142,46 +146,42 @@ La classe GoToBusiness definisce in Autowired i repository per l'accesso ai dati
 	@Autowired
 	protected AppRepository reporawsql;
 
-Si può notare che gli oggetti sono interfacce, e i repository sono classificati in base alle azioni di lettura (queries), scrittura (commands) e accesso sql legacy (store procedure in annotation o name query).
+Si puo notare che gli oggetti sono interfacce, e i repository sono classificati in base alle azioni di lettura (queries), scrittura (commands) e accesso sql legacy (store procedure in annotation o name query).
 
 # Come avviare l'applicazione da un semplice hello world
 
-Se il clone git è andato a buon fine, maven è stato configurato per accedere ai piu famosi repository presenti nel globo, allora potrebbe essere sufficiente eseguire alla base del progetto il comando 
+Se il clone git e' andato a buon fine, maven e' stato configurato per accedere ai piu famosi repository presenti nel globo, allora potrebbe essere sufficiente eseguire alla base del progetto il comando 
  
 	 mvn clean install
 
-ciè eseguirà una compilazione con il set di junit andati a buon fine.
+che esegue� una compilazione con il set di junit andati a buon fine.
 
-Se è tutto ok, allora nel target dovrebbe essere presente un artefatto .war con il nome da voi scelto, di default dovrebbe essere
+Se tutto e' ok, allora nel target dovrebbe essere presente un artefatto .war con il nome da voi scelto, di default dovrebbe essere
 
 	appdeployata
 
-Per avviare l'applicazione e il suo contesto spring è sufficiente eseguire le seguenti istruzioni
+Per avviare l'applicazione da un junit o un main application e' sufficiente eseguire le seguenti istruzioni
 
-			MainApplication.InitApp("appjpa");	
-			context = new AnnotationConfigApplicationContext(ConfigApp.class);
+			context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-InitApp istanzia il logger e la persistence unit definita in parametro hardcode. Dopo la sua esecuzione il repository è operativo.
+Il contesto spring e' configurato con la classe AppConfig e si ha quindi accesso a tutti gli oggetti iniettati, repository compresi
 
-Successivamente viene istanziato il contesto applicativo definito dalla configurazione ConfigApp e quindi l'app è avviata.
+		repocommand = context.getBean(IRepositoryCommands.class);
+		repoquery = context.getBean(IRepositoryQueries.class);
+		
+La flessibilita'� e' tale da poter creare un junit disaccoppiando il contesto di persistenza dal contesto applicativo vero e proprio.
 
-La flessibilità è tale da poter creare un junit disaccoppiando il contesto di persistenza dal contesto applicativo vero e proprio.
+Sono predisposti handler per eseguire accessi a app esterne con le canoniche sequenze di autenticazione di un google sign-on e sulla classe MainContext è possibile definire la key_id necessaria per accedere ad un applicazione registrata su appengine
 
-Il goToBusiness è predisposto per eseguire accessi a app esterne con le canoniche sequenze di autenticazione di un google sign-on e sulla classe MainContext è possibile definire la key_id necessaria per accedere ad un applicazione registrata su appengine
+%KEYGOOGLEAPI% e' da definire una volta seguite le istruzioni su google sign in on 
 
-%KEYGOOGLEAPI% è da definire una volta seguite le istruzioni su google sign in on 
 
-Nella classe
-
-	it.alessandromodica.product.app.GoToBusiness
-
-è presente la chiamata al decoder indirizzi di google
+Nei casi in cui e' necessario acceedere ad esempio ad un decoder address di google si passa questo keygoogleapi
 
 	URL resolveAddress = new URL(
 			"https://maps.googleapis.com/maps/api/geocode/json?key=%KEYGOOGLEAPI%"
 			+ coordinate.getLat() + "," + coordinate.getLon());
 
-In questo caso specifico è utilizzato per accedere ai servizi di geo codifica degli indirizzi, si possono implementare altri sistemi , ma in generale quello che uno vuole. Qui era nato dall'esigenza di ottenere indirizzi codificati al volo.
 
 E predisposto per definire nuovi tipi di accessi ad altri provider di autenticazione.
 
@@ -195,12 +195,12 @@ nei metodi
 	onSignIn(googleUser)
 	signOut()
 
-si adatta l'uri di accesso all'endpoint del servizio applicativo impostando il dominio, il nome del progetto definito nel pom e il nome dell'endpoint definito su web.xml che è "handler"
+si adatta l'uri di accesso all'endpoint del servizio applicativo impostando il dominio, il nome del progetto definito nel pom e il nome dell'endpoint definito su web.xml che e' "handler"
 https://%DOMAIN%/${project.webappname}/handler
 
 Impostazioni sistemistiche piu avanzate possono definire l'uri piu idonea a seconda l'ambiente infrastrutturale.
 
-Se tutto è andato bene il login e logout di un account google dovrebbe riflettersi sulle tabelle ad hoc predisposte.
+Se tutto e' andato bene il login e logout di un account google dovrebbe riflettersi sulle tabelle ad hoc predisposte.
 
 I metodi
 
@@ -215,25 +215,119 @@ possono poi essere implementati a seconda le esigenze specifiche. Sono presenti 
 
 # Accesso ai dati con gli oggetti repository
 
-In uno dei junit definiti è possibile vedere il modo in cui è possibile eseguire una lettura dati tramite hibernate, utilizzando il comodo oggetto repository implementato in questo progetto, e vero fulcro innovativo di tutta l'applicazione
+In uno dei junit definiti e' possibile vedere il modo in cui è possibile eseguire una lettura dati tramite hibernate, utilizzando il comodo oggetto repository implementato in questo progetto, e vero fulcro innovativo di tutta l'applicazione
 
-			BOLikeClause testSearch = new BOLikeClause();
-			testSearch.set_nameField("email");
-			testSearch.set_value("alessandro.modica@gmail.com");
-			BOSearchApp criteria = new BOSearchApp();
-			criteria.get_listLikeClause().add(testSearch);
+			YAFilterLikeClause testSearch = new YAFilterLikeClause();
+			testSearch.setNameField("email");
+			testSearch.setValue("alessandro.modica@gmail.com");
+			YAFilterSearchApp criteria = new YAFilterSearchApp(GestioneUtenti.class);
+			criteria.getListLikeClause().add(testSearch);
 
-			List<PluginGestioneUtenti> fromDb = repoquery.setEntity(PluginGestioneUtenti.class)
+			List<GestioneUtenti> fromDb = repoquery
 					.search(criteria.getSerialized());
 
 			if (fromDb.isEmpty())
-				Assert.assertTrue("I dati non sono stati trovati, ma la query è stata eseguita correttamente", true);
+				Assert.assertTrue("I dati non sono stati trovati, ma la query � stata eseguita correttamente", true);
 			else {
-				for (PluginGestioneUtenti pluginCommonLogaccesso : fromDb) {
+				for (GestioneUtenti pluginCommonLogaccesso : fromDb) {
 
 					log.info(pluginCommonLogaccesso.getNickname());
 				}
 				Assert.assertTrue(true);
 			}
 
-L'oggetto BOSearchApp rappresenta la maggior parte delle operazioni di lettura che si può fare su un database. L'esempio mostra come eseguire una ricerca in forma like, in cui si chiede il recupero di dati dalla tabella plugingestioneutenti che abbiano la mia email. In pratica si vuole cercare l'utenza del creatore di questa applicazione.
+L'oggetto YaFilterSearchApp rappresenta la maggior parte delle operazioni di lettura che si puo' fare su un database. L'esempio mostra come eseguire una ricerca in forma like, in cui si chiede il recupero di dati dalla tabella plugingestioneutenti che abbiano la mia email. In pratica si vuole cercare l'utenza del creatore di questa applicazione.
+
+# YaFilter
+
+Yet Another Filter Search! Esatto! Un altro ancora!
+
+
+In questo documento sintetico si vuole descrivere l'utilizzo di un pojo java finalizzato alla composizione dinamica di query HQL hibernate (usando i Criteria), senza per� usare una riga di codice di hibernate.
+
+L'obiettivo del pojo e' raccogliere le clausole definite al suo interno, serializzare in modo comodo i risultati di clausola, e infine far generare al repository la Query hibernate rispettando al meglio la sintassi HQL, da immettere nell'entitymanager.
+
+E' un filtro studiato per ottenere risultati da una base dati mappata su hibernate, in base ad arbitrarie e complesse query, il pi� possibili aderenti alle esigenze specifiche, ma usando un autogeneratore standard e riusabile, oltre che tutto incapsulato in un pojo, e usato solo dal repository.
+
+
+
+#Il risultato � il vantaggio di comporre ricerche hibernate senza usare hibernate.
+
+
+
+E' richiesta una minima conoscenza del funzionamento di hibernate e delle piu comuni regole di composizione di una query a partire da criteria. Negli anni queste interfacce cambiano , anche profondamente nel tempo, per decisioni implementative di chi sviluppa hibernate stesso. Questo filter e' progettato per aggiornarsi facilmente alle nuove specifiche delle versioni successive di hibernate, con minime modifiche al generatore query. 
+
+La prima release funzionante di un repository progettato attorno a questo Filter (ai tempi BOSearcher), risale al 2007, su piattaforma dotnet, framework 4. Successivamente fu riusato in ambito java (dopo porting) nel 2010 fino al 2014 su vari progetti in Java, tutt'ora utilizzati. In tutti i casi l'adozione di questo filtro ha permesso tempi di sviluppo efficaci e stabili per progetti arbitrariamente complessi.
+
+Il pojo � intuitivo e ha bisogno di poche accortezze, che, nel tempo, sono state inquadrate fin dal momento in cui si istanzia il pojo.
+
+
+
+La regola generale � che una istanza di un FilterSearch deve essere sempre associato a una entita hibernate su cui eseguire la ricerca, altrimenti errore null exception.
+
+La maggior parte delle clausole sono facili inserimenti di coppie field/valore come ad esempio nelle uguaglianze, la lista di campi che non devono essere nulli o viceversa ecc... ecc... . Tuttavia alcune clausole, per la loro stretta natura di requisiti input, sono organizzati con pojo filter specifici per quel tipo di clausola.
+
+Tutte le singole clausole sono gestite dal filter come lista di occorrenze, quindi , al netto di anomalie, le clausole sono sempre gestite in multi occorrenza, le quali vengono concatenate con logica AND dal generatore interno.
+
+Se si vuole imporre una clausola di or, � sufficiente creare due o piu filtersearch separati in cui ciascuno esprimere i casi da associare in OR. Questo sistema permette la creazione di alberature di query.
+
+
+
+#Per chi � destinato.
+
+Programmatori che hanno la necessita di comporre query arbitrariamente complesse usando i criteria hibernate.
+
+
+
+#A cosa serve il FilterSearcher
+
+A usare i criteria hibernate usando un semplice insieme di pojo java.
+
+
+
+#Come si usa
+
+E� un oggetto pojo tradizionale serializzabile in cui � possibile popolare delle strutture dati per accogliere clausole di ricerca tipiche di un database.
+
+Si istanzia il filtro dando come argomento la classe dell�entita su cui eseguire la ricerca (la root di hibernate)
+
+Dopo aver compilato il filtro si passa al metodo repository.search(searcher.getSerialized())
+
+
+
+#Di cosa ha bisogno
+
+L�unico requisito per poter funzionare � avere i dati di input come richiesti dal chiamante , e che per ciascuno di essi sia supportata la clausola di ricerca dal filtro (il campo correttamente mappato, che non sia di tipo formula, ecc... ecc...).
+
+
+
+#Ha requisiti di framework dell�applicativo su cui opera
+
+No! L�unico requisito, oltre a una implementazione JPA definita a livello di progetto,  � che abbia i dati in input a disposizione per la costruzione del filter e che sia presente in libreria il BaseRepository che riconosce il filtro, oltre ad hibernate ovviamente.
+
+L�oggetto searcher � disaccoppiato da ogni logica di come viene trasportato il dato in input e in output. Lo scopo � accedere ai risultati del repository con un criteria hibernate ben formato e arbitrariamente complesso senza usare i criteria.
+
+
+
+#Quali clausole supporta
+
+supporto join (beta)
+uguaglianza
+between tra tipi di oggetti rangeable
+like
+like insensitive
+confronto con operatori ( =, !=, <, <=, >=)
+isnull
+isnotnull
+iszero
+isnotempty
+confronto di un booleano
+concatenare piu filter in or (cluster di query hql concatenate in or)
+order by 
+controllo delle clausole di desc asc per singolo campo in order
+maxresult (paginazione)
+firstresult (paginazione)
+lista campi in proiezione (tracciato dati sottoinsieme di quello dell�entita)
+clausola in
+clausola notIn
+clausola di negazione

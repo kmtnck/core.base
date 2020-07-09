@@ -17,7 +17,7 @@ import org.jboss.logging.Logger;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import it.alessandromodica.product.common.Constants;
-import it.alessandromodica.product.common.exceptions.RepositoryException;
+import it.alessandromodica.product.persistence.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteria;
 
 /***

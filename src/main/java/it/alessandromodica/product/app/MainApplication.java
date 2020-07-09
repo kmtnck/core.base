@@ -12,9 +12,9 @@ import it.alessandromodica.product.common.InputData;
 import it.alessandromodica.product.common.enumerative.AppContext;
 import it.alessandromodica.product.common.enumerative.RequestVariable;
 import it.alessandromodica.product.common.exceptions.BusinessException;
-import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.context.interfaces.ISecurity;
 import it.alessandromodica.product.model.bo.BOUtente;
+import it.alessandromodica.product.persistence.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.uow.UnitOfWork;
 
