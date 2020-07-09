@@ -249,7 +249,7 @@ E' un filtro studiato per ottenere risultati da una base dati mappata su hiberna
 
 
 
-#Il risultato è il vantaggio di comporre ricerche hibernate senza usare hibernate.
+## Il risultato è il vantaggio di comporre ricerche hibernate senza usare hibernate.
 
 
 
@@ -271,61 +271,78 @@ Se si vuole imporre una clausola di or, è sufficiente creare due o piu filtersea
 
 
 
-#Per chi è destinato.
+### Per chi è destinato.
 
 Programmatori che hanno la necessita di comporre query arbitrariamente complesse usando i criteria hibernate.
 
 
 
-#A cosa serve il FilterSearcher
+### A cosa serve il FilterSearcher
 
 A usare i criteria hibernate usando un semplice insieme di pojo java.
 
 
 
-#Come si usa
+### Come si usa
 
-E’ un oggetto pojo tradizionale serializzabile in cui è possibile popolare delle strutture dati per accogliere clausole di ricerca tipiche di un database.
+E' un oggetto pojo tradizionale serializzabile in cui è possibile popolare delle strutture dati per accogliere clausole di ricerca tipiche di un database.
 
-Si istanzia il filtro dando come argomento la classe dell’entita su cui eseguire la ricerca (la root di hibernate)
+Si istanzia il filtro dando come argomento la classe dell'entita su cui eseguire la ricerca (la root di hibernate)
 
 Dopo aver compilato il filtro si passa al metodo repository.search(searcher.getSerialized())
 
 
 
-#Di cosa ha bisogno
+### Di cosa ha bisogno
 
-L’unico requisito per poter funzionare è avere i dati di input come richiesti dal chiamante , e che per ciascuno di essi sia supportata la clausola di ricerca dal filtro (il campo correttamente mappato, che non sia di tipo formula, ecc... ecc...).
-
-
-
-#Ha requisiti di framework dell’applicativo su cui opera
-
-No! L’unico requisito, oltre a una implementazione JPA definita a livello di progetto,  è che abbia i dati in input a disposizione per la costruzione del filter e che sia presente in libreria il BaseRepository che riconosce il filtro, oltre ad hibernate ovviamente.
-
-L’oggetto searcher è disaccoppiato da ogni logica di come viene trasportato il dato in input e in output. Lo scopo è accedere ai risultati del repository con un criteria hibernate ben formato e arbitrariamente complesso senza usare i criteria.
+L'unico requisito per poter funzionare è avere i dati di input come richiesti dal chiamante , e che per ciascuno di essi sia supportata la clausola di ricerca dal filtro (il campo correttamente mappato, che non sia di tipo formula, ecc... ecc...).
 
 
 
-#Quali clausole supporta
+### Ha requisiti di framework dell'applicativo su cui opera
+
+No! L'unico requisito, oltre a una implementazione JPA definita a livello di progetto,  è che abbia i dati in input a disposizione per la costruzione del filter e che sia presente in libreria il BaseRepository che riconosce il filtro, oltre ad hibernate ovviamente.
+
+L'oggetto searcher è disaccoppiato da ogni logica di come viene trasportato il dato in input e in output. Lo scopo è accedere ai risultati del repository con un criteria hibernate ben formato e arbitrariamente complesso senza usare i criteria.
+
+
+
+### Quali clausole supporta
 
 supporto join (beta)
+
 uguaglianza
+
 between tra tipi di oggetti rangeable
+
 like
+
 like insensitive
+
 confronto con operatori ( =, !=, <, <=, >=)
+
 isnull
+
 isnotnull
+
 iszero
+
 isnotempty
+
 confronto di un booleano
+
 concatenare piu filter in or (cluster di query hql concatenate in or)
-order by 
-controllo delle clausole di desc asc per singolo campo in order
+
+order by controllo delle clausole di desc asc per singolo campo in order
+
 maxresult (paginazione)
+
 firstresult (paginazione)
-lista campi in proiezione (tracciato dati sottoinsieme di quello dell’entita)
+
+lista campi in proiezione (tracciato dati sottoinsieme di quello dell'entita)
+
 clausola in
+
 clausola notIn
+
 clausola di negazione
