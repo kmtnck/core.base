@@ -57,15 +57,15 @@ Per deployare il comando e' il seguente
 
 	gradle cargoRedeployRemote
  
-## b) Parametri di logging con Log4j
-La configurazione log4j è la piu semplice e versatile possibile: è definito allo stesso package common nello scope resource.
+## b) Parametri di logging con logback.xml
+La configurazione log4j e' la piu semplice e versatile possibile: è definito allo stesso package common nello scope resource.
  Si ha una predisposizione per essere inizializzato da un yaml
  Può essere automaticamente riconosciuto in qualsiasi classpath del package common, in modo da rendere granulare il suo uso in fase di testing o altri casi specifici. Qui di seguito la locazione presente in questo progetto.
 
-	./src/main/resources/it/alessandromodica/product/common/config/log4j.xml
+	./src/main/resources/logback.xml
 
 
-## c) Configurazione della persistence unit tramite persistence.xml
+## c) Configurazione dell'accesso ai dati
  In java ci sono molteplici approcci per configurare un datastorage, e ancor di piu con l'introduzione delle configurazioni dinamiche yaml kubernets oriented.
  
  Questa applicazione si basa sulle annotation JPA e Hibernate. La modalita'� delle transazione e' il classico RESOURCE_LOCAL, ma sostanzialmente si puo configurare l'accesso al datasource (o piu datasource) nelle modalita piu congeniali.
