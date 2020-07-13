@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>it.alessandromodica.open</groupId>
 		<artifactId>api.base</artifactId>
-		<version>1.0.5</version>
+		<version>1.0.7-SNAPSHOT</version>
 	</parent>
 
 	<scm>
@@ -24,7 +24,7 @@
 		<tomcat.version>5.0.28</tomcat.version>
 		<hsqldb.version>2.5.0</hsqldb.version>
 		<resteasy.version>3.12.0.Final</resteasy.version>
-		<yarepo.version>1.0.40</yarepo.version>
+		<yarepo.version>1.0.1-SNAPSHOT</yarepo.version>
 	</properties>
 
 
