@@ -1,62 +1,105 @@
 package it.alessandromodica.product.model.bo;
 
+/*{
+
+"profiloUtente":
+	{
+	"VU":"114698683329673820502",
+	"Bd":"Alessandro Modica",
+	"zW":"Alessandro",
+	"zU":"Modica",
+	"cL":"https://lh3.googleusercontent.com/a-/AOh14GgaEsHbvklXPlyiUdEd1yxDy-RG9BADJ2NIzIuzuw=s96-c",
+	"Au":"alessandro.modica@gmail.com"
+	},
+
+"googleUser":
+	{
+		"Ea":"114698683329673820502",
+		"wc":
+		{
+			"token_type":"Bearer",
+			"access_token":"ya29.a0AfH6SMBceh4s-uv002Ndi3TrlrcsSsFT12OVEDIX2e8VfuMvQiJCzYQopmtqks3vqG3G1407UCdv_IMIjRcO4hkVMGXA6g2tjoTG7iZA4VnleHzU0wfzYAh6BuDVoOk6H6suouCvErLTBUdSDqnx6sL7H024n-StkMuYWxV_XqhYUA",
+			"scope":"email profile openid https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email",
+			"login_hint":"AJDLj6If7qFVu_VBQ-1V7d1DVVPIGBwn6zl--qCnn2xDP7euxqwMu-LWx9NGzXeJIHh-3AafPT91eg5mTjwP2-bWDItn_mbSWg",
+			"expires_in":2103,
+			"id_token":"eyJhbGciOiJSUzI1NiIsImtpZCI6IjRlNGViZTQ4N2Q1Y2RmMmIwMjZhM2IyMjlkODZmMGQ0MjU4NDQ5ZmUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiMzIwODQ0NDI0MjQzLTRlcTUxbGluMW1rNTRzampsZG9mampjcWQ5ZGwyZHE4LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiMzIwODQ0NDI0MjQzLTRlcTUxbGluMW1rNTRzampsZG9mampjcWQ5ZGwyZHE4LmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTE0Njk4NjgzMzI5NjczODIwNTAyIiwiZW1haWwiOiJhbGVzc2FuZHJvLm1vZGljYUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IjhZelZGczl1Y3hSR0s0NXJ6Wnl2MHciLCJuYW1lIjoiQWxlc3NhbmRybyBNb2RpY2EiLCJwaWN0dXJlIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FPaDE0R2dhRXNIYnZrbFhQbHlpVWRFZDF5eER5LVJHOUJBREoyTkl6SXV6dXc9czk2LWMiLCJnaXZlbl9uYW1lIjoiQWxlc3NhbmRybyIsImZhbWlseV9uYW1lIjoiTW9kaWNhIiwibG9jYWxlIjoiaXQiLCJpYXQiOjE1OTQ2NDE4OTEsImV4cCI6MTU5NDY0NTQ5MSwianRpIjoiMzNkNzgxYjRhYzVjMjkzNjljNGJmYTNjY2U1ZmJjOGUyNzRiMWZjYiJ9.JzJkjULoNg1_kGECdOU4_PB1Qt5iDnftbCnDMz-8_LWAKsSUAuaHsaLa_JafabRSoAHgaCUx4Uhg6APw3UaPSTNCQ4oC5sLPZDTU8YtGZARawI9SkoxFytDveBS8k8PhfK6rpArL1hcaFboKYNQwzSe7LxFsL5P2wUQjpqqBxBG0w2L6Lp2CKtXxZtDEuNRlSOPa3cf1kXs4kKWTZjAeg2aeoteQfhxUoSrr2AppcoXl_A4Re9acOXYM8n2C_th1SLqyyU0SwYtz0AtwNHkX842Kz13h3A9hTc658L8HAe4zzmje7uvrpwTrhIwlU9lwSUK-9g3jRPuyNrUbnBjsdA",
+			"session_state":{"extraQueryParams":{"authuser":"0"}},
+			"first_issued_at":1594641890518,
+			"expires_at":1594645488518,
+			"idpId":"google"
+		},
+		"Qt":
+			{
+			"VU":"114698683329673820502",
+			"Bd":"Alessandro Modica",
+			"zW":"Alessandro",
+			"zU":"Modica",
+			"cL":"https://lh3.googleusercontent.com/a-/AOh14GgaEsHbvklXPlyiUdEd1yxDy-RG9BADJ2NIzIuzuw=s96-c",
+			"Au":"alessandro.modica@gmail.com"
+			}
+	},
+"nickname":"OBkppa",
+"datacookie":"sak-identification=; G_ENABLED_IDPS=google; __utmz=139770731.1571040704.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none); __utma=139770731.81283971.1571040704.1574500314.1582911996.3; csrftoken=yskOZmDJhMz0bCk7p1Ibd9wgnQI97bJNzvyVm8ImXJMHwOW32nR9OhvxdHqgXURG; ingress.intelmap.zoom=15; G_AUTHUSER_H=0; ingress.intelmap.lat=44.49673491481525; ingress.intelmap.lng=11.309266090393066; SAK-Token=0d2b508d1a6ddeb681da1bc603320775; sak-publickey=null; sak-scraps=null"
+}
+*/
+/*
+			String email = profilo.getU3();
+			String username = profilo.getIg();
+			String uriFoto = profilo.getPaa();
+			GoogleUser infogoogle = payload.getGoogleUser();
+			Token tokenInfo = infogoogle.getZi();
+			String idtoken = tokenInfo.getId_token();
+ * */
 public class BOPayloadAuth {
 
+	
 	public class ProfiloUtente {
-		private Number Eea;
-		private String ig;
-		private String ofa;
-		private String wea;
-		private String Paa;
-		private String U3;
 
-		public Number getEea() {
-			return Eea;
+		private Number VU;
+		private String Bd;
+		private String zW;
+		private String zU;
+		private String cL;
+		private String Au;
+		
+		public Number getVU() {
+			return VU;
+		}
+		public void setVU(Number vU) {
+			VU = vU;
+		}
+		public String getBd() {
+			return Bd;
+		}
+		public void setBd(String bd) {
+			Bd = bd;
+		}
+		public String getzW() {
+			return zW;
+		}
+		public void setzW(String zW) {
+			this.zW = zW;
+		}
+		public String getzU() {
+			return zU;
+		}
+		public void setzU(String zU) {
+			this.zU = zU;
+		}
+		public String getcL() {
+			return cL;
+		}
+		public void setcL(String cL) {
+			this.cL = cL;
+		}
+		public String getAu() {
+			return Au;
+		}
+		public void setAu(String au) {
+			Au = au;
 		}
 
-		public void setEea(Number eea) {
-			Eea = eea;
-		}
-
-		public String getIg() {
-			return ig;
-		}
-
-		public void setIg(String ig) {
-			this.ig = ig;
-		}
-
-		public String getOfa() {
-			return ofa;
-		}
-
-		public void setOfa(String ofa) {
-			this.ofa = ofa;
-		}
-
-		public String getWea() {
-			return wea;
-		}
-
-		public void setWea(String wea) {
-			this.wea = wea;
-		}
-
-		public String getPaa() {
-			return Paa;
-		}
-
-		public void setPaa(String paa) {
-			Paa = paa;
-		}
-
-		public String getU3() {
-			return U3;
-		}
-
-		public void setU3(String u3) {
-			U3 = u3;
-		}
+		
 	}
 
 	public class GoogleUser {
@@ -145,23 +188,27 @@ public class BOPayloadAuth {
 			}
 		}
 
-		private String E1;
-		private Token Zi;
-
-		public String getE1() {
-			return E1;
+		private String Ea;
+		private Token wc;
+		private ProfiloUtente Qt;
+		
+		public Token getWc() {
+			return wc;
 		}
-
-		public void setE1(String e1) {
-			E1 = e1;
+		public void setWc(Token wc) {
+			this.wc = wc;
 		}
-
-		public Token getZi() {
-			return Zi;
+		public String getEa() {
+			return Ea;
 		}
-
-		public void setZi(Token zi) {
-			Zi = zi;
+		public void setEa(String ea) {
+			Ea = ea;
+		}
+		public ProfiloUtente getQt() {
+			return Qt;
+		}
+		public void setQt(ProfiloUtente qt) {
+			Qt = qt;
 		}
 	}
 
