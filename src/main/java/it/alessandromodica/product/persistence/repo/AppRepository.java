@@ -18,7 +18,7 @@ import it.alessandromodica.product.persistence.exceptions.RepositoryException;
  *
  * @param <T>
  */
-public class AppRepository<T, JOIN> extends BaseRepository<T, JOIN>  {
+public abstract class AppRepository<T, JOIN> extends BaseRepository<T, JOIN>  {
 
 	private static final Logger log = Logger.getLogger(AppRepository.class);
 
