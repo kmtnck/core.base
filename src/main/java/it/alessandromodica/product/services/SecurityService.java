@@ -183,13 +183,23 @@ public class SecurityService implements ISecurityService {
 		ProfiloUtente profilo = payload.getProfiloUtente();
 
 		if (profilo != null) {
-			String email = profilo.getU3();
-			String username = profilo.getIg();
-			String uriFoto = profilo.getPaa();
+			/*
+			{
+			"VU":"114698683329673820502",
+			"Bd":"Alessandro Modica",
+			"zW":"Alessandro",
+			"zU":"Modica",
+			"cL":"https://lh3.googleusercontent.com/a-/AOh14GgaEsHbvklXPlyiUdEd1yxDy-RG9BADJ2NIzIuzuw=s96-c",
+			"Au":"alessandro.modica@gmail.com"
+			}
+*/
+			String email = profilo.getAu();
+			String username = profilo.getBd();
+			String uriFoto = profilo.getcL();
 			GoogleUser infogoogle = payload.getGoogleUser();
-			Token tokenInfo = infogoogle.getZi();
+			Token tokenInfo = infogoogle.getWc();
 			String idtoken = tokenInfo.getId_token();
-
+			
 			BOVerificaToken esitoVerifica = verifyIdToken(idtoken);
 
 			boolean validToken = true;
