@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.alessandromodica.product.app.MainApplication;
 import it.alessandromodica.product.common.Constants;
 import it.alessandromodica.product.persistence.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteria;
+import it.alessandromodica.product.restcontroller.interfaces.IMainController;
 import it.alessandromodica.product.services.interfaces.IMainService;
 
 /***
@@ -38,15 +38,13 @@ import it.alessandromodica.product.services.interfaces.IMainService;
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @RestController
 @RequestMapping(value = "/services/entity")
-public class MainController implements IMainController {
+public class MainController<T> implements IMainController<T> {
 
 	protected static final Logger logger = Logger.getLogger(MainController.class);
 
 	@Autowired
 	private IMainService mainservice;
 
-	MainApplication mainApp;
-	
 	// @Override
 	@RequestMapping(value = "/test/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
 	public Object test(@PathVariable("id") String id) {
@@ -105,11 +103,11 @@ public class MainController implements IMainController {
 
 	@Override
 	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
-	public Object get(@PathVariable("id") int id, @RequestParam Map info) throws RepositoryException {
+	public Object get(@PathVariable("id") int id, @RequestParam Map<String,String> info) throws RepositoryException {
 
 		try {
 
-			Class<?> classEntity = Class.forName((String)info.get(Constants.CLASSNAME));
+			Class<?> classEntity = Class.forName(info.get(Constants.CLASSNAME));
 			Object result = (Object) mainservice.getById(id, classEntity);
 
 			return result;
@@ -141,6 +139,36 @@ public class MainController implements IMainController {
 	public void save(@RequestBody Object toSave) throws RepositoryException {
 
 		mainservice.add(toSave);
+	}
+
+	/**
+	 * Metodo check routine per recuperare valori da request map solo e soltanto se
+	 * esiste il parametro. Ritorna null altrimenti
+	 * 
+	 * @param requestmap
+	 * @param key
+	 * @return
+	 */
+	public static String getIfContain(Map<String, String> requestmap, String key) {
+		if (requestmap.containsKey(key))
+			return requestmap.get(key);
+		else
+			return null;
+	}
+
+	public static String getInfoRemote(Map<String, String> headers) {
+		String infoRemote = headers.get("x-forwarded-for");
+		if (infoRemote == null) {
+			infoRemote = headers.get("X_FORWARDED_FOR");
+			if (infoRemote == null) {
+				infoRemote = " Indirizzo ip: sconosciuto";// + request.getRemoteAddr();
+			}
+		}
+
+		if (headers.get("User-Agent") != null)
+			infoRemote += "  User-agent: " + headers.get("User-Agent");
+
+		return ">>>> In arrivo una richiesta web da parte di : " + infoRemote + " <<<<<";
 	}
 
 }

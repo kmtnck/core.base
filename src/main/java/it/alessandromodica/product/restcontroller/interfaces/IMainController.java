@@ -1,4 +1,4 @@
-package it.alessandromodica.product.restcontroller;
+package it.alessandromodica.product.restcontroller.interfaces;
 
 import java.util.List;
 import java.util.Map;
@@ -9,12 +9,11 @@ import io.swagger.annotations.ApiParam;
 import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteria;
 
 /**
- * Interfaccia che rappresent il modulo rest dei carichi. Si nota che l'unico
- * riferimento definito è swagger. L'interfaccia pilota quindi le interazioni
- * con swagger e solo lui.
+ * Controller principale general purpose
  * 
- * @author amodica
+ * @author kmtnck
  *
+ * @param <T>
  */
 @Api(value = "modulo.entity", description = "Interfaccia per la gestione CRUD di una entita database")
 public interface IMainController<T> {
