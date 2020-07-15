@@ -20,7 +20,6 @@ import it.alessandromodica.product.common.Constants;
 import it.alessandromodica.product.persistence.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteria;
 import it.alessandromodica.product.services.interfaces.IMainService;
-import it.alessandromodica.product.views.AppViewListener;
 
 /***
  * Classe che rappresenta le chiamate rest per accedere al modulo dei carichi
@@ -38,6 +37,7 @@ import it.alessandromodica.product.views.AppViewListener;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @RestController
+@RequestMapping(value = "/services/entity")
 public class MainController implements IMainController {
 
 	protected static final Logger logger = Logger.getLogger(MainController.class);
