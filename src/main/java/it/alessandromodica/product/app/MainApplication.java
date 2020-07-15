@@ -3,6 +3,9 @@ package it.alessandromodica.product.app;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import it.alessandromodica.product.callback.SettingCookie;
@@ -40,14 +43,15 @@ import it.alessandromodica.product.persistence.uow.UnitOfWork;
  * @author Alessandro
  *
  */
-//@SpringBootApplication
+@SpringBootApplication
 @Component
 @SuppressWarnings("rawtypes")
+@ComponentScan(basePackages = "it.alessandromodica.product")
 public class MainApplication extends MainContext {
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
-    }*/
+    }
 	// XXX: classe principale e cardine di tutto il progetto
 	// deve essere visto come il cappello di riferimento per tutta la gerarchia
 	// del software

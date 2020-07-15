@@ -1,8 +1,7 @@
-package it.alessandromodica.product.rest;
+package it.alessandromodica.product.restcontroller;
 
 import java.util.List;
-
-import javax.ws.rs.core.UriInfo;
+import java.util.Map;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,8 +17,7 @@ import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteri
  *
  */
 @Api(value = "modulo.entity", description = "Interfaccia per la gestione CRUD di una entita database")
-@Deprecated
-public interface IEntityRest<T> {
+public interface IMainController<T> {
 
 	@ApiOperation(value = "Test chiamata rest", response = Object.class)
 	@ApiParam(value = "Id per il test")
@@ -27,7 +25,7 @@ public interface IEntityRest<T> {
 
 	@ApiOperation(value = "Recupera un oggetto da database", response = Object.class)
 	@ApiParam(value = "ID dell'oggetto")
-	public Object get(int id, UriInfo info) throws Exception;
+	public Object get(int id, Map<String, String> info) throws Exception;
 
 	@ApiOperation(value = "Recupera un oggetto da database", response = List.class)
 	@ApiParam(value = "Token di ricerca")

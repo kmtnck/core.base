@@ -70,14 +70,14 @@
 			<artifactId>slf4j-log4j12</artifactId>
 			<version>1.7.12</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.8.5</version>
 		</dependency>
 
-		
+
 		<dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
@@ -91,19 +91,15 @@
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
 
 		<!-- Spring -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>${spring-framework.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>${spring-framework.version}</version>
-		</dependency>
-		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-web</artifactId> 
+		<!-- dipendenze necessarie solo se si vuole avviare l'applicazione in un 
+			contesto non springboot -->
+		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-core</artifactId> 
 			<version>${spring-framework.version}</version> </dependency> <dependency> 
-			<groupId>org.springframework</groupId> <artifactId>spring-webmvc</artifactId> 
+			<groupId>org.springframework</groupId> <artifactId>spring-context</artifactId> 
+			<version>${spring-framework.version}</version> </dependency> -->
+		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-web</artifactId> 
+			<version>${spring-framework.version}</version> </dependency> -->
+		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-webmvc</artifactId> 
 			<version>${spring-framework.version}</version> </dependency> -->
 
 		<!-- Spring boot -->
@@ -118,7 +114,18 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 			<version>${spring-boot.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<version>${spring-boot.version}</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.junit.vintage</groupId>
+					<artifactId>junit-vintage-engine</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
 
 		<!-- Obiettivo: sostituire l'involucro esterno in una applicatione spring 
 			boot in cui poter gestire il context annotation allo stesso identico modo 
@@ -127,6 +134,8 @@
 
 		<!-- REST Client support -->
 		<!-- RESTEASY Dependencies -->
+		<!-- le librerie resteasy supportano un set di endpoint funzionanti in 
+			contesti non springboot -->
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-servlet-initializer</artifactId>
@@ -260,11 +269,11 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.33</version>
 		</dependency>
-		
+
 		<!-- fine parte backend -->
 
 
-		
+
 	</dependencies>
 
 	<reporting>
@@ -283,6 +292,14 @@
 
 	<build>
 		<plugins>
+
+			<!-- plugin utile per avviare una istanza springboot con un invoke maven. 
+				Attenzione il processo non viene chiuso con il tasto rosso di eclipse . handle 
+				with care -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

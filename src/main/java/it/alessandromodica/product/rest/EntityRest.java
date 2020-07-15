@@ -32,8 +32,12 @@ import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteri
  *         associato, consumes, produces e gli eventuali ruoli utenti ammessi,
  *         se non è specificato la chiamata è anonima e libera, altrimenti
  *         forbidden
+ *         
+ *         Gli endpoint qui implementati sono validi in ogni contesto ma non sono pratici da mantenere in un contesto springboot puro.
+ *         Sono pertanto deprecati nel contesto springboot, ma validi in altri contesti spring classico
  *
  */
+@Deprecated
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @Path(value = "/entity")
 public class EntityRest implements IEntityRest {
@@ -54,12 +58,12 @@ public class EntityRest implements IEntityRest {
 	}
 	/*
 Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi client smart
-{
 
-  "maxResult": "10",
+{
+  "classEntity": "it.alessandromodica.product.model.po.GestioneUtenti",
+  "maxResult": "50",
   "firstResult": 0,
-  "descendent": "false",
-  "className": "it.ditech.comm.xmodule.product.po.CaricoDettaglio"
+  "descendent": "true",
   "listOrderBy": [],
   "listOrClause": [],
   "listbetween": [],
@@ -69,15 +73,10 @@ Template di BOSerializeCriteria in formato json , manipolabile da un qualsiasi c
   "listIsNull": [],
   "listIsNotNull": [],
   "listIsZero": [],
+  "listEquals": {},
   "listIsNotEmpty": [],
   "listFieldsProjection": [],
   
-  //per i test bisogna rimuovere questi tag in quanto valori non coerenti generano eccezioni server
-  "listEquals": {"ciccio": ""},
-  "listIn": {"source":[]},
-  "listNotIn":  {"source":[]},
-  "listValueBool":  {"namefield": "false"},
-  "mapDescendent": {"namefield": "false"},
   "}": {}
 }
 
