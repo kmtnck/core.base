@@ -41,6 +41,7 @@ import it.alessandromodica.product.common.exceptions.BusinessException;
  * @author Alessandro
  *
  */
+@Deprecated
 public class AppViewServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
