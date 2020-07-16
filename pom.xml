@@ -260,12 +260,9 @@
 		</dependency>
 
 		<!-- driver accesso database mysql -->
-<!-- 		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.33</version>
-		</dependency> -->
-		
+		<!-- <dependency> <groupId>mysql</groupId> <artifactId>mysql-connector-java</artifactId> 
+			<version>5.1.33</version> </dependency> -->
+
 		<!-- per junit. e' istanziato un inmemory database hsqldb a runtime -->
 		<dependency>
 			<groupId>org.hsqldb</groupId>
@@ -277,7 +274,7 @@
 			<groupId>org.hsqldb</groupId>
 			<artifactId>sqltool</artifactId>
 			<version>${hsqldb.version}</version>
-		</dependency>		
+		</dependency>
 
 		<!-- fine parte backend -->
 
@@ -302,12 +299,21 @@
 	<build>
 		<plugins>
 
-			<!-- plugin utile per avviare una istanza springboot con un invoke maven. 
-				Attenzione il processo non viene chiuso con il tasto rosso di eclipse . handle 
-				with care -->
+			<!--per rendere il war avviabile viene generata una versione exec con 
+				le informazioni di BOOT-INFO di springboot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+						<configuration>
+							<classifier>exec</classifier>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 
 			<plugin>
