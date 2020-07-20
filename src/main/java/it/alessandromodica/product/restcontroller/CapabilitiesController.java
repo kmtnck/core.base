@@ -51,7 +51,7 @@ public class CapabilitiesController {
 		EnumSet.allOf(RequestVariable.class)
 				.forEach(currentEnum -> inputData.getMapRequestData().put(currentEnum, info.get(currentEnum.name())));
 
-		return mainApp.processAction(inputData, "sconosciuto", headers.get("Referer"), headers.get("User-Agent"),
+		return mainApp.processAction(inputData, inforemote, headers.get("Referer"), headers.get("User-Agent"),
 				MainController.getIfContain(info, MagicString.ProtocolloApp.P_OBJPLAYER), context);
 
 	}

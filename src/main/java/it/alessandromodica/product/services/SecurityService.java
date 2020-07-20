@@ -148,7 +148,7 @@ public class SecurityService implements ISecurityService {
 			GestioneUtentiOauth data = (GestioneUtentiOauth) repoquery.getSingleOrDefault(criteria.getSerialized());
 
 			if (data != null) {
-				repocommands.deleteFromId(data.getIdouth(), "idouth");
+				repocommands.deleteFromId(data.getIdouth(), "idouth", GestioneUtentiOauth.class);
 				repocommands.delete(data);
 				result.setEsito("Utente " + email + " rimosso con successo!");
 			}
