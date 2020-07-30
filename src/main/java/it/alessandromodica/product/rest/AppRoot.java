@@ -3,6 +3,7 @@ package it.alessandromodica.product.rest;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import io.swagger.jaxrs.config.BeanConfig;
 import it.alessandromodica.product.services.interfaces.IMainService;
 import it.alessandromodica.product.views.AppViewListener;
 
@@ -26,5 +27,20 @@ public class AppRoot extends Application {
 
 	public AppRoot() {
 		mainservice = AppViewListener.context.getBean(IMainService.class);
+		getBeanConfig();
+	}
+	
+	public BeanConfig getBeanConfig()
+	{
+		BeanConfig beanConfig = new BeanConfig();
+		beanConfig.setTitle("Generatore ui swagger");
+		beanConfig.setDescription("Espone gli endpoint swagger");
+		beanConfig.setVersion("1.0.0");
+		beanConfig.setResourcePackage("it.alessandromodica.product");
+		beanConfig.setBasePath("/core.base/services");
+		beanConfig.setScan(true);
+		beanConfig.setPrettyPrint(true);
+		
+		return beanConfig;
 	}
 }
