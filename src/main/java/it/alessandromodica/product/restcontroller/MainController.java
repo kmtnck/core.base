@@ -168,7 +168,9 @@ public class MainController<T> implements IMainController<T> {
 		if (headers.get("User-Agent") != null)
 			infoRemote += "  User-agent: " + headers.get("User-Agent");
 
-		return ">>>> In arrivo una richiesta web da parte di : " + infoRemote + " <<<<<";
+		logger.info(">>>> In arrivo una richiesta web da parte di : " + infoRemote + " <<<<<");
+		
+		return infoRemote;
 	}
 
 }
