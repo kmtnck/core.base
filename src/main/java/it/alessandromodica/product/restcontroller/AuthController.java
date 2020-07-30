@@ -19,7 +19,7 @@ import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.restcontroller.interfaces.IAuthController;
 
 @RestController
-@RequestMapping(value = "/handler/auth")
+@RequestMapping(value = "/auth")
 public class AuthController implements IAuthController {
 
 	@Autowired

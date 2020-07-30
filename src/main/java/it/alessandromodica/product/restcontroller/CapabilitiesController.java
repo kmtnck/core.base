@@ -21,7 +21,7 @@ import it.alessandromodica.product.common.enumerative.RequestVariable;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 
 @RestController
-@RequestMapping(value = "/handler/capabilities")
+@RequestMapping(value = "/capabilities")
 public class CapabilitiesController {
 
 	private static final Logger log = Logger.getLogger(CapabilitiesController.class);

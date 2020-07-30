@@ -37,7 +37,7 @@ import it.alessandromodica.product.services.interfaces.IMainService;
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @RestController
-@RequestMapping(value = "/services/entity")
+@RequestMapping(value = "/entity")
 public class MainController<T> implements IMainController<T> {
 
 	protected static final Logger logger = Logger.getLogger(MainController.class);
