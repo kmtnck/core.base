@@ -18,7 +18,7 @@ import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.context.interfaces.ISecurity;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.persistence.exceptions.RepositoryException;
-import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
+import it.alessandromodica.product.persistence.repo.BaseRepository;
 import it.alessandromodica.product.persistence.uow.UnitOfWork;
 
 /**
@@ -57,7 +57,7 @@ public class MainApplication extends MainContext {
 	// del software
 
 	@Autowired
-	protected IRepositoryCommands repocommands;
+	protected BaseRepository repository;
 
 	private static final Logger log = Logger.getLogger(MainApplication.class);
 
@@ -235,7 +235,7 @@ public class MainApplication extends MainContext {
 
 				authContext.setUtenteCorrente(currentUtente);
 				
-				repocommands.executeTransaction(settingcookie);
+				repository.executeTransaction(settingcookie);
 
 				cassaforte.setVersione(inputData.getMapRequestData().get(RequestVariable.versione) != null
 						? inputData.getMapRequestData().get(RequestVariable.versione).toString()

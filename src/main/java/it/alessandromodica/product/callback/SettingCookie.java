@@ -11,8 +11,7 @@ import it.alessandromodica.product.app.AuthContext;
 import it.alessandromodica.product.model.po.GestioneUtentiInfoautenticazione;
 import it.alessandromodica.product.persistence.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.interfaces.IBulkTransaction;
-import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
-import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
+import it.alessandromodica.product.persistence.repo.BaseRepository;
 import it.alessandromodica.product.persistence.searcher.YAFilterSearchApp;
 
 /**
@@ -29,11 +28,8 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 	AuthContext authContext;
 
 	@Autowired
-	protected IRepositoryCommands repocommands;
+	protected BaseRepository repository;
 	
-	@Autowired
-	protected IRepositoryQueries repoquery;
-
 	private static final Logger log = Logger.getLogger(SettingCookie.class);
 
 	@SuppressWarnings("unchecked")
@@ -58,7 +54,7 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 					log.info("Cookie da aggiungere: " + cCookie);
 					try {
 
-						GestioneUtentiInfoautenticazione obj = (GestioneUtentiInfoautenticazione) repoquery
+						GestioneUtentiInfoautenticazione obj = (GestioneUtentiInfoautenticazione) repository
 								//.setEntity(GestioneUtentiInfoautenticazione.class)
 								.getSingleOrDefault(criteria.getSerialized());
 
@@ -66,7 +62,7 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 							if (!obj.getValueparametro().equals(valoreparametro)) {
 								obj.setValueparametro(valoreparametro);
 
-								repocommands.update(obj);
+								repository.update(obj);
 
 								log.info("<<<S Il Cookie e' stato aggiornato: da [" + obj.getValueparametro() + "] a ["
 										+ valoreparametro + "]");
@@ -82,7 +78,7 @@ public class SettingCookie extends CallbackCommon implements IBulkTransaction {
 							pObj.setValueparametro(valoreparametro);
 							pObj.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
 
-							repocommands.add(pObj);
+							repository.add(pObj);
 
 							log.info("<<<S Il Cookie e' stato aggiunto: " + cCookie);
 						}
