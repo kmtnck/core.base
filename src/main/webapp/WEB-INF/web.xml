@@ -5,13 +5,13 @@
 	<display-name>Benvenuti in questa app che fa cose</display-name>
 
 	<listener>
-		<listener-class>it.alessandromodica.product.views.AppViewListener</listener-class>
+		<listener-class>it.alessandromodica.legacy.views.AppViewListener</listener-class>
 	</listener>
 
 	<!-- Servlet classica legacy approach -->
 	<servlet>
 		<servlet-name>AppServlet</servlet-name>
-		<servlet-class>it.alessandromodica.product.views.AppViewServlet</servlet-class>
+		<servlet-class>it.alessandromodica.legacy.views.AppViewServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>AppServlet</servlet-name>

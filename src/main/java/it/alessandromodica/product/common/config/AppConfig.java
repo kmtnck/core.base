@@ -19,12 +19,19 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
 @EnableAutoConfiguration
 @Configuration
 //XXX: e' dichiatato il componentscan sulla classe springapplication. In un contesto standard il context spring richiede l'annotation in questo punto
 @ComponentScan(basePackages = "it.alessandromodica.product")
 @EnableTransactionManagement
 @PropertySource("classpath:datasource.properties")
+@EnableSwagger2
 public class AppConfig {
 
 	@Value("${driver}")
@@ -83,6 +90,12 @@ public class AppConfig {
 		properties.setProperty("hibernate.show_sql", "false");
 
 		return properties;
+	}
+
+	@Bean
+	public Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
+				.paths(PathSelectors.any()).build();
 	}
 
 }
