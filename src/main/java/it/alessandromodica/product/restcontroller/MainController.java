@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import it.alessandromodica.product.common.Constants;
+import it.alessandromodica.product.app.MainApplication;
 import it.alessandromodica.product.persistence.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteria;
 import it.alessandromodica.product.restcontroller.interfaces.IMainController;
@@ -33,8 +33,9 @@ import it.alessandromodica.product.services.interfaces.IMainService;
  *         associato, consumes, produces e gli eventuali ruoli utenti ammessi,
  *         se non è specificato la chiamata è anonima e libera, altrimenti
  *         forbidden
- *         
- * Endpoint rest controller disponibile nel caso in cui l'applicazione e' avviata come istanza springboot da MainApplication
+ * 
+ *         Endpoint rest controller disponibile nel caso in cui l'applicazione
+ *         e' avviata come istanza springboot da MainApplication
  *
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -58,29 +59,16 @@ public class MainController<T> implements IMainController<T> {
 	}
 	/*
 	 * Template di BOSerializeCriteria in formato json , manipolabile da un
-	 * qualsiasi client smart 
-
-{
-  "classEntity": "it.alessandromodica.product.model.po.GestioneUtenti",
-  "maxResult": "50",
-  "firstResult": 0,
-  "descendent": "true",
-  "listOrderBy": [],
-  "listOrClause": [],
-  "listbetween": [],
-  "listLike": [],
-  "listLikeInsensitive": [],
-  "listOperator": [],
-  "listIsNull": [],
-  "listIsNotNull": [],
-  "listIsZero": [],
-  "listEquals": {},
-  "listIsNotEmpty": [],
-  "listFieldsProjection": [],
-  
-  "}": {}
-}
-
+	 * qualsiasi client smart
+	 * 
+	 * { "classEntity": "it.alessandromodica.product.model.po.GestioneUtenti",
+	 * "maxResult": "50", "firstResult": 0, "descendent": "true", "listOrderBy": [],
+	 * "listOrClause": [], "listbetween": [], "listLike": [], "listLikeInsensitive":
+	 * [], "listOperator": [], "listIsNull": [], "listIsNotNull": [], "listIsZero":
+	 * [], "listEquals": {}, "listIsNotEmpty": [], "listFieldsProjection": [],
+	 * 
+	 * "}": {} }
+	 * 
 	 * 
 	 */
 
@@ -105,11 +93,15 @@ public class MainController<T> implements IMainController<T> {
 
 	@Override
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
-	public Object get(@PathVariable("id") int id, @RequestParam Map<String,String> info) throws RepositoryException {
+	public Object get(@PathVariable("id") int id, @RequestParam String classname) throws RepositoryException {
 
 		try {
 
-			Class<?> classEntity = Class.forName(info.get(Constants.CLASSNAME));
+			String[] splitClassname = classname.split("\\.");
+			if (splitClassname.length == 1)
+				classname = MainApplication.packagePO + "." + classname;
+
+			Class<?> classEntity = Class.forName(classname);
 			Object result = (Object) mainservice.getById(id, classEntity);
 
 			return result;
@@ -171,7 +163,7 @@ public class MainController<T> implements IMainController<T> {
 			infoRemote += "  User-agent: " + headers.get("User-Agent");
 
 		logger.info(">>>> In arrivo una richiesta web da parte di : " + infoRemote + " <<<<<");
-		
+
 		return infoRemote;
 	}
 

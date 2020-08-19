@@ -50,6 +50,8 @@ import it.alessandromodica.product.persistence.uow.UnitOfWork;
 @ComponentScan(basePackages = "it.alessandromodica.product")
 public class MainApplication extends MainContext {
 
+	public final static String packagePO = "it.alessandromodica.product.model.po";
+	
     public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
     }
