@@ -33,6 +33,8 @@ import it.alessandromodica.product.services.interfaces.IMainService;
  *         associato, consumes, produces e gli eventuali ruoli utenti ammessi,
  *         se non è specificato la chiamata è anonima e libera, altrimenti
  *         forbidden
+ *         
+ * Endpoint rest controller disponibile nel caso in cui l'applicazione e' avviata come istanza springboot da MainApplication
  *
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -46,7 +48,7 @@ public class MainController<T> implements IMainController<T> {
 	private IMainService mainservice;
 
 	// @Override
-	@RequestMapping(value = "/test/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
+	@RequestMapping(value = "/test/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public Object test(@PathVariable("id") String id) {
 
 		String result = "Questo e' un test funzionalita rest e basta! " + id.toString();
@@ -102,7 +104,7 @@ public class MainController<T> implements IMainController<T> {
 	}
 
 	@Override
-	@RequestMapping(value = "/get/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON, consumes = MediaType.APPLICATION_JSON)
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON)
 	public Object get(@PathVariable("id") int id, @RequestParam Map<String,String> info) throws RepositoryException {
 
 		try {

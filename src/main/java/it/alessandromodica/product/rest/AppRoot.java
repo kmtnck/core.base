@@ -15,6 +15,7 @@ import it.alessandromodica.product.views.AppViewListener;
  * La strada alternativa e piu lineare e' l'implementazione dei rest con le
  * annotation springboot vere e proprie, nel package restcontroller
  * 
+ * Endpoint resteasy disponibili nel caso in cui l'applicazione e' avviata come artefatto war classico
  * @author kmtnck
  *
  */
