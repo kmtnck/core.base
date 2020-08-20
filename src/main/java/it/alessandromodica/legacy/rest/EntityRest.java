@@ -38,7 +38,6 @@ import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteri
  *
  */
 @Deprecated
-@SuppressWarnings({ "unchecked", "rawtypes" })
 @Path(value = "/entity")
 public class EntityRest implements IEntityRest {
 

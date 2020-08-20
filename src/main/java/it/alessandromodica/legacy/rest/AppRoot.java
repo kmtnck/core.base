@@ -18,7 +18,6 @@ import it.alessandromodica.product.services.interfaces.IMainService;
  * @author kmtnck
  *
  */
-@SuppressWarnings("rawtypes")
 @ApplicationPath("/services")
 @Deprecated
 public class AppRoot extends Application {
