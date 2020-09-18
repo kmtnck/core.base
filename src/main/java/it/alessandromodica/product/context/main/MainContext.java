@@ -1,4 +1,4 @@
-package it.alessandromodica.product.app;
+package it.alessandromodica.product.context.main;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

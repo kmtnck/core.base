@@ -1,4 +1,4 @@
-package it.alessandromodica.product.rest;
+package it.alessandromodica.legacy.rest;
 
 import java.util.List;
 

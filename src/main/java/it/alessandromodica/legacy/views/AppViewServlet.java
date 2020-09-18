@@ -1,4 +1,4 @@
-package it.alessandromodica.product.views;
+package it.alessandromodica.legacy.views;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

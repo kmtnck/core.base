@@ -1,7 +1,6 @@
 package it.alessandromodica.product.restcontroller.interfaces;
 
 import java.util.List;
-import java.util.Map;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +23,7 @@ public interface IMainController<T> {
 
 	@ApiOperation(value = "Recupera un oggetto da database", response = Object.class)
 	@ApiParam(value = "ID dell'oggetto")
-	public Object get(int id, Map<String, String> info) throws Exception;
+	public Object get(int id, String classname) throws Exception;
 
 	@ApiOperation(value = "Recupera un oggetto da database", response = List.class)
 	@ApiParam(value = "Token di ricerca")

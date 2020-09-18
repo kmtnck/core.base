@@ -1,4 +1,4 @@
-package it.alessandromodica.product.rest;
+package it.alessandromodica.legacy.rest;
 
 import java.util.List;
 
@@ -38,7 +38,6 @@ import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteri
  *
  */
 @Deprecated
-@SuppressWarnings({ "unchecked", "rawtypes" })
 @Path(value = "/entity")
 public class EntityRest implements IEntityRest {
 
@@ -51,7 +50,7 @@ public class EntityRest implements IEntityRest {
 	@Produces(value = MediaType.APPLICATION_JSON)
 	public Object test(@PathParam(value = "id") String id) {
 
-			String result = "Questo e' un test funzionalita rest e basta! " + id.toString();
+			String result = "Questo e' un test funzionalita rest in modalita Legacy ! " + id.toString();
 			
 			return result;
 
