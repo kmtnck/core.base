@@ -6,7 +6,7 @@ import javax.servlet.ServletContextListener;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import it.alessandromodica.product.common.config.AppConfig;
+import it.alessandromodica.product.common.config.SpringConfig;
 
 /**
  * Classe listener che estende il classico ServletContextListener, che viene
@@ -32,7 +32,7 @@ public class AppViewListener implements ServletContextListener {
 
 		try {
 
-			context = new AnnotationConfigApplicationContext(AppConfig.class);
+			context = new AnnotationConfigApplicationContext(SpringConfig.class);
 		} catch (Exception e) {
 			// il log potrebbe non essere stato istanziato, pertanto si utilizza
 			// il printstacktrace
