@@ -27,8 +27,9 @@
 		<hsqldb.version>2.5.0</hsqldb.version>
 		<resteasy.version>3.12.0.Final</resteasy.version>
 		<yarepo.version>1.1.1-SNAPSHOT</yarepo.version>
-	</properties>
 
+		<spring-security.version>5.3.3.RELEASE</spring-security.version>
+	</properties>
 
 	<dependencies>
 		<!-- XXX: classe junit, puo evolversi nel tempo con la versione, riadattare 
@@ -39,6 +40,19 @@
 			<version>4.13</version>
 			<scope>test</scope>
 		</dependency>
+<!-- 		<dependency>
+			<groupId>net.bytebuddy</groupId>
+			<artifactId>byte-buddy</artifactId>
+			<version>1.10.14</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>2.9.0</version>
+			<scope>test</scope>
+		</dependency> -->
 
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 		<dependency>
@@ -132,7 +146,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>${spring-security.version}</version>
+		</dependency>
 		<!-- Obiettivo: sostituire l'involucro esterno in una applicatione spring 
 			boot in cui poter gestire il context annotation allo stesso identico modo 
 			del precedente -->
@@ -191,36 +209,25 @@
 		</dependency>
 
 		<!-- librerie swagger -->
-<!-- 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>2.9.2</version>
-		</dependency> -->
+		<!-- <dependency> <groupId>io.springfox</groupId> <artifactId>springfox-swagger2</artifactId> 
+			<version>2.9.2</version> </dependency> -->
 
 		<!-- librerie swagger -->
-<!-- 		<dependency>
-			<groupId>io.swagger</groupId>
-			<artifactId>swagger-annotations</artifactId>
-			<version>1.6.2</version>
+		<!-- <dependency> <groupId>io.swagger</groupId> <artifactId>swagger-annotations</artifactId> 
+			<version>1.6.2</version> </dependency> <dependency> <groupId>io.swagger</groupId> 
+			<artifactId>swagger-jaxrs</artifactId> <version>1.6.2</version> </dependency> -->
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.6.1</version>
 		</dependency>
 
 		<dependency>
-			<groupId>io.swagger</groupId>
-			<artifactId>swagger-jaxrs</artifactId>
-			<version>1.6.2</version>
-		</dependency> -->
-
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.6.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.6.1</version>
-        </dependency>		
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.6.1</version>
+		</dependency>
 
 		<!-- inizio parte web -->
 		<dependency>
@@ -289,6 +296,12 @@
 			<version>5.1.33</version> </dependency> -->
 
 		<!-- per junit. e' istanziato un inmemory database hsqldb a runtime -->
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.4.200</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.hsqldb</groupId>
 			<artifactId>hsqldb</artifactId>
@@ -399,6 +412,14 @@
 				<groupId>com.spotify</groupId>
 				<artifactId>dockerfile-maven-plugin</artifactId>
 				<version>1.4.10</version>
+<!-- 				<executions>
+					<execution>
+						<id>default</id>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+				</executions> -->
 				<configuration>
 					<repository>appcontainer/webapp</repository>
 					<tag>1.0.1</tag>
