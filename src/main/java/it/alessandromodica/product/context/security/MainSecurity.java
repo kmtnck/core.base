@@ -4,10 +4,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import it.alessandromodica.product.app.AuthContext;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.context.interfaces.ISecurity;
+import it.alessandromodica.product.context.main.AuthContext;
 import it.alessandromodica.product.model.bo.BOPayloadAuth;
 import it.alessandromodica.product.model.bo.BOSecurity;
 import it.alessandromodica.product.model.bo.BOSignGoogle;

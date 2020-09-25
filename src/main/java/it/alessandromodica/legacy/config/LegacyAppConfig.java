@@ -1,4 +1,4 @@
-package it.alessandromodica.product.common.config;
+package it.alessandromodica.legacy.config;
 
 import java.util.Properties;
 
@@ -19,12 +19,20 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+
+//XXX: e' dichiatato il componentscan sulla classe springapplication. In un contesto standard il context spring richiede l'annotation in questo punto
 @EnableAutoConfiguration
-@Configuration
-@ComponentScan(basePackages = "it.alessandromodica.product")
+@ComponentScan(basePackages = { "it.alessandromodica.product.services", "it.alessandromodica.product.context",
+		"it.alessandromodica.product.model", "it.alessandromodica.product.persistence" })
 @EnableTransactionManagement
 @PropertySource("classpath:datasource.properties")
-public class AppConfig {
+@Configuration
+//@EnableSwagger2
+public class LegacyAppConfig {
 
 	@Value("${driver}")
 	private String driver;
@@ -79,9 +87,15 @@ public class AppConfig {
 		Properties properties = new Properties();
 		properties.setProperty("hibernate.dialect", dialect);
 		properties.setProperty("hibernate.hbm2ddl.auto", "update");
-		properties.setProperty("hibernate.show_sql", "true");
+		properties.setProperty("hibernate.show_sql", "false");
 
 		return properties;
 	}
+	
 
+	@Bean
+	public Docket api() {
+		return new Docket(DocumentationType.SWAGGER_2).select().apis(RequestHandlerSelectors.any())
+				.paths(PathSelectors.any()).build();
+	}
 }

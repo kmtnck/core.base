@@ -3,6 +3,9 @@ package it.alessandromodica.product.app;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
 import it.alessandromodica.product.callback.SettingCookie;
@@ -12,10 +15,11 @@ import it.alessandromodica.product.common.InputData;
 import it.alessandromodica.product.common.enumerative.AppContext;
 import it.alessandromodica.product.common.enumerative.RequestVariable;
 import it.alessandromodica.product.common.exceptions.BusinessException;
-import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.context.interfaces.ISecurity;
+import it.alessandromodica.product.context.main.MainContext;
 import it.alessandromodica.product.model.bo.BOUtente;
-import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
+import it.alessandromodica.product.persistence.exceptions.RepositoryException;
+import it.alessandromodica.product.persistence.repo.BaseRepository;
 import it.alessandromodica.product.persistence.uow.UnitOfWork;
 
 /**
@@ -40,20 +44,23 @@ import it.alessandromodica.product.persistence.uow.UnitOfWork;
  * @author Alessandro
  *
  */
-//@SpringBootApplication
+@SpringBootApplication
 @Component
 @SuppressWarnings("rawtypes")
+@ComponentScan(basePackages = "it.alessandromodica.product")
 public class MainApplication extends MainContext {
 
-    /*public static void main(String[] args) {
+	public final static String packagePO = "it.alessandromodica.product.model.po";
+	
+    public static void main(String[] args) {
         SpringApplication.run(MainApplication.class, args);
-    }*/
+    }
 	// XXX: classe principale e cardine di tutto il progetto
 	// deve essere visto come il cappello di riferimento per tutta la gerarchia
 	// del software
 
 	@Autowired
-	protected IRepositoryCommands repocommands;
+	protected BaseRepository repository;
 
 	private static final Logger log = Logger.getLogger(MainApplication.class);
 
@@ -231,7 +238,7 @@ public class MainApplication extends MainContext {
 
 				authContext.setUtenteCorrente(currentUtente);
 				
-				repocommands.executeTransaction(settingcookie);
+				repository.executeTransaction(settingcookie);
 
 				cassaforte.setVersione(inputData.getMapRequestData().get(RequestVariable.versione) != null
 						? inputData.getMapRequestData().get(RequestVariable.versione).toString()

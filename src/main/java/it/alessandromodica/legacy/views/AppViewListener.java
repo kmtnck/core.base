@@ -1,4 +1,4 @@
-package it.alessandromodica.product.views;
+package it.alessandromodica.legacy.views;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;

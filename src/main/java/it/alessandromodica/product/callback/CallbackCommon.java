@@ -2,7 +2,7 @@ package it.alessandromodica.product.callback;
 
 import javax.persistence.EntityManager;
 
-import it.alessandromodica.product.common.exceptions.RepositoryException;
+import it.alessandromodica.product.persistence.exceptions.RepositoryException;
 
 /**
  * Callback comune in cui poter eseguire set di istruzioni in transazione

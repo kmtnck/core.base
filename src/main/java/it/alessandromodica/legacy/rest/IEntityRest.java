@@ -1,4 +1,4 @@
-package it.alessandromodica.product.rest;
+package it.alessandromodica.legacy.rest;
 
 import java.util.List;
 
@@ -7,7 +7,6 @@ import javax.ws.rs.core.UriInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteria;
 
 /**
@@ -19,6 +18,7 @@ import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteri
  *
  */
 @Api(value = "modulo.entity", description = "Interfaccia per la gestione CRUD di una entita database")
+@Deprecated
 public interface IEntityRest<T> {
 
 	@ApiOperation(value = "Test chiamata rest", response = Object.class)
@@ -27,14 +27,14 @@ public interface IEntityRest<T> {
 
 	@ApiOperation(value = "Recupera un oggetto da database", response = Object.class)
 	@ApiParam(value = "ID dell'oggetto")
-	public Object get(int id, UriInfo info) throws RepositoryException;
+	public Object get(int id, UriInfo info) throws Exception;
 
 	@ApiOperation(value = "Recupera un oggetto da database", response = List.class)
 	@ApiParam(value = "Token di ricerca")
-	public List<Object> ricerca(YAFilterSerializeCriteria searcher) throws RepositoryException;
+	public List<Object> ricerca(YAFilterSerializeCriteria searcher) throws Exception;
 
-	public int count(YAFilterSerializeCriteria searcher) throws RepositoryException;
+	public int count(YAFilterSerializeCriteria searcher) throws Exception;
 
-	public void save(T toSave) throws RepositoryException;
+	public void save(T toSave) throws Exception;
 
 }

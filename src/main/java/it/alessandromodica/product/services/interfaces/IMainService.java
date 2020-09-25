@@ -2,10 +2,10 @@ package it.alessandromodica.product.services.interfaces;
 
 import java.util.List;
 
-import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.po.GestioneUtenti;
+import it.alessandromodica.product.persistence.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteria;
 
 public interface IMainService<T> {
