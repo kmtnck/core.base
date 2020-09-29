@@ -1,5 +1,5 @@
 # goToBusiness nome in codice: core.base
- Un modulo che prende cose e ne fa altre per soddisfare la felicita' .
+ Un modulo che prende cose e ne fa altre per dare felicita' .
  
  Una piu' ampia documentazione in stile javadoc e rigorosamente autogenerata la trovate qui https://alessandromodica.com/javadoc/gotobusiness/
 (non e' sempre aggiornata, ma si puo autogenerare)
@@ -66,7 +66,7 @@ La configurazione log4j e' la piu semplice e versatile possibile.
 ## c) Configurazione dell'accesso ai dati
  In java ci sono molteplici approcci per configurare un datastorage, e ancor di piu con l'introduzione delle configurazioni dinamiche yaml kubernets oriented.
  
- Questa applicazione si basa sulle annotation JPA e Hibernate. La modalita'  delle transazione e' il classico RESOURCE_LOCAL, ma sostanzialmente si puo configurare l'accesso al datasource (o piu datasource) nelle modalita piu congeniali.
+ Questa applicazione si basa sulle annotation JPA e Hibernate. La modalita'Â  delle transazione e' il classico RESOURCE_LOCAL, ma sostanzialmente si puo configurare l'accesso al datasource (o piu datasource) nelle modalita piu congeniali.
  
 Tuttavia la modalita' JTA richiede un minimo di adattamento dei repository che in questa release e' in una libreria separata e supporta le annotation springboot. Una libreria ad hoc yarepository con supporto delle jta implementation permettera di avviarlo anche in un contesto EE.
 
@@ -81,7 +81,7 @@ I parametri fondamentali da immettere rimangono comunque i seguenti:
 Questi parametri potrebbero risiedere in un file yaml o recuperati dinamicamente a fronte di opportune chiamate, in questo progetto i parametri sono raccolti nel file datasource.properties e sono letti dalla classe di configurazione AppConfig.
 
 L'applicazione e' configurata di default per accedere ad un database su file hdbsql di nome storageapp.
-Il database mappato sul persistence.xml ed e' creato a runtime. La base dati iniziale e' gia'  usufruibile per fare junit.
+Il database mappato sul persistence.xml ed e' creato a runtime. La base dati iniziale e' gia'Â  usufruibile per fare junit.
 
 ### Autogenerazione con Hibernate Tools
 
@@ -152,7 +152,7 @@ Se il clone git e' andato a buon fine, maven e' stato configurato per accedere a
  
 	 mvn clean install
 
-che esegue  una compilazione con il set di junit andati a buon fine.
+che esegueÂ  una compilazione con il set di junit andati a buon fine.
 
 Se tutto e' ok, allora nel target dovrebbe essere presente un artefatto .war con il nome da voi scelto, di default dovrebbe essere
 
@@ -167,9 +167,9 @@ Il contesto spring e' configurato con la classe AppConfig e si ha quindi accesso
 		repocommand = context.getBean(IRepositoryCommands.class);
 		repoquery = context.getBean(IRepositoryQueries.class);
 		
-La flessibilita'  e' tale da poter creare un junit disaccoppiando il contesto di persistenza dal contesto applicativo vero e proprio.
+La flessibilita'Â  e' tale da poter creare un junit disaccoppiando il contesto di persistenza dal contesto applicativo vero e proprio.
 
-Sono predisposti handler per eseguire accessi a app esterne con le canoniche sequenze di autenticazione di un google sign-on e sulla classe MainContext Ã¨ possibile definire la key_id necessaria per accedere ad un applicazione registrata su appengine
+Sono predisposti handler per eseguire accessi a app esterne con le canoniche sequenze di autenticazione di un google sign-on e sulla classe MainContext ÃƒÂ¨ possibile definire la key_id necessaria per accedere ad un applicazione registrata su appengine
 
 %KEYGOOGLEAPI% e' da definire una volta seguite le istruzioni su google sign in on 
 
@@ -213,7 +213,7 @@ possono poi essere implementati a seconda le esigenze specifiche. Sono presenti 
 
 # Accesso ai dati con gli oggetti repository
 
-In uno dei junit definiti e' possibile vedere il modo in cui Ã¨ possibile eseguire una lettura dati tramite hibernate, utilizzando il comodo oggetto repository implementato in questo progetto, e vero fulcro innovativo di tutta l'applicazione
+In uno dei junit definiti e' possibile vedere il modo in cui ÃƒÂ¨ possibile eseguire una lettura dati tramite hibernate, utilizzando il comodo oggetto repository implementato in questo progetto, e vero fulcro innovativo di tutta l'applicazione
 
 			YAFilterLikeClause testSearch = new YAFilterLikeClause();
 			testSearch.setNameField("email");
@@ -225,7 +225,7 @@ In uno dei junit definiti e' possibile vedere il modo in cui Ã¨ possibile esegui
 					.search(criteria.getSerialized());
 
 			if (fromDb.isEmpty())
-				Assert.assertTrue("I dati non sono stati trovati, ma la query è stata eseguita correttamente", true);
+				Assert.assertTrue("I dati non sono stati trovati, ma la query Ã¨ stata eseguita correttamente", true);
 			else {
 				for (GestioneUtenti pluginCommonLogaccesso : fromDb) {
 
@@ -241,15 +241,15 @@ L'oggetto YaFilterSearchApp rappresenta la maggior parte delle operazioni di let
 Yet Another Filter Search! Esatto! Un altro ancora!
 
 
-In questo documento sintetico si vuole descrivere l'utilizzo di un pojo java finalizzato alla composizione dinamica di query HQL hibernate (usando i Criteria), senza però usare una riga di codice di hibernate.
+In questo documento sintetico si vuole descrivere l'utilizzo di un pojo java finalizzato alla composizione dinamica di query HQL hibernate (usando i Criteria), senza perÃ² usare una riga di codice di hibernate.
 
 L'obiettivo del pojo e' raccogliere le clausole definite al suo interno, serializzare in modo comodo i risultati di clausola, e infine far generare al repository la Query hibernate rispettando al meglio la sintassi HQL, da immettere nell'entitymanager.
 
-E' un filtro studiato per ottenere risultati da una base dati mappata su hibernate, in base ad arbitrarie e complesse query, il più possibili aderenti alle esigenze specifiche, ma usando un autogeneratore standard e riusabile, oltre che tutto incapsulato in un pojo, e usato solo dal repository.
+E' un filtro studiato per ottenere risultati da una base dati mappata su hibernate, in base ad arbitrarie e complesse query, il piÃ¹ possibili aderenti alle esigenze specifiche, ma usando un autogeneratore standard e riusabile, oltre che tutto incapsulato in un pojo, e usato solo dal repository.
 
 
 
-## Il risultato è il vantaggio di comporre ricerche hibernate senza usare hibernate.
+## Il risultato Ã¨ il vantaggio di comporre ricerche hibernate senza usare hibernate.
 
 
 
@@ -257,21 +257,21 @@ E' richiesta una minima conoscenza del funzionamento di hibernate e delle piu co
 
 La prima release funzionante di un repository progettato attorno a questo Filter (ai tempi BOSearcher), risale al 2007, su piattaforma dotnet, framework 4. Successivamente fu riusato in ambito java (dopo porting) nel 2010 fino al 2014 su vari progetti in Java, tutt'ora utilizzati. In tutti i casi l'adozione di questo filtro ha permesso tempi di sviluppo efficaci e stabili per progetti arbitrariamente complessi.
 
-Il pojo è intuitivo e ha bisogno di poche accortezze, che, nel tempo, sono state inquadrate fin dal momento in cui si istanzia il pojo.
+Il pojo Ã¨ intuitivo e ha bisogno di poche accortezze, che, nel tempo, sono state inquadrate fin dal momento in cui si istanzia il pojo.
 
 
 
-La regola generale è che una istanza di un FilterSearch deve essere sempre associato a una entita hibernate su cui eseguire la ricerca, altrimenti errore null exception.
+La regola generale Ã¨ che una istanza di un FilterSearch deve essere sempre associato a una entita hibernate su cui eseguire la ricerca, altrimenti errore null exception.
 
 La maggior parte delle clausole sono facili inserimenti di coppie field/valore come ad esempio nelle uguaglianze, la lista di campi che non devono essere nulli o viceversa ecc... ecc... . Tuttavia alcune clausole, per la loro stretta natura di requisiti input, sono organizzati con pojo filter specifici per quel tipo di clausola.
 
 Tutte le singole clausole sono gestite dal filter come lista di occorrenze, quindi , al netto di anomalie, le clausole sono sempre gestite in multi occorrenza, le quali vengono concatenate con logica AND dal generatore interno.
 
-Se si vuole imporre una clausola di or, è sufficiente creare due o piu filtersearch separati in cui ciascuno esprimere i casi da associare in OR. Questo sistema permette la creazione di alberature di query.
+Se si vuole imporre una clausola di or, Ã¨ sufficiente creare due o piu filtersearch separati in cui ciascuno esprimere i casi da associare in OR. Questo sistema permette la creazione di alberature di query.
 
 
 
-### Per chi è destinato.
+### Per chi Ã¨ destinato.
 
 Programmatori che hanno la necessita di comporre query arbitrariamente complesse usando i criteria hibernate.
 
@@ -285,7 +285,7 @@ A usare i criteria hibernate usando un semplice insieme di pojo java.
 
 ### Come si usa
 
-E' un oggetto pojo tradizionale serializzabile in cui è possibile popolare delle strutture dati per accogliere clausole di ricerca tipiche di un database.
+E' un oggetto pojo tradizionale serializzabile in cui Ã¨ possibile popolare delle strutture dati per accogliere clausole di ricerca tipiche di un database.
 
 Si istanzia il filtro dando come argomento la classe dell'entita su cui eseguire la ricerca (la root di hibernate)
 
@@ -295,15 +295,15 @@ Dopo aver compilato il filtro si passa al metodo repository.search(searcher.getS
 
 ### Di cosa ha bisogno
 
-L'unico requisito per poter funzionare è avere i dati di input come richiesti dal chiamante , e che per ciascuno di essi sia supportata la clausola di ricerca dal filtro (il campo correttamente mappato, che non sia di tipo formula, ecc... ecc...).
+L'unico requisito per poter funzionare Ã¨ avere i dati di input come richiesti dal chiamante , e che per ciascuno di essi sia supportata la clausola di ricerca dal filtro (il campo correttamente mappato, che non sia di tipo formula, ecc... ecc...).
 
 
 
 ### Ha requisiti di framework dell'applicativo su cui opera
 
-No! L'unico requisito, oltre a una implementazione JPA definita a livello di progetto,  è che abbia i dati in input a disposizione per la costruzione del filter e che sia presente in libreria il BaseRepository che riconosce il filtro, oltre ad hibernate ovviamente.
+No! L'unico requisito, oltre a una implementazione JPA definita a livello di progetto,  Ã¨ che abbia i dati in input a disposizione per la costruzione del filter e che sia presente in libreria il BaseRepository che riconosce il filtro, oltre ad hibernate ovviamente.
 
-L'oggetto searcher è disaccoppiato da ogni logica di come viene trasportato il dato in input e in output. Lo scopo è accedere ai risultati del repository con un criteria hibernate ben formato e arbitrariamente complesso senza usare i criteria.
+L'oggetto searcher Ã¨ disaccoppiato da ogni logica di come viene trasportato il dato in input e in output. Lo scopo Ã¨ accedere ai risultati del repository con un criteria hibernate ben formato e arbitrariamente complesso senza usare i criteria.
 
 
 
