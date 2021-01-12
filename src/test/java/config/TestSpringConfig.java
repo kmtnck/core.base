@@ -1,4 +1,4 @@
-package it.alessandromodica.product.common.config;
+package config;
 
 import java.util.Properties;
 
@@ -7,9 +7,10 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
@@ -27,20 +28,20 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-//https://www.baeldung.com/spring-profiles
-@Profile("!test")
+@Profile("test")
 @EnableAutoConfiguration
-@Configuration
+@TestConfiguration
 @EnableTransactionManagement
 @ComponentScan(basePackages = "it.alessandromodica.product")
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application-test.properties")
 @EnableJpaRepositories(entityManagerFactoryRef = "primaryEntityManagerFactory", transactionManagerRef = "primaryTransactionManager")
 @EnableSwagger2
-public class SpringConfig {
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+public class TestSpringConfig {
 
 	@Autowired
 	private Environment env;
-	
+
 	Properties additionalProperties() {
 		Properties properties = new Properties();
 
@@ -49,7 +50,7 @@ public class SpringConfig {
 
 
 	@Bean(name = "primaryTransactionManager")
-	@Primary	
+	@Primary
 	public JpaTransactionManager jpaTransactionManager() {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
 		entityManagerFactoryBean().setJpaVendorAdapter(vendorAdaptor());
