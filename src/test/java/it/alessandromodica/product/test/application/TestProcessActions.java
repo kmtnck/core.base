@@ -7,11 +7,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import it.alessandromodica.legacy.config.LegacyAppConfig;
 import it.alessandromodica.product.app.MainApplication;
 import it.alessandromodica.product.common.OutputData;
-import it.alessandromodica.product.common.config.AppConfig;
 import it.alessandromodica.product.common.exceptions.BusinessException;
-import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.context.interfaces.ISecurity;
 import it.alessandromodica.product.model.bo.BOUtente;
@@ -19,6 +18,7 @@ import it.alessandromodica.product.model.po.CommonBlacklist;
 import it.alessandromodica.product.model.po.CommonLogaccesso;
 import it.alessandromodica.product.model.po.GestioneUtenti;
 import it.alessandromodica.product.model.po.VUtentiLoggatiDettaglio;
+import it.alessandromodica.product.persistence.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
 import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
 import it.alessandromodica.product.persistence.searcher.YAFilterLikeClause;
@@ -59,7 +59,7 @@ public class TestProcessActions extends TestCase {
 		//AppConfig.InitApp();
 
 		// Avviare contesto spring
-		context = new AnnotationConfigApplicationContext(AppConfig.class);
+		context = new AnnotationConfigApplicationContext(LegacyAppConfig.class);
 		appservice = context.getBean(IAppService.class);
 		security = context.getBean(ISecurity.class);
 		repocommand = context.getBean(IRepositoryCommands.class);

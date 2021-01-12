@@ -1,14 +1,13 @@
-package it.alessandromodica.product.common.config;
+package config;
 
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -23,16 +22,15 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@EnableAutoConfiguration
-@Configuration
+//@EnableAutoConfiguration
+@TestConfiguration
 //XXX: e' dichiatato il componentscan sulla classe springapplication. In un contesto standard il context spring richiede l'annotation in questo punto
 @ComponentScan(basePackages = "it.alessandromodica.product")
 @EnableTransactionManagement
-@PropertySource("classpath:datasource.properties")
-@EnableSwagger2
-public class AppConfig {
+@PropertySource("classpath:application-test.properties")
+//@EnableSwagger2
+public class TestConfig {
 
 	@Value("${driver}")
 	private String driver;

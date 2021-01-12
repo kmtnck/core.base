@@ -4,12 +4,12 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import it.alessandromodica.product.app.MainContext;
 import it.alessandromodica.product.common.OutputData;
 import it.alessandromodica.product.common.InputData;
 import it.alessandromodica.product.common.exceptions.BusinessException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.context.interfaces.IConsultazione;
+import it.alessandromodica.product.context.main.MainContext;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.services.interfaces.IAppService;
 

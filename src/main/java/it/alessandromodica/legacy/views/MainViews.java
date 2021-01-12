@@ -1,4 +1,4 @@
-package it.alessandromodica.product.views;
+package it.alessandromodica.legacy.views;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;

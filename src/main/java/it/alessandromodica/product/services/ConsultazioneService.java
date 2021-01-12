@@ -6,10 +6,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.model.po.VUtentiLoggatiDettaglio;
-import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
+import it.alessandromodica.product.persistence.exceptions.RepositoryException;
+import it.alessandromodica.product.persistence.repo.BaseRepository;
 import it.alessandromodica.product.persistence.searcher.YAFilterSearchApp;
 import it.alessandromodica.product.services.interfaces.IAppService;
 
@@ -29,7 +29,7 @@ import it.alessandromodica.product.services.interfaces.IAppService;
 public class ConsultazioneService implements IAppService {
 
 	@Autowired
-	protected IRepositoryQueries repoquery;
+	protected BaseRepository repository;
 
 	private static final Logger log = Logger.getLogger(ConsultazioneService.class);
 
@@ -45,7 +45,7 @@ public class ConsultazioneService implements IAppService {
 	}
 
 	private List<VUtentiLoggatiDettaglio> recoverUtenti() throws RepositoryException {
-		List<VUtentiLoggatiDettaglio> result = repoquery//.setEntity(VUtentiLoggatiDettaglio.class)
+		List<VUtentiLoggatiDettaglio> result = repository//.setEntity(VUtentiLoggatiDettaglio.class)
 				.search(new YAFilterSearchApp(VUtentiLoggatiDettaglio.class).getSerialized());
 
 		return result;

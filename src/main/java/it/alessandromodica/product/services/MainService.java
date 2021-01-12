@@ -9,13 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.alessandromodica.product.common.Constants;
-import it.alessandromodica.product.common.exceptions.RepositoryException;
 import it.alessandromodica.product.common.exceptions.ServiceException;
 import it.alessandromodica.product.model.bo.BOUtente;
 import it.alessandromodica.product.model.po.CommonLogaccesso;
 import it.alessandromodica.product.model.po.GestioneUtenti;
-import it.alessandromodica.product.persistence.interfaces.IRepositoryCommands;
-import it.alessandromodica.product.persistence.interfaces.IRepositoryQueries;
+import it.alessandromodica.product.persistence.exceptions.RepositoryException;
+import it.alessandromodica.product.persistence.repo.BaseRepository;
 import it.alessandromodica.product.persistence.searcher.YAFilterSearchApp;
 import it.alessandromodica.product.persistence.searcher.YAFilterSerializeCriteria;
 import it.alessandromodica.product.services.interfaces.IMainService;
@@ -37,10 +36,7 @@ import it.alessandromodica.product.services.interfaces.IMainService;
 public class MainService<T> implements IMainService<T> {
 
 	@Autowired
-	protected IRepositoryQueries repoquery;
-
-	@Autowired
-	protected IRepositoryCommands repocommands;
+	protected BaseRepository repository;
 
 	private static final Logger log = Logger.getLogger(MainService.class);
 
@@ -62,7 +58,7 @@ public class MainService<T> implements IMainService<T> {
 
 			GestioneUtenti result;
 			try {
-				result = (GestioneUtenti) repoquery//.setEntity(GestioneUtenti.class)
+				result = (GestioneUtenti) repository//.setEntity(GestioneUtenti.class)
 						.getSingleOrDefault(search.getSerialized());
 				return result;
 
@@ -90,7 +86,7 @@ public class MainService<T> implements IMainService<T> {
 			toAdd.setIpaddress(utentecorrente.getInforemote());
 			toAdd.setDescrizione(messaggio);
 			toAdd.setIstante(Timestamp.from(Calendar.getInstance().toInstant()));
-			repocommands.add(toAdd);
+			repository.add(toAdd);
 
 			log.info("---> " + messaggio);
 
@@ -107,25 +103,25 @@ public class MainService<T> implements IMainService<T> {
 	@Override
 	public List<T> search(YAFilterSerializeCriteria searcher) throws RepositoryException {
 		// TODO Auto-generated method stub
-		return repoquery.search(searcher);
+		return repository.search(searcher);
 	}
 
 	@Override
 	public int count(YAFilterSerializeCriteria searcher) throws RepositoryException{
 		// TODO Auto-generated method stub
-		return repoquery.getCount(searcher);
+		return repository.getCount(searcher);
 	}
 
 	@Override
 	public T getById(Object objId, Class<T> classEntity) throws RepositoryException {
 		// TODO Auto-generated method stub
-		return (T) repoquery.getById(objId, classEntity);
+		return (T) repository.getById(objId, classEntity);
 	}
 
 	@Override
 	public void add(T obj) throws RepositoryException {
 		// TODO Auto-generated method stub
-		repocommands.add(obj);
+		repository.add(obj);
 	}
 
 }

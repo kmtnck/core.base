@@ -7,7 +7,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 
-import it.alessandromodica.product.common.exceptions.RepositoryException;
+import it.alessandromodica.product.persistence.exceptions.RepositoryException;
 import it.alessandromodica.product.persistence.interfaces.IBulkTransaction;
 import it.alessandromodica.product.persistence.interfaces.IUnitOfWork;
 

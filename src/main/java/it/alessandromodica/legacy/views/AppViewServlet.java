@@ -1,4 +1,4 @@
-package it.alessandromodica.product.views;
+package it.alessandromodica.legacy.views;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -41,6 +41,7 @@ import it.alessandromodica.product.common.exceptions.BusinessException;
  * @author Alessandro
  *
  */
+@Deprecated
 public class AppViewServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
